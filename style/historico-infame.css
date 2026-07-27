@@ -260,11 +260,7 @@ color: #fff;
         }
 
 
-/*/// ------------------------------
-
-~   Columns
-
------------------------------- ///*/
+/* ~ COLUNAS ------------------------------ */
 
 .section {
   margin: 0;
@@ -284,3 +280,138 @@ color: #fff;
 }
 
 
+/* Container geral dos posts */
+.post-colunas-container {
+  display: grid;
+  grid-template-columns: repeat(var(--colunas), 1fr);
+  gap: 20px; /* Espaço entre colunas */
+}
+
+/* Estilo individual de cada post */
+.post-colunas-item {
+  background: #fff;
+  padding: 15px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Ajusta imagens dentro dos posts */
+.post-colunas-item img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Ajuste responsivo */
+@media (max-width: 900px) {
+  .post-colunas-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .post-colunas-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ~ POLAROID ------------------------------ */
+
+/* Container geral da Polaroid */
+.polaroid {
+  background-color: #fff;
+  padding: 10px 10px 25px 10px; /* espaço extra embaixo para legenda */
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  width: fit-content;
+  margin: 10px;
+  text-align: center;
+  display: inline-block;
+  font-family: sans-serif;
+  transition: transform 0.2s;
+}
+
+/* Efeito de leve rotação ao passar o mouse (opcional) */
+.polaroid:hover {
+  transform: rotate(-2deg) scale(1.03);
+}
+
+/* Imagem dentro da Polaroid */
+.polaroid img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc; /* linha discreta entre imagem e legenda */
+}
+
+/* Legenda */
+.polaroid .caption {
+  font-size: 0.9em;
+  color: #333;
+}
+
+/* ~ ALBUM REVIEW / MUSIC ------------------------------ */
+
+.album-review{
+  display:flex;
+  gap:24px;
+  margin:20px 0;
+  align-items:flex-start;
+}
+
+.album-cover img{
+  width:220px;
+  border-radius:6px;
+  display:block;
+}
+
+/* duas colunas */
+.tracklist{
+  column-count:2;
+  column-gap:40px;
+  list-style-position:inside;
+  padding:0;
+  margin:0;
+}
+
+/* cada música */
+.tracklist li{
+  padding:6px 0;
+  border-bottom:1px solid #ddd;
+  transition:all .2s ease;
+}
+
+/* hover */
+.tracklist li:hover{
+  background:#f5f5f5;
+  padding-left:6px;
+}
+
+/* favoritas */
+.tracklist li.fav{
+  font-weight:600;
+}
+
+.tracklist li.fav::after{
+  content:" ★";
+  opacity:.8;
+}
+
+/* mobile */
+@media (max-width:600px){
+
+  .album-review{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .tracklist{
+    column-count:1;
+    width:100%;
+  }
+
+}

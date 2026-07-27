@@ -1,125 +1,124 @@
 
-//<![CDATA[
 (function () {
-  // === Config ===
-  var FEED_ENDPOINT = '/feeds/posts/summary';   // mesmo domínio
-  var MAX_RESULTS = 500;                         // pode aumentar até 500 se precisar
+  'use strict';
 
-  // === Helpers ===
-  function isLongPostPath(p){ return /^\/\d{4}\/\d{2}\/[^/]+\.html$/.test(p); }
-  function extractSlugFromLong(p){ return p.slice(p.lastIndexOf('/')+1, p.lastIndexOf('.html')); }
-  function isShortSlugPath(p){ return /^\/[^/]+$/.test(p) && p !== '/' && p !== '/p'; }
-  function replaceUrl(u){ if (history.replaceState) history.replaceState(null, null, u); }
+  var IDX_KEY  = 'pc_index_v2';
+  var IDX_TTL  = 6 * 60 * 60 * 1000;   // 6 h
+  var PAGE_SZ  = 500;                  // teto do feed do Blogger
+  var MAX_REQ  = 40;                   // trava de seguranca: ate 20.000 posts
+  var RESERVED = /^(p|search|feeds|b|view|sitemap\.xml|robots\.txt|favicon\.ico)$/i;
 
-  function getCanonicalHref(){
-    var l = document.querySelector('link[rel="canonical"]');
-    return l && l.href ? l.href : '';
+  var RE_POST  = /^\/\d{4}\/\d{2}\/([^\/]+)\.html$/;
+  var RE_PAGE  = /^\/p\/([^\/]+)\.html$/;
+  var RE_SHORT = /^\/([^\/.]+)\/?$/;
+
+  var path = decodeURIComponent(location.pathname);
+  var tail = location.search + location.hash;
+
+  // ---------- indice ----------
+  function readIndex() {
+    try {
+      var raw = localStorage.getItem(IDX_KEY);
+      if (!raw) return null;
+      var o = JSON.parse(raw);
+      return (Date.now() - o.t < IDX_TTL) ? o.d : null;
+    } catch (e) { return null; }
   }
-  function canonicalMatchesSlug(slug){
-    var href = getCanonicalHref();
-    return href ? new RegExp('/' + slug + '\\.html($|\\?)').test(href) : false;
+
+  function toUrl(slug, v) {
+    return v === 'p' ? '/p/' + slug + '.html'
+                     : '/' + v.slice(0, 4) + '/' + v.slice(4) + '/' + slug + '.html';
   }
 
-  function findAltLink(entry){
-    if(!entry || !entry.link) return '';
-    for (var i=0;i<entry.link.length;i++){
-      if (entry.link[i].rel === 'alternate') return entry.link[i].href;
+  // 'fields' reduz muito o tamanho da resposta; se o teu feed o ignorar,
+  // podes remove-lo sem alterar o comportamento.
+  function feedChunk(kind, start) {
+    var u = '/feeds/' + kind + '?alt=json&max-results=' + PAGE_SZ +
+            '&start-index=' + start + '&fields=feed/entry(link)';
+    return fetch(u, { credentials: 'same-origin' })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
+  }
+
+  function harvest(data, idx) {
+    var e = data && data.feed && data.feed.entry;
+    if (!e) return 0;
+    for (var i = 0; i < e.length; i++) {
+      var links = e[i].link || [], href = '';
+      for (var j = 0; j < links.length; j++)
+        if (links[j].rel === 'alternate') { href = links[j].href; break; }
+      if (!href) continue;
+      var p = href.replace(/^https?:\/\/[^\/]+/, '');
+      var m = p.match(RE_POST);
+      if (m) { idx[m[1]] = p.slice(1, 5) + p.slice(6, 8); continue; }
+      m = p.match(RE_PAGE);
+      if (m) { idx[m[1]] = 'p'; }
     }
-    return '';
-  }
-  function findPostUrlInFeedBySlug(slug, feedObj){
-    var feed = feedObj && (feedObj.feed || feedObj);
-    if(!feed || !feed.entry) return '';
-    var entries = feed.entry;
-    for (var i=0;i<entries.length;i++){
-      var href = findAltLink(entries[i]);
-      if(!href) continue;
-      var s = href.slice(href.lastIndexOf('/')+1).replace(/\.html.*/,'');
-      if (s.toLowerCase() === slug.toLowerCase()) return href;
-    }
-    return '';
+    return e.length;
   }
 
-  function fetchJson(url){
-    return fetch(url, {credentials:'same-origin', cache:'no-cache'})
-      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
+  function crawl(kind, idx, start, req) {
+    if (req >= MAX_REQ) return Promise.resolve();
+    return feedChunk(kind, start).then(function (data) {
+      var n = harvest(data, idx);
+      if (n < PAGE_SZ) return;
+      return crawl(kind, idx, start + PAGE_SZ, req + 1);
+    }).catch(function () { /* fim do feed ou erro: para aqui */ });
   }
-  function jsonp(url){
-    return new Promise(function(resolve, reject){
-      var cb = 'pc_cb_' + Date.now();
-      window[cb] = function(data){ resolve(data); cleanup(); };
-      function cleanup(){
-        delete window[cb];
-        if (s.parentNode) s.parentNode.removeChild(s);
-        clearTimeout(t);
-      }
-      var s = document.createElement('script');
-      s.src = url + (url.indexOf('?')>-1?'&':'?') + 'alt=json-in-script&callback=' + cb;
-      s.onerror = function(){ cleanup(); reject(new Error('JSONP error')); };
-      document.head.appendChild(s);
-      var t = setTimeout(function(){ cleanup(); reject(new Error('JSONP timeout')); }, 8000);
+
+  var building = null;
+  function buildIndex() {
+    if (building) return building;
+    var idx = {};
+    building = Promise.all([
+      crawl('posts/summary', idx, 1, 0),
+      crawl('pages/default', idx, 1, 0)
+    ]).then(function () {
+      try { localStorage.setItem(IDX_KEY, JSON.stringify({ t: Date.now(), d: idx })); } catch (e) {}
+      return idx;
     });
+    return building;
   }
 
-  function resolveSlugToUrl(slug){
-    var searchUrl = FEED_ENDPOINT + '?alt=json&q=' + encodeURIComponent(slug) + '&max-results=' + MAX_RESULTS;
-    return fetchJson(searchUrl)
-      .catch(function(){ return jsonp(FEED_ENDPOINT + '?q=' + encodeURIComponent(slug) + '&max-results=' + MAX_RESULTS); })
-      .then(function(data){
-        var url = findPostUrlInFeedBySlug(slug, data);
-        if (url) return url;
-        // fallback: tenta primeira página do feed
-        var listUrl = FEED_ENDPOINT + '?alt=json&max-results=' + Math.max(MAX_RESULTS, 100);
-        return fetchJson(listUrl).catch(function(){ return jsonp(listUrl); })
-          .then(function(data2){
-            var u = findPostUrlInFeedBySlug(slug, data2);
-            return u || '';
-          });
-      });
+  function warm() {
+    if (readIndex()) return;
+    var go = function () { buildIndex(); };
+    if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 4000 });
+    else setTimeout(go, 1500);
   }
 
-  function run(){
-    var path = location.pathname;
-
-    // A) URL longa de postagem → mostrar curta
-    if (isLongPostPath(path)) {
-      var slug = extractSlugFromLong(path);
-      replaceUrl('/' + slug);
-      sessionStorage.setItem('pc_active_slug', slug);
-      return;
-    }
-
-    // B) URL curta (/slug) → resolver para a postagem real e manter curta
-    if (isShortSlugPath(path)) {
-      var slug = decodeURIComponent(path.slice(1));
-
-      // Já estamos exibindo o conteúdo da postagem correta? então mantém como está.
-      if (canonicalMatchesSlug(slug)) {
-        sessionStorage.setItem('pc_active_slug', slug);
-        return;
-      }
-
-      // Evita loop enquanto resolve
-      if (sessionStorage.getItem('pc_resolving') === slug) return;
-      sessionStorage.setItem('pc_resolving', slug);
-
-      resolveSlugToUrl(slug).then(function(postUrl){
-        sessionStorage.removeItem('pc_resolving');
-        if (postUrl) {
-          // carrega a URL real; quando abrir, o caso A troca de volta para /slug
-          location.replace(postUrl);
-        } else {
-          console.warn('Slug não encontrado no feed: ' + slug);
-          // opcional: redirecionar para busca
-          // location.href = '/search?q=' + encodeURIComponent(slug);
-        }
-      }).catch(function(){
-        sessionStorage.removeItem('pc_resolving');
-        console.warn('Falha ao consultar o feed do Blogger para resolver o slug.');
-      });
-    }
+  // ---------- A. URL longa -> curta (sem rede) ----------
+  var m = path.match(RE_POST) || path.match(RE_PAGE);
+  if (m) {
+    history.replaceState(null, '', '/' + m[1] + tail);
+    warm();
+    return;
   }
 
-  run(); // executa o mais cedo possível
+  // ---------- B. URL curta -> resolve ----------
+  var s = path.match(RE_SHORT);
+  if (!s || RESERVED.test(s[1])) { warm(); return; }
+  var slug = s[1];
+
+  if (sessionStorage.getItem('pc_resolving') === slug) return;  // anti-loop
+  sessionStorage.setItem('pc_resolving', slug);
+  var done = function (url) {
+    sessionStorage.removeItem('pc_resolving');
+    if (url) location.replace(url + tail);
+  };
+
+  var cache = readIndex();
+  if (cache && cache[slug]) { done(toUrl(slug, cache[slug])); return; }
+
+  // Sem cache: testa pagina e monta indice ao mesmo tempo.
+  var pagePath = '/p/' + slug + '.html';
+  var isPage = fetch(pagePath, { method: 'HEAD', credentials: 'same-origin' })
+                 .then(function (r) { return r.ok; }).catch(function () { return false; });
+  var idxReady = buildIndex();
+
+  isPage.then(function (ok) {
+    if (ok) { done(pagePath); return; }
+    return idxReady.then(function (idx) {
+      done(idx[slug] ? toUrl(slug, idx[slug]) : null);
+    });
+  }).catch(function () { sessionStorage.removeItem('pc_resolving'); });
 })();
-//]]>

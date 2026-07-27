@@ -1,0 +1,286 @@
+/* FIRULAS --------------------------------------------------------*/
+
+
+.divisor{
+    margin:22px auto;
+    text-align:center;
+    font-size:1.8rem;
+    color:var(--cor-amarelo);
+    letter-spacing:8px;
+    user-select:none;
+
+}
+
+.divisor:before{
+	content: '\2736';
+}
+
+
+/* LIKE BUTTON --------------------------------------------------------*/
+
+.likebtn-wrapper {
+  margin-bottom: 1em;
+}
+
+.lb-style-custom .likebtn-icon {
+  color: #000;
+}
+
+.lb-style-custom .lb-a:hover .lb-fi,
+.lb-style-custom .lb-voted .lb-a .lb-fi {
+  color: #e3bfce !important;
+}
+
+.lb-style-custom .lb-count {
+  color: #000;
+  font: bold 12px arial, sans-serif !important;
+  margin-top: .1em;
+  margin-left: .1em;
+}
+
+.lb-tt.lb-share-tt {
+  visibility: hidden;
+}
+
+/* TAG FILME ----------------------------------------------- */
+
+.categorias-filme a{
+display:none; }
+
+.filme{
+margin-top: 10px;
+padding: 30px;
+display:block;
+background: #F8F8F8;
+margin-bottom: 20px;
+min-height: 370px;
+}
+
+.post img{
+max-width: 100%; /* tamanho máximo da imagem, pode e deve ser alterado */
+text-decoration: none;
+} 
+ 
+
+.post-tags{
+color: #D7D7D7;
+text-align:center;
+}
+
+
+/* TAG LIVRO ----------------------------------------------- */
+
+.lido-livros {
+    display: block;
+    float: left;
+    text-align: left;
+    margin: 0 10px 25px 0;
+    width: 240px;;
+    height: 110px;
+    font-size: 11px;
+    line-height: 19px;
+}
+
+
+.lido-capa {
+    margin: 0 10px 0 0;
+    width: 65px; 
+    height: 95px;
+    float: left;
+}
+
+
+.capa-livro, .capa-livro a {
+margin: 0 1px 0 0;
+float: left;
+text-decoration: none;
+width: 120px; 
+padding: 10px;
+text-decoration: none;
+height:auto;
+}
+
+
+.livro{
+margin-top: 10px;
+padding: 30px;
+display:block;
+background: #F0E68C;
+min-height: 200px;
+line-height: 1.6em;
+}
+
+livro img{
+
+}
+
+.nome-livro, .nome-filme{
+font-size: 12px;
+text-transform:uppercase;
+margin-top: 20px;
+}
+
+.tamanho{
+height: 320;
+width: 213;
+float: left;
+
+}
+
+.serie {
+font-family: 'Playfair Display', serif;
+font-style: italic;
+font-size: 11px;
+}
+.nota{
+color: #000;
+letter-spacing: 10px;
+font-size: 12px;
+}
+
+.fa-heart{
+color:#000;
+margin-left: 2px;}
+
+.resumo {
+margin-top:14px;
+font-style: italic;
+font-family: georgia;
+font-size: 9px;
+text-align: justify;
+display:none;}
+
+.editora,.autor{
+font: Raleway;
+font-style: italic;
+font-size: 14px;
+font-size: 12px;
+}
+
+.paginas, .duracao{
+font: Raleway;
+font-size: 12px;
+}
+
+
+.total {
+width:100%;
+height:auto;
+text-align: center;
+
+}
+
+/* COISAS DO POST  ----------------------------------------------- */
+
+.postdiferente {
+font-family: 'Dosis', sans-serif;
+color: #555555;
+text-align: justify;
+border-left: 3px solid #54453B;
+margin-left: 30px;
+padding-left: 10px;
+margin-bottom: 30px;
+margin-right: 30px;
+font-style: italic;
+}
+
+.publieditorial{
+background: #3BA58F;
+    text-transform: uppercase;
+    font-size: 10px;
+    padding: 10px;
+color: #fff;
+    letter-spacing: 1px;
+    text-align: center;
+    font-family: 'Lora', cursive;
+}
+
+.publieditorial a{
+    color: #fff;
+    font-family: 'Lora', cursive;
+    font-size: 10px;
+}
+
+.legenda{
+    background: #e3e3e3;
+    position: absolute;
+    opacity: 1;
+    width: auto;
+    margin: -3.5% 2% 10%;
+    padding: 5px 10px 5px 10px;
+    color: #999;
+    font-family: Lato;
+    font-size: 13px;
+    font-style: italic;
+	text-transform: lowercase;
+}
+
+.legenda a{
+	text-decoration: none;
+    color: #999;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+        .image-container {
+            display: flex;
+            justify-content: space-between; /* Espaço entre as imagens */
+            align-items: center; /* Alinha imagens verticalmente no centro */
+            flex-wrap: wrap; /* Garante que as imagens fiquem em uma nova linha caso a tela seja menor */
+        }
+
+        .image-container img {
+            max-width: 100%; /* Garante que as imagens sejam redimensionadas responsivamente */
+            height: auto; /* Mantém a proporção da imagem */
+            margin: 2px;
+        }
+
+        .image-box-2 {
+            flex-basis: calc(49,5%); /* Define duas imagens por linha */
+           /* Garante que padding/margin não afetem a largura total */
+        }
+
+        .image-box-3 {
+            flex-basis: calc(33%); /* Define duas imagens por linha */
+           /* Garante que padding/margin não afetem a largura total */
+        }
+
+
+        @media (max-width: 768px) {
+            .image-box-3, .image-box-2 {
+                flex-basis: calc(100% - 10px); /* Uma imagem por linha em telas pequenas */
+            }
+        }
+
+
+/*/// ------------------------------
+
+~   Columns
+
+------------------------------ ///*/
+
+.section {
+  margin: 0;
+}
+
+.outer {
+  position: relative;
+}
+
+@media screen and (min-width: 50em) {
+  .header-wrap, .container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1100px;
+    width: 85%;
+  }
+}
+
+

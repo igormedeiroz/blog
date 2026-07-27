@@ -289,11 +289,7 @@ color: #fff;
 
 /* Estilo individual de cada post */
 .post-colunas-item {
-  background: #fff;
   padding: 15px;
-  box-sizing: border-box;
-  border: 1px solid #ddd;
-  border-radius: 5px;
 }
 
 /* Ajusta imagens dentro dos posts */
@@ -325,13 +321,14 @@ color: #fff;
   background-color: #fff;
   padding: 10px 10px 25px 10px; /* espaço extra embaixo para legenda */
   border: 1px solid #ccc;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
   width: fit-content;
   margin: 10px;
   text-align: center;
   display: inline-block;
   font-family: sans-serif;
   transition: transform 0.2s;
+  border-radius: 2px;
 }
 
 /* Efeito de leve rotação ao passar o mouse (opcional) */
@@ -364,8 +361,8 @@ color: #fff;
 }
 
 .album-cover img{
-  width:220px;
-  border-radius:6px;
+  width:200px;
+  border-radius:0px;
   display:block;
 }
 
@@ -374,7 +371,7 @@ color: #fff;
   column-count:2;
   column-gap:40px;
   list-style-position:inside;
-  padding:10px;
+  padding:30px;
   margin:0;
 }
 

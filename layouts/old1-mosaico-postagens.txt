@@ -1,0 +1,651 @@
+<script>
+async function carregarTudo() {
+  try {
+    const feedUrl = "/feeds/posts/default?alt=json&max-results=300";
+    const res = await fetch(feedUrl);
+    const data = await res.json();
+
+    if (!data.feed || !data.feed.entry) return;
+
+    const entries = data.feed.entry;
+
+    const posts = [];
+    const statusPosts = [];
+    let ultimaImagem = null;
+    let ultimoLink = null;
+    let dataUltimaImagem = null;
+
+    entries.forEach(entry => {
+      const tags = entry.category ? entry.category.map(c => c.term.toLowerCase()) : [];
+      const link = entry.link.find(l => l.rel === "alternate")?.href || "#";
+      const dataPub = new Date(entry.published.$t);
+      const titulo = entry.title.$t;
+
+      if (tags.includes("notas semanais")) {
+        statusPosts.push({ titulo, link, data: dataPub });
+      }
+
+      if (!tags.some(t => [".txt","fotografia","now","leituras","status","notas semanais",'música'].includes(t))) {
+        posts.push({ titulo, link, data: dataPub });
+      }
+
+      const content = entry.content?.$t || "";
+      const temp = document.createElement("div");
+      temp.innerHTML = content;
+
+      const imgs = temp.querySelectorAll('img[data-type="fotolog"]');
+
+      if (imgs.length) {
+        if (!dataUltimaImagem || dataPub > dataUltimaImagem) {
+          ultimaImagem = imgs[imgs.length - 1];
+          ultimoLink = link;
+          dataUltimaImagem = dataPub;
+        }
+      }
+    });
+
+    posts.sort((a,b)=>b.data-a.data);
+    statusPosts.sort((a,b)=>b.data-a.data);
+
+    document.getElementById("ultimos-posts").innerHTML =
+      `<div class="lista-posts">` +
+      posts.slice(0,8).map(p => `<div class="item"><a href="${p.link}">${p.titulo}</a></div>`).join("") +
+      `</div>`;
+
+    document.getElementById("posts-status").innerHTML =
+      statusPosts.map(p => `<div class="status-item"><a href="${p.link}">${p.titulo}</a></div>`).join("");
+
+    if (ultimaImagem) {
+      document.getElementById("fotologSingle").innerHTML =
+        `<a href="${ultimoLink}">
+          <img src="${ultimaImagem.src.replace(/s\\d+/, "s600")}">
+        </a>`;
+    }
+
+  // Música
+const musicaRes = await fetch(`/feeds/posts/default/-/música?alt=json&max-results=1`);
+const musicaData = await musicaRes.json();
+
+if (musicaData.feed && musicaData.feed.entry) {
+  const post = musicaData.feed.entry[0];
+  const title = post.title.$t;
+  const parts = title.split(",");
+  const album = parts[0]?.trim() || title;
+  const artist = parts[1]?.trim() || "";
+  const link = post.link.find(l => l.rel === "alternate")?.href || "#";
+
+  let img = "";
+  if (post.media$thumbnail) {
+    img = post.media$thumbnail.url.replace(/\/s\d+(-c)?\//, "/s0/");
+  }
+
+  document.getElementById("album-grid").innerHTML = `
+    <img src="${img}">
+    <a class="album" href="${link}">
+      <span class="album-title">${album}</span>
+      <span class="album-artist">${artist}</span>
+    </a>
+  `;
+}
+
+    // Leituras
+    const leituraRes = await fetch("/feeds/posts/default/-/leituras?alt=json&max-results=4");
+    const leituraData = await leituraRes.json();
+
+    if (leituraData.feed && leituraData.feed.entry) {
+      const lista = leituraData.feed.entry.map(item => {
+        const titulo = item.title.$t;
+        
+        const parts = titulo.split(",");
+        const livro = parts[0]?.trim() || titulo;
+        const autor = parts[1]?.trim() || "";
+        
+        const link = item.link.find(l => l.rel === "alternate")?.href || "#";
+        const conteudo = item.content?.$t || "";
+        const imgMatch = conteudo.match(/<img[^>]+src="([^">]+)"/i);
+        const imagem = imgMatch ? imgMatch[1] : "";
+
+        return `
+          <div class="card">
+            <a href="${link}" class="card-link">
+              <div class="card-image-wrapper">
+                ${imagem ? `<img src="${imagem}">` : `<div class="no-image">Sem imagem</div>`}
+              </div>
+              <div class="card-info">
+                <div class="resenha-livro">${livro}</div>
+                <div class="resenha-autor">${autor}</div>
+              </div>
+            </a>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("leituras-lista").innerHTML =
+        `<div class="leituras-gallery">${lista}</div>`;
+    }
+
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+carregarTudo();
+</script>
+
+<div class="especial"> <center><a href="/beda-2026-2"><b> VEJA TODOS OS POSTS DO <i>BEDA 2026</i>.</b></a> <br /></center></div>
+<br />
+<div class="mosaico">
+
+  <section class="bloco blogposts">
+    <h2>Últimas postagens <div class="bloco-link"><a href="/arquivo">+ arquivo</a></div></h2>
+    <div class="conteudo">
+      <div id="ultimos-posts"></div>
+    </div>
+  </section>
+
+  <section class="bloco weeknotes">
+    <h2><span>notas semanais</span></h2>
+    <div class="conteudo scroll">
+      <div class="status-grid" id="posts-status"></div>
+    </div>
+  </section>
+
+    <section class="bloco fotolog">
+    <h2>foto</h2>
+    <div class="conteudo">
+      <div class="fotolog-single" id="fotologSingle"></div>
+    </div>
+  </section>
+
+  <section class="bloco ouvindo">
+    <h2>  ouvindo  <div class="bloco-link"><a href="/discografia">+ álbuns</a></div></h2>
+    <div class="conteudo">
+      <div id="album-grid"></div>
+    </div>
+  </section>
+
+  <section class="bloco leitura">
+    <h2><span>leitura </span> <div class="bloco-link"><a href="/leituras">+ resenhas</a> / <a href="https://www.blogger.com/comment/fullpage/page/7884095782081920739/2981004925390301677">indique</a></div></h2>
+    <div class="conteudo">
+      <div id="leituras-lista"></div>
+    </div>
+  </section>
+
+  <section class="bloco status">
+    <h2>  ultimamente <div class="bloco-link"><a href="/status">+ pensamentos</a></div></h2>
+    <div class="conteudo">
+      <div id="status-feed"> <div id="status-feeds"></div> </div>
+    </div>
+  </section>
+
+</div>
+
+<!--BOTÃO FLUTUANTE-->
+<button id="fab-open">+</button>
+
+<!--MODAL TELA CHEIA-->
+<div id="fullscreen-modal">
+  <div class="modal-content">
+
+    <button id="close-modal">✕</button>
+
+    <div class="modal-pages">
+      <!--páginas que você vai colocar-->
+      <section class="modal-page">
+      <center><div class="titulo-pagina-estatica">Mais páginas</div>
+</center>
+<br />
+   
+   <a href="/blogroll">blogroll</a><br /><a href="https://www.igormedeiroz.com/txt">textos poéticos</a><br /><a href="https://www.igormedeiroz.com/status">status</a><br /><a href="https://www.igormedeiroz.com/galeria">minhas fotos favoritas</a><br /><a href="https://www.igormedeiroz.com/manifesto">manifesto</a><br /><a href="https://www.igormedeiroz.com/equipamento">eletrônicos</a><br /><a href="/guestbook">guestbook</a><br /><a href="/snake">jogo da cobrinha</a><br /><a href="/now">now</a><br />
+      
+      </section>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.especial{
+    max-width:1100px;
+    background: #faedc8;
+    padding: 20px;
+    margin-top: 40px;
+  }
+  
+.especial:hover{
+    background: #fce5a4;
+  color: #a69462;
+  }
+  
+  
+.mosaico{
+  max-width:1100px;
+  margin:auto;
+  display:grid;
+  gap:14px;
+  grid-template-columns:repeat(4,1fr);
+  grid-template-areas:
+  "blog blog week week"
+  "blog blog foto ouvindo"
+  "leitura leitura foto ouvindo"
+  "status status status status";
+}
+
+.blogposts{grid-area:blog;}
+.weeknotes{grid-area:week;}
+.ouvindo{grid-area:ouvindo;}
+.fotolog{grid-area:foto;}
+.leitura{grid-area:leitura;}
+.status{grid-area:status;}
+
+.bloco{
+  border:1px dotted #000;
+  border-radius:10px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+  
+.bloco .bloco-link {
+  color: #000;           /* cor final */
+  opacity: 0;            /* invisível no início */
+  transition: opacity 0.5s ease-in-out;
+}
+
+.bloco:hover .bloco-link {
+  opacity: 1;            /* aparece suavemente */
+}
+  
+.bloco h2{
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  padding:10px 12px;
+  margin:0;
+  border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+}
+
+.bloco h2 span {
+ background: linear-gradient(transparent 50%, #f5f242 /* vermelho #ff582e; */ 50%);
+  padding: 0 6px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+  
+.conteudo{
+  padding:12px;
+  flex:1;
+}
+
+.scroll{
+  max-height:340px;
+  overflow-y:auto;
+}
+
+.lista-posts .item{
+  border-bottom:1px solid #eee;
+  padding:8px 0;
+}
+
+.mosaico a{
+  text-decoration:none;
+  color:inherit;
+}
+
+.status-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.status-item{
+  padding:8px;
+  border:1px solid #ddd;
+  border-radius:6px;
+  font-size:13px;
+}
+
+#album-grid{
+  display:grid;
+}
+
+.album img{
+  min-width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.album-title, .resenha-livro{
+  display:block;
+  font-weight:600;
+  margin-top:8px;
+}
+
+.album-artist, .resenha-autor{
+  font-size:13px;
+  opacity:.7;
+}
+
+.fotolog-single{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+.fotolog-single img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.leituras-gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(83px,1fr));
+  gap:10px;
+}
+
+.card-info{
+  
+}
+  
+.card-image-wrapper{
+  width:100%;
+  padding-bottom:140%;
+  position:relative;
+}
+
+.card-image-wrapper img{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.card-title{
+  font-size:13px;
+  text-align:center;
+  margin-top:6px;
+}
+  
+/* personalização por tipo */
+
+.blogposts{
+  background:#f9f9f9;
+  border-color:#ccc;
+}
+
+.weeknotes{
+  background:#fffef5;
+  border-color:#e6d8a8;
+}
+
+.ouvindo{
+   background:  #2e8bff; /* azul */
+  border-color: #2e8bff; /* azul */
+}
+
+.fotolog{
+  background: transparent;
+  border: 2px solid #fff;
+}
+  
+.fotolog h2{
+  display:none;
+}
+  
+.fotolog .conteudo{
+      padding: 0px !important;
+}
+
+.leitura{
+  background:#fffdbd;
+  border-color:#f5f242 ;
+}
+
+.status{
+  background:#fafafa;
+  border-color:#ddd;
+  display: inline;
+}
+  
+.container-header a{
+    font-size:0px;
+    
+    }
+    
+.container-header h1::before{
+    content:"Histórico Infame";
+    font-style: italic;
+      text-transform: capitalize !important;
+    }
+  
+.post-body a, .post p a { 
+  border-bottom: 0px solid #BC8F8F; 
+    transition:all .2s ease;
+} 
+
+.post-body a:hover, .post p a:hover {
+ padding-left:6px;
+} 
+  
+.post img {
+    max-width: 100%;
+    text-decoration: none;
+    border-bottom: 0px solid #BC8F8F;
+    margin: 0px; 
+}
+
+@media (max-width:900px){
+  .mosaico{
+    grid-template-columns:1fr 1fr;
+    grid-template-areas:
+    "blog blog"
+    "week week"
+    "foto ouvindo"
+    "leitura leitura"
+    "status status";
+  }
+}
+
+@media (max-width:600px){
+  .mosaico{
+    grid-template-columns:1fr;
+    grid-template-areas:
+    "blog"
+    "week"
+    "foto"
+    "ouvindo"
+    "leitura"
+    "status";
+  }
+}
+</style>
+
+
+<style>
+.row {
+
+}
+  
+#status-feeds {
+
+}
+
+.date, .content {
+
+}
+
+.status-post .date {
+  color: #888;
+  DISPLAY: NONE;
+  }
+  
+.status-post .content {
+  
+}
+
+  
+.status-post p {
+  margin: 0;
+}
+
+.status-post img {
+  display:none;
+}
+</style>
+
+<script>
+function loadStatus(json) {
+  const container = document.getElementById("status-feeds");
+  const entries = json.feed.entry;
+
+  if (!entries) {
+    container.innerHTML = "Nenhum status encontrado.";
+    return;
+  }
+
+  entries.forEach(function(entry) {
+
+    let content = entry.content ? entry.content.$t : entry.summary.$t;
+
+    // Remove quebras de linha
+    content = content.replace(/(\r\n|\n|\r)/gm, " ");
+
+    // Link automático para @usuario (ajuste a URL base)
+    content = content.replace(/@([a-zA-Z0-9_]+)/g, 
+      '<a href="https://seusite.com/$1" target="_blank">@$1</a>'
+    );
+
+    // Link do post
+    const postLink = entry.link.find(l => l.rel === "alternate").href;
+
+    // Formatar data: dd . mm . yy, hh:mm
+    const d = new Date(entry.published.$t);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = String(d.getFullYear()).slice(-2);
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    const date = `${day} . ${month} . ${year} / ${hours}:${minutes} — `;
+
+    const post = document.createElement("div");
+    post.className = "status-post";
+
+    post.innerHTML = `
+      <div class="row">
+  <span class="date"> ${date}</span> <span class="content"> ${content} </span>
+</div>
+      
+    `;
+
+    container.appendChild(post);
+  });
+}
+</script>
+
+<script src="/feeds/posts/default/-/status?alt=json-in-script&amp;callback=loadStatus&amp;max-results=1"></script> 
+
+
+<style>
+  /* BOTÃO FLUTUANTE */
+#fab-open{
+  position:fixed;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:999;
+  
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  
+  background:#ff582e; /* vermelho */;
+  color:#fff;
+  font-size:20px;
+  
+  box-shadow:0 4px 10px rgba(0,0,0,.2);
+  transition:.2s;
+}
+
+#fab-open:hover{
+  transform:translateY(-50%) scale(1.1);
+}
+
+/* MODAL FULLSCREEN */
+#fullscreen-modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  
+  background:#fff;
+  z-index:1000;
+  
+  display:none;
+}
+
+/* quando ativo */
+#fullscreen-modal.active{
+  display:block;
+}
+
+/* conteúdo */
+.modal-content{
+  width:100%;
+  height:100%;
+  overflow-y:auto;
+  padding:40px;
+  position:relative;
+}
+
+/* botão fechar */
+#close-modal{
+  position:absolute;
+  top:20px;
+  right:20px;
+  
+  border:none;
+  background:#000;
+  color:#fff;
+  
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  cursor:pointer;
+}
+
+/* páginas */
+.modal-pages{
+  display:flex;
+  flex-direction:column;
+  gap:40px;
+  text-align:center;
+}
+
+.modal-page{
+  min-height:100vh;
+  border-bottom:1px solid #eee;
+  padding-bottom:40px;
+}
+</style>
+
+<script>
+const fab = document.getElementById("fab-open");
+const modal = document.getElementById("fullscreen-modal");
+const closeBtn = document.getElementById("close-modal");
+
+fab.addEventListener("click", () => {
+  modal.classList.add("active");
+  document.body.style.overflow = "hidden"; // trava scroll
+});
+
+closeBtn.addEventListener("click", () => {
+  modal.classList.remove("active");
+  document.body.style.overflow = "auto";
+});
+</script>

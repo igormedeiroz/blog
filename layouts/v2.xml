@@ -1,0 +1,85 @@
+
+
+1
+<?xml version="1.0" encoding="UTF-8" ?>
+2
+<!DOCTYPE html>
+3
+<!--
+4
+=============================================================================
+5
+ TEMPLATE : Historico Infame, Red & Blue
+6
+ Autor    : Igor Medeiroz
+7
+ Licenca  : Creative Commons Attribution - o credito no rodape deve ser mantido.
+8
+ Revisao  : Sistema de temas (claro / escuro / sepia / terminal) via data-tema.
+9
+​
+10
+ COMO ESTE ARQUIVO ESTA ORGANIZADO
+11
+ ===========================================================================
+12
+ 1. <head>      : meta tags, fontes e o CSS completo dentro de <b:skin>.
+13
+ 2. <body>      : estrutura em 5 blocos ->
+14
+                  #menu-wrapper     (menu principal + botao de tema)
+15
+                  #header-wrapper   (cabecalho / titulo do blog)
+16
+                  #crosscol-wrapper (menu de paginas + posts populares)
+17
+                  #content-wrapper  (#main-wrapper + #sidebar-wrapper)
+18
+                  #footer-wrapper   (rodape + creditos)
+19
+ 3. <b:widget>  : cada gadget do Blogger. O codigo dentro de <b:includable>
+20
+                  e o HTML que o Blogger gera; so edite se souber o que faz.
+21
+​
+22
+ ONDE MEXER PARA PERSONALIZAR
+23
+ ===========================================================================
+24
+ - Cores, fontes e larguras : bloco ":root" logo no inicio do CSS.
+25
+ - Nada mais precisa ser tocado para trocar a identidade visual do blog.
+26
+=============================================================================
+27
+--><html expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+28
+<head>
+29
+​
+30
+  <!-- ================= TEMA: ANTI-PISCA =================
+31
+       Tem de ser o PRIMEIRO script da pagina e ficar antes de
+32
+       qualquer CSS. Le a escolha guardada e marca-a no <html>
+33
+       antes da primeira pintura, para o leitor nao ver o tema
+34
+       claro a piscar antes de o escuro entrar. -->
+35
+  <script>
+36
+    //<![CDATA[
+37
+    (function () {
+38
+      try {
+39
+        var t = localStorage.getItem('tema');
+40
+        if (t) document.documentElement.setAttribute('data-tema', t);
+41
+      } catch (e) { /* modo privado: segue o tema do sistema */ }
+Template: Edit template

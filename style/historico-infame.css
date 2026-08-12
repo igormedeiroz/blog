@@ -162,10 +162,15 @@ img.capa-livro{
   line-height:1.6;
   text-align:justify;
   color:var(--cor-texto-suave);
-  overflow: scroll;
+  overflow-y: scroll;
   max-height: 110px;
+  padding-right: 10px;
 }
  
+.resumo::-webkit-scrollbar {
+  width: 3px;
+}
+
 /* --- Varias fichas lado a lado (grelha de leituras) --- */
 .total{ display:flex; flex-wrap:wrap; gap:18px; width:100%; }
  

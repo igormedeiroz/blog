@@ -1,0 +1,340 @@
+<!-- =========================================================
+     A MESA - homepage de objetos arrastaveis
+     Bloco unico para um gadget HTML/JavaScript do Blogger.
+     Cole na seccao "home" (Layout -> home -> Adicionar gadget
+     -> HTML/JavaScript) e guarde.
+
+     COMO ACRESCENTAR UM OBJETO
+     ---------------------------------------------------------
+     Copie um <div class="objeto"> e mude:
+       data-x / data-y : posicao inicial, em % da mesa (0 a 100)
+       data-w          : largura em px no ecra grande
+       data-rot        : inclinacao em graus (opcional)
+       o <img>         : o desenho
+     Para o objeto levar a algum sitio, ponha o <img> dentro de
+     um <a href="...">, como no exemplo do Instagram.
+     ========================================================= -->
+
+<style>
+/* ---------------------------------------------------------
+   As cores vem do tema do blog. Se alguma variavel faltar,
+   entra o valor de reserva a seguir a virgula.
+   --------------------------------------------------------- */
+.mesa-wrap{
+  --mesa-altura:      600px;   /* altura da mesa no ecra grande */
+  --mesa-altura-mob:  520px;
+  --mesa-texto:       var(--cor-texto-suave, #8c8c8c);
+  --mesa-titulo:      var(--cor-titulo, #111);
+  --mesa-fonte:       var(--fonte-base, monospace);
+
+  position:relative;
+  width:100%;
+  margin:0 0 40px;
+  font-family:var(--mesa-fonte);
+}
+
+/* --- Apresentacao --- */
+.mesa-intro{
+  max-width:520px;
+  margin:0 0 8px;
+  font-size:15px;
+  line-height:1.7;
+  color:var(--mesa-titulo);
+}
+.mesa-intro p{ margin:0 0 10px; }
+.mesa-dica{
+  margin:0;
+  font-size:12px;
+  color:var(--mesa-texto);
+}
+
+/* --- A mesa --- */
+.mesa{
+  position:relative;
+  width:100%;
+  height:var(--mesa-altura);
+  margin-top:18px;
+  touch-action:none;        /* o dedo arrasta o objeto, nao a pagina */
+  overflow:hidden;
+}
+
+/* --- Cada objeto --- */
+.objeto{
+  position:absolute;
+  top:0;
+  left:0;
+  cursor:grab;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:none;
+  transition:filter .18s ease;
+  will-change:transform;
+}
+.objeto:hover{ filter:brightness(1.05) drop-shadow(0 6px 14px rgba(0,0,0,.18)); }
+.objeto.a-arrastar{ cursor:grabbing; filter:drop-shadow(0 12px 24px rgba(0,0,0,.28)); }
+
+.objeto img{
+  display:block;
+  width:100%;
+  height:auto;
+  pointer-events:none;      /* o rato fala com o .objeto, nao com a imagem */
+  -webkit-user-drag:none;
+  user-drag:none;
+}
+.objeto a{
+  display:block;
+  line-height:0;
+  outline-offset:4px;
+}
+.objeto a:focus-visible{ outline:2px solid var(--cor-link-hover, #111); }
+
+/* Etiqueta que aparece ao passar o cursor num objeto com link */
+.objeto[data-rotulo]::after{
+  content:attr(data-rotulo);
+  position:absolute;
+  left:50%;
+  bottom:-22px;
+  transform:translateX(-50%);
+  padding:3px 8px;
+  background:var(--cor-titulo, #111);
+  color:var(--cor-contraste, #fff);
+  font-size:10px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease;
+}
+.objeto[data-rotulo]:hover::after{ opacity:1; }
+
+/* --- Botao de arrumar --- */
+.mesa-arrumar{
+  position:absolute;
+  right:0;
+  bottom:-6px;
+  padding:7px 12px;
+  background:transparent;
+  border:1px solid var(--cor-borda, #ececec);
+  border-radius:3px;
+  font-family:var(--mesa-fonte);
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--mesa-texto);
+  cursor:pointer;
+  transition:color .18s ease, border-color .18s ease;
+}
+.mesa-arrumar:hover{ color:var(--mesa-titulo); border-color:var(--mesa-texto); }
+
+/* --- Telemovel --- */
+@media (max-width:700px){
+  .mesa{ height:var(--mesa-altura-mob); }
+  .mesa-intro{ font-size:14px; }
+  .objeto[data-rotulo]::after{ display:none; }
+}
+
+/* Quem pediu menos animacoes no sistema nao leva transicoes. */
+@media (prefers-reduced-motion: reduce){
+  .objeto, .mesa-arrumar, .objeto[data-rotulo]::after{ transition:none; }
+}
+</style>
+
+
+<div class="mesa-wrap">
+
+  <div class="mesa-intro">
+    <p>Oi. Isto aqui é a minha mesa.</p>
+    <p class="mesa-dica">
+      Pode bagunçar à vontade — algumas coisas levam a outros lugares.
+    </p>
+  </div>
+
+  <div class="mesa" id="mesa">
+
+    <!-- Objeto simples, sem link -->
+    <div class="objeto" data-x="6" data-y="10" data-w="190" data-rot="-6">
+      <img alt="Caderno" src="COLE-AQUI-O-ENDERECO-DA-IMAGEM.png"/>
+    </div>
+
+    <!-- Objeto com link. O data-rotulo aparece ao passar o cursor. -->
+    <div class="objeto" data-rotulo="Instagram" data-x="34" data-y="6" data-w="150" data-rot="4">
+      <a href="https://instagram.com/igormedeiroz" rel="noopener" target="_blank">
+        <img alt="Instagram" src="COLE-AQUI-O-ENDERECO-DA-IMAGEM.png"/>
+      </a>
+    </div>
+
+    <div class="objeto" data-rotulo="Fotografia" data-x="60" data-y="14" data-w="200" data-rot="-3">
+      <a href="/p/fotografia.html">
+        <img alt="Fotografia" src="COLE-AQUI-O-ENDERECO-DA-IMAGEM.png"/>
+      </a>
+    </div>
+
+    <div class="objeto" data-rotulo="Blog" data-x="18" data-y="50" data-w="170" data-rot="7">
+      <a href="/blog">
+        <img alt="Blog" src="COLE-AQUI-O-ENDERECO-DA-IMAGEM.png"/>
+      </a>
+    </div>
+
+    <div class="objeto" data-x="52" data-y="55" data-w="140" data-rot="-10">
+      <img alt="Fita" src="COLE-AQUI-O-ENDERECO-DA-IMAGEM.png"/>
+    </div>
+
+  </div>
+
+  <button class="mesa-arrumar" id="mesaArrumar" type="button">Arrumar a mesa</button>
+
+</div>
+
+
+<script>
+//<![CDATA[
+(function () {
+  "use strict";
+
+  var CHAVE = "mesa_posicoes_v1";   // onde as posicoes ficam guardadas
+  var LIMIAR = 5;                   // px de movimento a partir dos quais
+                                    // deixa de ser clique e passa a arrasto
+
+  var mesa = document.getElementById("mesa");
+  var btn  = document.getElementById("mesaArrumar");
+  if (!mesa) return;
+
+  var objetos = [].slice.call(mesa.querySelectorAll(".objeto"));
+  var zTopo = 10;
+
+  /* ===== posicoes guardadas (por objeto, em % da mesa) ===== */
+  function ler() {
+    try { return JSON.parse(localStorage.getItem(CHAVE)) || {}; }
+    catch (e) { return {}; }
+  }
+  function gravar(p) {
+    try { localStorage.setItem(CHAVE, JSON.stringify(p)); } catch (e) {}
+  }
+  var guardadas = ler();
+
+  /* ===== colocar cada objeto ===== */
+  function chave(el, i) { return (el.getAttribute("data-rotulo") || "obj") + i; }
+
+  function colocar(el, xPct, yPct) {
+    el.style.left = xPct + "%";
+    el.style.top  = yPct + "%";
+  }
+
+  objetos.forEach(function (el, i) {
+    var largura = parseFloat(el.getAttribute("data-w")) || 160;
+    var rot     = parseFloat(el.getAttribute("data-rot")) || 0;
+
+    el.style.width = largura + "px";
+    el.style.transform = "rotate(" + rot + "deg)";
+    el.dataset.rotBase = rot;
+    el.style.zIndex = 1 + i;
+
+    var g = guardadas[chave(el, i)];
+    colocar(el,
+      g ? g.x : (parseFloat(el.getAttribute("data-x")) || 0),
+      g ? g.y : (parseFloat(el.getAttribute("data-y")) || 0));
+
+    // No telemovel os objetos encolhem para caberem na mesa.
+    if (window.matchMedia("(max-width:700px)").matches) {
+      el.style.width = Math.round(largura * 0.62) + "px";
+    }
+  });
+
+  /* ===== arrastar ===== */
+  objetos.forEach(function (el, i) {
+    var ativo = false, moveu = false;
+    var offX = 0, offY = 0, iniX = 0, iniY = 0;
+
+    el.addEventListener("pointerdown", function (ev) {
+      if (ev.button !== 0 && ev.pointerType === "mouse") return;
+
+      var caixa = el.getBoundingClientRect();
+      var mesaC = mesa.getBoundingClientRect();
+
+      ativo = true;
+      moveu = false;
+      iniX = ev.clientX;
+      iniY = ev.clientY;
+      offX = ev.clientX - caixa.left;
+      offY = ev.clientY - caixa.top;
+
+      el.setPointerCapture(ev.pointerId);
+      el.classList.add("a-arrastar");
+      el.style.zIndex = ++zTopo;
+
+      // Guarda a largura da mesa para nao a recalcular a cada movimento.
+      el._mesa = mesaC;
+      el._tam  = caixa;
+    });
+
+    el.addEventListener("pointermove", function (ev) {
+      if (!ativo) return;
+
+      if (!moveu &&
+          (Math.abs(ev.clientX - iniX) > LIMIAR ||
+           Math.abs(ev.clientY - iniY) > LIMIAR)) {
+        moveu = true;
+      }
+      if (!moveu) return;
+
+      ev.preventDefault();
+
+      var m = el._mesa;
+      var x = ev.clientX - m.left - offX;
+      var y = ev.clientY - m.top  - offY;
+
+      // Nao deixa sair da mesa.
+      x = Math.max(0, Math.min(x, m.width  - el._tam.width));
+      y = Math.max(0, Math.min(y, m.height - el._tam.height));
+
+      colocar(el, (x / m.width) * 100, (y / m.height) * 100);
+    });
+
+    function largar(ev) {
+      if (!ativo) return;
+      ativo = false;
+      el.classList.remove("a-arrastar");
+      try { el.releasePointerCapture(ev.pointerId); } catch (e) {}
+
+      if (moveu) {
+        guardadas[chave(el, i)] = {
+          x: parseFloat(el.style.left),
+          y: parseFloat(el.style.top)
+        };
+        gravar(guardadas);
+      }
+    }
+
+    el.addEventListener("pointerup", largar);
+    el.addEventListener("pointercancel", largar);
+
+    // Se o objeto foi arrastado, o clique nao deve seguir o link.
+    var ligacao = el.querySelector("a");
+    if (ligacao) {
+      ligacao.addEventListener("click", function (ev) {
+        if (moveu) { ev.preventDefault(); moveu = false; }
+      });
+    }
+
+    // O navegador tenta arrastar imagens sozinho; aqui nao interessa.
+    el.addEventListener("dragstart", function (ev) { ev.preventDefault(); });
+  });
+
+  /* ===== arrumar: volta tudo ao lugar de origem ===== */
+  if (btn) {
+    btn.addEventListener("click", function () {
+      objetos.forEach(function (el, i) {
+        colocar(el,
+          parseFloat(el.getAttribute("data-x")) || 0,
+          parseFloat(el.getAttribute("data-y")) || 0);
+        el.style.zIndex = 1 + i;
+      });
+      zTopo = 10;
+      guardadas = {};
+      gravar(guardadas);
+    });
+  }
+})();
+//]]>
+</script>

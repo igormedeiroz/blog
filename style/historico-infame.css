@@ -402,3 +402,55 @@ sup a{
   font-size:.9em;
   color:var(--cor-texto-suave);
 }
+
+/* -----------------------------------------------------------------------------
+   11. TOGGLE POST
+   -------------------------------------------------------------------------- */
+   
+.toggle-post {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin: 20px 0;
+  max-width: 700px;
+  font-family: Arial, sans-serif;
+}
+
+/* esconde o checkbox */
+.toggle-post input[type="checkbox"] {
+  display: none;
+}
+
+/* label clicável */
+.toggle-post label {
+  display: block;
+  cursor: pointer;
+  font-weight: normal;
+  padding: 10px;
+}
+
+/* conteúdo fechado */
+.toggle-conteudo {
+  display: none;
+  margin-top: 15px;
+  line-height: 1.6;
+}
+
+/* conteúdo aberto */
+.toggle-post input[type="checkbox"]:checked ~ .toggle-conteudo {
+  display: block;
+}
+
+  
+.lista-blogs ul {
+  column-count: 2;
+  column-gap: 40px;
+  list-style-position: inside;
+  padding-left: 0;
+  text-transform: lowercase;
+}
+
+@media (max-width: 600px) {
+  .lista-blogs ul {
+    column-count: 1;
+  }
+}

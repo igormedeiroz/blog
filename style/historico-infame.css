@@ -303,9 +303,6 @@ img.capa-livro{
  
 .post-colunas-item{
   padding:15px;
-  background:var(--cor-superficie);
-  border:1px solid var(--cor-borda);
-  border-radius:3px;
 }
 .post-colunas-item img{
   max-width:100%;
@@ -330,7 +327,7 @@ img.capa-livro{
   width:fit-content;
   margin:10px;
   padding:10px 10px 25px;
-  background:var(--cor-superficie);
+  background: #f1f1f1;
   border:1px solid var(--cor-borda);
   border-radius:2px;
   box-shadow:0 8px 16px var(--sombra);
@@ -344,6 +341,7 @@ img.capa-livro{
   height:auto;
   display:block;
   margin-bottom:10px;
+ 
   border-bottom:1px solid var(--cor-borda);
 }
  

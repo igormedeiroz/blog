@@ -299,6 +299,7 @@ img.capa-livro{
   display:grid;
   grid-template-columns:repeat(var(--colunas, 3), 1fr);
   gap:20px;
+  align-items: center;
 }
  
 .post-colunas-item{

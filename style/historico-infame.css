@@ -329,7 +329,7 @@ img.capa-livro{
   padding:10px 10px 25px;
   background: #f1f1f1;
   border:1px solid var(--cor-borda);
-  border-radius:2px;
+  border-radius:5px;
   box-shadow:0 8px 16px var(--sombra);
   text-align:center;
   transition:transform .2s ease;
@@ -451,4 +451,15 @@ sup a{
   .lista-blogs ul {
     column-count: 1;
   }
+}
+
+
+/* -----------------------------------------------------------------------------
+   12. TITULO PAGINA ESTATICA
+   -------------------------------------------------------------------------- */
+   
+.titulo-pagina-estatica{
+	text-align: center;
+	font-size: var(--titulo-post);
+	
 }

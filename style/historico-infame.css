@@ -462,5 +462,7 @@ sup a{
 .titulo-pagina-estatica{
 	text-align: center;
 	font-size: var(--titulo-post);
+	font-family: var(--fonte-auxiliar);
+	font-style: italic;
 	
 }

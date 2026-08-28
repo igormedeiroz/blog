@@ -530,4 +530,28 @@ sup a{
     var(--cor-texto-suave);
 
 }
+
+
+.pagina-estatica-intro {
+
+  max-width: 500px;
+
+  margin:
+    20px auto 70px;
+
+  text-align: center;
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 10px;
+
+  color:
+    var(--cor-texto-suave);
+
+  letter-spacing:
+    .08em;
+
+}
  

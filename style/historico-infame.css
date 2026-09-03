@@ -475,10 +475,8 @@ sup a{
 .pagina-estatica-overline {
 
   display: block;
+  text-transform: uppercase;
   margin-bottom: 12px;
-  font-family:
-    "Courier New",
-    monospace;
 
   font-size: 9px;
 
@@ -493,7 +491,7 @@ sup a{
 .pagina-estatica-header h1 {
 
   margin: 0;
-
+  text-transform: lowercase;
   font-family:
     "Aboreto",
     sans-serif;
@@ -516,10 +514,6 @@ sup a{
   margin:
     18px auto 0;
 
-  font-family:
-    "Courier New",
-    monospace;
-
   font-size: 10px;
 
   line-height: 1.7;
@@ -538,10 +532,6 @@ sup a{
     20px auto 70px;
 
   text-align: center;
-
-  font-family:
-    "Courier New",
-    monospace;
 
   font-size: 10px;
 

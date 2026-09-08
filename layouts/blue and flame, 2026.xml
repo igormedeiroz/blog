@@ -5,19 +5,21 @@
  TEMPLATE : Historico Infame, Red & Blue
  Autor    : Igor Medeiroz
  Licenca  : Creative Commons Attribution - o credito no rodape deve ser mantido.
- Revisao  : 5 temas com icone proprio; botao de tema a direita do menu.
+ Revisao  : nome do blog + paginas numa so barra; botao de tema no rodape;
+            temas Riso e Azulejo; localizacao com base para posts sem
+            local; quickedit reforcado.
 
  COMO ESTE ARQUIVO ESTA ORGANIZADO
  ===========================================================================
  1. <head>      : meta tags, fontes e o CSS completo dentro de <b:skin>.
- 2. <body>      : estrutura em 5 blocos ->
-                  #menu-wrapper     (menu principal + botao de tema)
-                  #header-wrapper   (cabecalho / titulo do blog)
-                  #crosscol-wrapper (menu de paginas + posts populares)
+ 2. <body>      : estrutura em 4 blocos ->
+                  #menu-wrapper     nome do blog (#header-wrapper) +
+                                    paginas (.menu-links), lado a lado
+                  #crosscol-wrapper (posts populares)
                   #content-wrapper  (#main-wrapper + #sidebar-wrapper)
                                     #main-wrapper tem #home-wrapper,
                                     so visivel na primeira pagina
-                  #footer-wrapper   (rodape + creditos)
+                  #footer-wrapper   rodape: copyright + botao de tema
  3. <b:widget>  : cada gadget do Blogger. O codigo dentro de <b:includable>
                   e o HTML que o Blogger gera; so edite se souber o que faz.
 
@@ -213,6 +215,25 @@
   --cor-veu:          rgba(255,220,212,.9);
 }
 
+/* --- Tema AZULEJO: azul, vermelho e bege ---
+       Bege claro tipo pedra de Lisboa, azul de azulejo e vermelho
+       terracota. Contrastes conferidos para AA (4.5:1); o
+       texto-suave original (#7a6a52) ficava em 4.23:1 e foi
+       escurecido para #6f6048 (4.92:1). --- */
+:root[data-tema="azulejo"]{
+  color-scheme: light;
+  --cor-fundo:        #f0e6d2;   /* bege/creme               */
+  --cor-texto:        #1c2f45;   /* azul-marinho             */
+  --cor-texto-suave:  #6f6048;
+  --cor-titulo:       #14232f;
+  --cor-link:         #2f5f86;   /* azul de azulejo          */
+  --cor-link-hover:   #a8331f;   /* vermelho terracota       */
+  --cor-borda:        #ddd0ae;
+  --cor-superficie:   #e8dcc2;
+  --cor-contraste:    #f0e6d2;
+  --cor-veu:          rgba(240,230,210,.9);
+}
+
 /* ------------------------------------------------------------------
    01b. TOKENS QUE NAO MUDAM COM O TEMA
    Fontes, tamanhos e larguras ficam aqui, definidos uma unica vez.
@@ -230,6 +251,13 @@
   --titulo-post:  24px;
   --altura-linha: 1.75;
   --espaco-letra: .12em;  /* usado nos textos em maiusculas */
+
+  /* --accent: adicionado para o hover de .post-body a corrigido
+     abaixo, na seccao 04. Sem esta linha, --accent nao existia em
+     nenhum tema e o hover ficava sem cor (var() invalido cai no
+     valor herdado, ou seja, nada muda). Aponta para o mesmo tom
+     usado no resto do site para hover de link. */
+  --accent: var(--cor-link-hover);
 
   /* -- Layout -- */
   --largura-site:    1040px;  /* largura maxima do conteudo   */
@@ -299,8 +327,6 @@ h4{ font-size:var(--texto-sm); font-weight:600; }
    04. ESTRUTURA / WRAPPERS
    Sem floats: o conteudo usa flexbox, o que dispensa hacks de largura.
    ------------------------------------------------------------------ */
-#header-wrapper{ width:100%; padding:60px 20px 30px; }
-
 #outer-wrapper{
   width:100%;
   max-width:var(--largura-site);
@@ -490,16 +516,26 @@ h4{ font-size:var(--texto-sm); font-weight:600; }
 #header img{ margin:0 auto; }
 
 /* ------------------------------------------------------------------
-   06. MENU PRINCIPAL  (widget PageList + botao de tema)
-   Ecra grande : barra no topo, presa ao rolar, SO TEXTO.
-   Telemovel   : barra fixa em baixo, SO ICONES.
-   Os icones sao injetados pelo script no fim do <body> e ficam
-   escondidos no ecra grande; os rotulos fazem o inverso.
+   06. CABECALHO + MENU  (nome do blog + widget PageList)
+   Uma unica barra no topo: o nome fica a esquerda, as paginas a
+   direita. O botao de tema NAO vive mais aqui -- foi para o rodape
+   (seccao 13).
 
-   Centragem: o widget do Blogger envolve a lista em tres <div>
-   aninhadas. Com display:contents essas caixas deixam de contar
-   para o layout, e os itens do menu passam a ser filhos diretos
-   do flex, o que permite centrar e distribuir com exatidao.
+   Ecra grande : uma linha, nome + paginas em texto.
+   Telemovel   : o nome fica no topo (sozinho); as paginas descem
+                 para uma barra fixa no fundo, so com icones. Os
+                 icones sao injetados pelo script no fim do <body>.
+
+   Estrutura no HTML (ver <body>):
+     #menu-wrapper
+       .menu-topo
+         #header-wrapper   (nome do blog, widget Header1)
+         .menu-links       (envolve o widget PageList1)
+
+   Centragem/alinhamento: o widget do Blogger envolve a lista em
+   tres <div> aninhadas. Com display:contents essas caixas deixam
+   de contar para o layout, e os <li> passam a ser filhos diretos
+   do flex dentro de .menu-links.
    ------------------------------------------------------------------ */
 #menu-wrapper{
   position:sticky;
@@ -511,27 +547,43 @@ h4{ font-size:var(--texto-sm); font-weight:600; }
 }
 
 .menu-topo{
-  position:relative;      /* referencia para o botao de tema absoluto */
   display:flex;
-  align-items:stretch;
-  justify-content:center;
-  gap:0;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
   max-width:var(--largura-site);
   margin:0 auto;
   padding:0 20px;
 }
 
-/* As caixas do widget saem do fluxo do flex. */
-.menu-topo .section,
-.menu-topo .widget,
-.menu-topo .widget-content,
-.menu-topo #PageList1 ul{ display:contents; }
-.menu-topo h2{ display:none; }
+/* --- Nome do blog, agora compacto e a esquerda --- */
+#header-wrapper{ padding:0; flex:0 0 auto; }
+#header{ text-align:left; }
+#header-inner{ margin:0; }
+#header h1{
+  margin:0;
+  font-size:var(--texto-sm);
+  font-weight:600;
+  letter-spacing:var(--espaco-letra);
+  text-transform:uppercase;
+  text-align:left;
+}
+/* A descricao (subtitulo do blog) nao cabe numa barra fina;
+   fica reservada para quem quiser reativa-la manualmente. */
+#header .description{ display:none; }
+
+/* --- Paginas, agora a direita --- */
+.menu-links{ display:flex; align-items:stretch; min-width:0; }
+
+.menu-links .section,
+.menu-links .widget,
+.menu-links .widget-content,
+.menu-links #PageList1 ul{ display:contents; }
+.menu-links h2{ display:none; }
 
 #PageList1 li{ display:flex; margin:0; }
 
-#PageList1 a,
-#tema-toggle{
+#PageList1 a{
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -552,30 +604,16 @@ h4{ font-size:var(--texto-sm); font-weight:600; }
   transition:color var(--transicao);
 }
 #PageList1 a:visited{ color:var(--cor-texto-suave); }
-#PageList1 a:hover,
-#tema-toggle:hover{ color:var(--cor-titulo); }
+#PageList1 a:hover{ color:var(--cor-titulo); }
 #PageList1 .selected a{ color:var(--cor-titulo); }
 
-#PageList1 a:focus-visible,
-#tema-toggle:focus-visible{
+#PageList1 a:focus-visible{
   outline:2px solid var(--cor-link-hover);
   outline-offset:-4px;
 }
 
-/* O botao de tema sai do fluxo e encosta a direita da barra. Assim os
-   links das paginas ficam centrados no meio real do ecra, em vez de
-   serem empurrados para a esquerda pela largura do botao. */
-#tema-toggle{
-  position:absolute;
-  right:20px;
-  top:0;
-  bottom:0;
-  margin:0;
-  padding-left:14px;
-  border-left:0;
-}
-
-/* O icone herda a cor do texto e nunca encolhe. */
+/* O icone herda a cor do texto e nunca encolhe. Usado tambem pelo
+   botao de tema, agora no rodape (ver seccao 13/16). */
 .menu-icone{
   flex:0 0 auto;
   width:21px;
@@ -587,51 +625,43 @@ h4{ font-size:var(--texto-sm); font-weight:600; }
   stroke-linejoin:round;
 }
 
-/* No ecra grande: so texto nas paginas... */
+/* No ecra grande: so texto nas paginas. */
 #PageList1 .menu-icone{ display:none; }
-
-/* ...mas o botao de tema mantem sempre o icone, nos dois tamanhos.
-   O nome do tema fica ao lado dele no ecra grande. */
-#tema-toggle .menu-icone{ display:block; }
-
-/* Como o menu passou para o topo, o cabecalho respira menos. */
-#header-wrapper{ padding:44px 20px 26px; }
 
 /* ------------------------------------------------------------------
    06b. MENU NO TELEMOVEL
-   Barra fixa no fundo, so icones, itens com a mesma largura.
+   O nome do blog fica onde esta (topo, sticky). So .menu-links vira
+   uma barra fixa no fundo, com icones -- por isso o position:fixed
+   vai em .menu-links e nao em #menu-wrapper: um elemento fixed
+   posiciona-se em relacao ao ecra independentemente de onde vive no
+   HTML (a nao ser que um antepassado tenha transform/filter, o que
+   nao e o caso aqui), entao o nome continua normal no topo.
    O padding-bottom no body impede que a barra tape o fim do
    conteudo; env(safe-area-inset-bottom) trata da barra de gestos
    do iPhone.
    ------------------------------------------------------------------ */
 @media screen and (max-width:700px){
-  #menu-wrapper{
+  .menu-topo{ padding:0 16px; }
+
+  #header-wrapper{ padding:14px 0; }
+  #header h1{ font-size:var(--texto-xs); }
+
+  .menu-links{
     position:fixed;
-    top:auto;
-    bottom:0;
     left:0;
     right:0;
-    border-bottom:0;
+    bottom:0;
+    z-index:900;
+    background:var(--cor-fundo);
     border-top:1px solid var(--cor-borda);
     padding-bottom:env(safe-area-inset-bottom, 0px);
   }
 
   body{ padding-bottom:76px; }
 
-  .menu-topo{ padding:0; }
-
-  /* Cada item ocupa exatamente a mesma fatia da largura, incluindo
-     o botao de tema. Sem larguras minimas: nada desalinha. */
-  #PageList1 li,
-  #tema-toggle{ flex:1 1 0; min-width:0; }
-
-  #PageList1 a{ flex:1 1 auto; }
-
-  #PageList1 a,
-  #tema-toggle{ padding:15px 0; }
-
-  /* No telemovel volta a ser um item normal da barra inferior. */
-  #tema-toggle{ position:static; margin:0; padding:15px 0; border-left:0; }
+  /* Cada pagina ocupa exatamente a mesma fatia da largura. */
+  #PageList1 li{ flex:1 1 0; min-width:0; }
+  #PageList1 a{ flex:1 1 auto; padding:15px 0; }
 
   /* So icones. */
   #PageList1 .menu-icone{ display:block; }
@@ -643,8 +673,6 @@ h4{ font-size:var(--texto-sm); font-weight:600; }
     clip:rect(0 0 0 0);
     white-space:nowrap;
   }
-
-  #header-wrapper{ padding:28px 16px 18px; }
 }
 
 /* ------------------------------------------------------------------
@@ -693,7 +721,44 @@ h4{ font-size:var(--texto-sm); font-weight:600; }
 /* ------------------------------------------------------------------
    08. POSTS
    ------------------------------------------------------------------ */
-.post{ margin:0 auto 70px; }
+.post{ position:relative; margin:0 auto 70px; }
+
+/* Quickedit: o lapis que so o autor logado ve, para editar o post
+   sem passar pelo painel do Blogger. O proprio Blogger controla
+   quando ele aparece (a classe adminClass so existe quando o
+   visitante e um autor do blog); aqui so cuidamos do aspeto, para
+   nao depender do CSS de administrador que o Blogger injeta, que
+   um skin totalmente customizado como este pode acabar cobrindo. */
+.item-control.quickedit{
+  position:absolute;
+  top:0;
+  right:0;
+  z-index:5;
+  opacity:.35;
+  transition:opacity var(--transicao);
+}
+.post:hover .item-control.quickedit{ opacity:1; }
+.item-control.quickedit a{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:30px;
+  height:30px;
+  background:var(--cor-superficie);
+  border:1px solid var(--cor-borda);
+  border-radius:50%;
+  color:var(--cor-texto-suave);
+}
+.item-control.quickedit a:hover{ color:var(--cor-titulo); border-color:var(--cor-texto-suave); }
+.quickedit-icone{
+  width:14px;
+  height:14px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
 .post h3.post-title{ margin:0 0 12px; }
 .post h3 a, .post h3 a:visited, .post h3 strong{ display:block; color:var(--cor-titulo); font-weight:400; }
 .post h3 a:hover{ color:var(--cor-link); }
@@ -765,6 +830,21 @@ h4{ font-size:var(--texto-sm); font-weight:600; }
 .compartilhar{ display:inline-flex; gap:16px; }
 .compartilhar a{ color:var(--cor-texto-suave); }
 .compartilhar a:hover{ color:var(--cor-link-hover); }
+
+/* Localizacao do post: icone de pin + texto. Quando o post nao tem
+   localizacao propria, o script no fim do <body> preenche o texto
+   com Brasilia (antes de 2021) ou Porto (2021 em diante). */
+.post-location a{ display:inline-flex; align-items:center; gap:4px; }
+.pin-icone{
+  flex:0 0 auto;
+  width:11px;
+  height:11px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
 
 /* ------------------------------------------------------------------
    09. POSTAGENS RELACIONADAS  (#at-gambar)
@@ -975,11 +1055,44 @@ h4{ font-size:var(--texto-sm); font-weight:600; }
 }
 #creditos{ width:100%; border-top:1px solid var(--cor-borda); }
 .creditos{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:14px;
   padding:22px 10px;
-  text-align:center;
   font-size:10px;
+  letter-spacing:var(--espaco-letra);
+  text-transform:uppercase;
   color:var(--cor-texto-suave);
 }
+
+/* Botao de tema, agora aqui no rodape: um botao-pilula pequeno,
+   e nao mais o item alto da barra do menu. */
+#tema-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 10px;
+  background:transparent;
+  border:1px solid var(--cor-borda);
+  border-radius:20px;
+  font-family:var(--fonte-base);
+  font-size:10px;
+  letter-spacing:inherit;
+  text-transform:inherit;
+  color:var(--cor-texto-suave);
+  cursor:pointer;
+  -webkit-appearance:none;
+  appearance:none;
+  transition:color var(--transicao), border-color var(--transicao);
+}
+#tema-toggle:hover{ color:var(--cor-titulo); border-color:var(--cor-texto-suave); }
+#tema-toggle:focus-visible{
+  outline:2px solid var(--cor-link-hover);
+  outline-offset:2px;
+}
+#creditos .menu-icone{ width:14px; height:14px; }
 
 /* ------------------------------------------------------------------
    14. RESPONSIVO
@@ -988,7 +1101,6 @@ h4{ font-size:var(--texto-sm); font-weight:600; }
 @media screen and (max-width:900px){
   :root{ --titulo-blog:28px; --titulo-post:20px; --texto-base:14px; --gap:0px; }
 
-  #header-wrapper{ padding:40px 16px 20px; }
   #outer-wrapper{ padding:0 16px; margin-bottom:50px; }
 
   #content-wrapper{ display:block; }
@@ -1025,10 +1137,11 @@ body#layout #menu-wrapper,
 body#layout #footer-wrapper{ padding:0; }
 body#layout #menu-wrapper{ position:static; }
 body#layout .menu-topo{ display:block; }
-body#layout .menu-topo .section,
-body#layout .menu-topo .widget,
-body#layout .menu-topo .widget-content,
-body#layout .menu-topo #PageList1 ul{ display:block; }
+body#layout .menu-links{ position:static; display:block; }
+body#layout .menu-links .section,
+body#layout .menu-links .widget,
+body#layout .menu-links .widget-content,
+body#layout .menu-links #PageList1 ul{ display:block; }
 body#layout #home-wrapper{ display:block; }
 body#layout .date-outer,
 body#layout .date-posts{ display:block; }
@@ -1037,10 +1150,10 @@ body#layout body{ padding-bottom:0; }
 
 /* ------------------------------------------------------------------
    16. BOTAO DE TEMA
-   O aspeto vem da seccao 06: o botao e apenas mais um item do menu.
-   Aqui ficam so os ajustes proprios dele.
+   O aspeto principal vem da seccao 13 (rodape), onde o botao agora
+   vive. Esta regra so garante que navegadores nao aplicam a
+   aparencia nativa de <button>.
    ------------------------------------------------------------------ */
-#tema-toggle{ -webkit-appearance:none; appearance:none; }
 
 /* Respeita quem pediu menos animacoes nas definicoes do sistema. */
 @media (prefers-reduced-motion: reduce){
@@ -1124,46 +1237,14 @@ body#layout body{ padding-bottom:0; }
 
   <body>
 
-    <!-- ================= MENU PRINCIPAL =================
-         Barra no topo (ecra grande) ou fixa em baixo (telemovel).
-         Contem o widget Paginas e o botao de tema. Os icones sao
-         acrescentados pelo script no fim do <body>. -->
+    <!-- ================= CABECALHO + MENU =================
+         Uma unica barra: o nome do blog (widget Header1) a
+         esquerda, o widget Paginas a direita. No telemovel o nome
+         fica sozinho no topo e as paginas descem para uma barra
+         fixa no fundo, so com icones (ver CSS, seccao 06b).
+         O botao de tema vive agora no rodape (ver #footer-wrapper). -->
     <div id='menu-wrapper'>
       <nav aria-label='Menu principal' class='menu-topo'>
-
-                <b:section class='menu' id='menu' maxwidgets='1' showaddelement='no'>
-                  <b:widget id='PageList1' locked='false' title='Páginas' type='PageList' version='1'>
-                    <b:widget-settings>
-                      <b:widget-setting name='pageListJson'><![CDATA[{"395579416045985828":{"href":"https://www.igormedeiroz.com/p/blog.html","position":1,"title":"blog"},"429264964123889320":{"href":"https://www.igormedeiroz.com/p/navegue.html","position":2,"title":"+"},"1823572247140042333":{"href":"https://www.igormedeiroz.com/p/fotografia.html","position":0,"title":"fotografia"}}]]></b:widget-setting>
-                      <b:widget-setting name='homeTitle'>Página inicial</b:widget-setting>
-                    </b:widget-settings>
-                    <b:includable id='main'>
-  <!-- Sempre uma lista: o layout responsivo trata do telemovel,
-       por isso o <select> do modo movel do Blogger nao e usado. -->
-  <b:if cond='data:title != &quot;&quot;'><h2><data:title/></h2></b:if>
-  <div class='widget-content'>
-    <ul>
-      <b:loop values='data:links' var='link'>
-        <b:if cond='data:link.isCurrentPage'>
-          <li class='selected'><a expr:href='data:link.href'><data:link.title/></a></li>
-        <b:else/>
-          <li><a expr:href='data:link.href'><data:link.title/></a></li>
-        </b:if>
-      </b:loop>
-    </ul>
-    <b:include name='quickedit'/>
-  </div>
-</b:includable>
-                  </b:widget>
-                </b:section>
-
-        <button aria-label='Mudar o tema do blog' id='tema-toggle' type='button'>
-          <span class='tema-ponto'/>
-          <span class='menu-rotulo' id='tema-nome'>Tema</span>
-        </button>
-
-      </nav>
-    </div>
 
     <div id='header-wrapper'>
       <b:section class='header' id='header' maxwidgets='1' showaddelement='no'>
@@ -1246,6 +1327,37 @@ body#layout body{ padding-bottom:0; }
 </b:includable>
         </b:widget>
       </b:section>
+    </div>
+
+        <div class='menu-links'>
+          <b:section class='menu' id='menu' maxwidgets='1' showaddelement='no'>
+            <b:widget id='PageList1' locked='false' title='Páginas' type='PageList' version='1'>
+              <b:widget-settings>
+                <b:widget-setting name='pageListJson'><![CDATA[{"395579416045985828":{"href":"https://www.igormedeiroz.com/p/blog.html","position":1,"title":"blog"},"429264964123889320":{"href":"https://www.igormedeiroz.com/p/navegue.html","position":2,"title":"+"},"1823572247140042333":{"href":"https://www.igormedeiroz.com/p/fotografia.html","position":0,"title":"fotografia"}}]]></b:widget-setting>
+                <b:widget-setting name='homeTitle'>Página inicial</b:widget-setting>
+              </b:widget-settings>
+              <b:includable id='main'>
+  <!-- Sempre uma lista: o layout responsivo trata do telemovel,
+       por isso o <select> do modo movel do Blogger nao e usado. -->
+  <b:if cond='data:title != &quot;&quot;'><h2><data:title/></h2></b:if>
+  <div class='widget-content'>
+    <ul>
+      <b:loop values='data:links' var='link'>
+        <b:if cond='data:link.isCurrentPage'>
+          <li class='selected'><a expr:href='data:link.href'><data:link.title/></a></li>
+        <b:else/>
+          <li><a expr:href='data:link.href'><data:link.title/></a></li>
+        </b:if>
+      </b:loop>
+    </ul>
+    <b:include name='quickedit'/>
+  </div>
+</b:includable>
+            </b:widget>
+          </b:section>
+        </div>
+
+      </nav>
     </div>
 
   	<div id='outer-wrapper'><div id='wrap2'>
@@ -1852,6 +1964,7 @@ body#layout body{ padding-bottom:0; }
               <b:if cond='data:top.showDummy'>
                 <div class='goog-inline-block dummy-container'><data:post.dummyTag/></div>
               </b:if>
+              <b:include data='post' name='postQuickEdit'/>
             </div>
 
           </div>
@@ -2040,10 +2153,25 @@ m.parentNode.insertBefore(a, m)
       <div class='post-footer-line post-footer-line-3'>
 		<span class='post-location'>
           <b:if cond='data:top.showLocation'>
-            <b:if cond='data:post.location'>
-              
-              <a href='/mundo' target='_blank' title='Lugares que visitei'><data:post.location.name/></a>
-            </b:if>
+            <!-- expr:data-desde carrega a data do post; o script no
+                 fim do <body> usa-a so quando nao ha localizacao
+                 propria, para decidir entre Brasilia e Porto. -->
+            <span class='post-location-inner' expr:data-desde='data:post.timestampISO8601'>
+              <b:if cond='data:post.location'>
+                <a href='/mundo' target='_blank' title='Lugares que visitei'>
+                  <svg aria-hidden='true' class='pin-icone' viewBox='0 0 24 24'><path d='M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z'/><circle cx='12' cy='10' r='2.3'/></svg>
+                  <data:post.location.name/>
+                </a>
+              <b:else/>
+                <!-- Sem localizacao no post: o texto fica vazio aqui
+                     e o script preenche com Brasilia (antes de 2021)
+                     ou Porto (2021 em diante), conforme a data acima. -->
+                <a class='post-location-fallback' href='/mundo' target='_blank' title='Lugares que visitei'>
+                  <svg aria-hidden='true' class='pin-icone' viewBox='0 0 24 24'><path d='M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z'/><circle cx='12' cy='10' r='2.3'/></svg>
+                  <span class='post-location-texto'/>
+                </a>
+              </b:if>
+            </span>
           </b:if>
         </span> 
 	  </div>
@@ -2055,9 +2183,9 @@ m.parentNode.insertBefore(a, m)
 </b:includable>
             <b:includable id='postQuickEdit' var='post'>
   <b:if cond='data:post.editUrl'>
-    <span expr:class='&quot;item-control &quot; + data:post.adminClass'>
+    <span expr:class='&quot;item-control quickedit &quot; + data:post.adminClass'>
       <a expr:href='data:post.editUrl' expr:title='data:top.editPostMsg'>
-        <img alt='' class='icon-action' height='18' src='//img2.blogblog.com/img/icon18_edit_allbkg.gif' width='18'/>
+        <svg aria-hidden='true' class='quickedit-icone' viewBox='0 0 24 24'><path d='M4 20h4l11-11a2.5 2.5 0 0 0-4-4L4 16v4z'/><path d='m14.5 6.5 3 3'/></svg>
       </a>
     </span>
   </b:if>
@@ -3047,8 +3175,22 @@ carregarUltimasLeituras();
       <b:section class='footer' id='footer'/>
     </div>
 	<div id='creditos'>
-      <div class='creditos'>///////// @igormedeiroz</div>
+      <div class='creditos'>
+        <span id='rodape-copyright'>2012 &#8211; <span id='ano-atual'>2026</span> &#169; Igor Medeiroz</span>
+        <button aria-label='Mudar o tema do blog' id='tema-toggle' type='button'>
+          <span class='tema-ponto'/>
+          <span class='menu-rotulo' id='tema-nome'/>
+        </button>
+      </div>
     </div>
+    <script>
+      //<![CDATA[
+      (function () {
+        var el = document.getElementById('ano-atual');
+        if (el) el.textContent = new Date().getFullYear();
+      })();
+      //]]>
+    </script>
   <b:include data='blog' name='google-analytics'/>
 
   <!-- ================= SCRIPTS =================
@@ -3161,6 +3303,31 @@ carregarUltimasLeituras();
     //]]>
   </script>
 
+  <!-- ================= LOCALIZACAO: PADRAO =================
+       Quando o post nao tem localizacao propria, decide o texto
+       pela data: antes de 2021 -> Brasilia; 2021 em diante -> Porto.
+       Feito em JS (e nao no <b:if> do Blogger) porque a linguagem de
+       templates do Blogger nao compara datas de forma confiavel;
+       aqui e so comparar dois numeros de ano. -->
+  <script type='text/javascript'>
+    //<![CDATA[
+    (function () {
+      document.querySelectorAll('.post-location-fallback').forEach(function (a) {
+        var texto = a.querySelector('.post-location-texto');
+        var pai = a.closest('.post-location-inner');
+        if (!texto || !pai) return;
+
+        var iso = pai.getAttribute('data-desde') || '';
+        var ano = iso ? parseInt(iso.slice(0, 4), 10) : NaN;
+
+        texto.textContent = (!isNaN(ano) && ano < 2021)
+          ? 'Brasília, Brasil'
+          : 'Porto, Portugal';
+      });
+    })();
+    //]]>
+  </script>
+
   <!-- ================= TEMA: TROCA =================
        Cada clique avanca para o tema seguinte da lista. Para juntar
        um tema novo: crie o bloco :root[data-tema="..."] no CSS e
@@ -3178,7 +3345,11 @@ carregarUltimasLeituras();
         { id: 'sepia', nome: '',
           icone: '<path d="M4.5 8h12v6a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4z"/><path d="M16.5 9.5h1.8a2.2 2.2 0 0 1 0 4.4h-1.8"/><path d="M7.5 3.5v2M10.5 3.5v2M13.5 3.5v2"/>' },
         { id: 'terminal', nome: '',
-          icone: '<rect x="2.8" y="4.5" width="18.4" height="15" rx="2"/><path d="m7 9.5 3 2.5-3 2.5"/><path d="M12.5 15h4.5"/>' }
+          icone: '<rect x="2.8" y="4.5" width="18.4" height="15" rx="2"/><path d="m7 9.5 3 2.5-3 2.5"/><path d="M12.5 15h4.5"/>' },
+        { id: 'riso', nome: '',
+          icone: '<circle cx="9.4" cy="12" r="5.6"/><circle cx="14.6" cy="12" r="5.6"/>' },
+        { id: 'azulejo', nome: '',
+          icone: '<rect x="6.5" y="6.5" width="11" height="11" transform="rotate(45 12 12)"/><circle cx="12" cy="12" r="2.4"/>' }
       ];
 
       var raiz = document.documentElement;

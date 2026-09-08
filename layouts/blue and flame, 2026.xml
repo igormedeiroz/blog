@@ -1,0 +1,3247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<!--
+=============================================================================
+ TEMPLATE : Historico Infame, Red & Blue
+ Autor    : Igor Medeiroz
+ Licenca  : Creative Commons Attribution - o credito no rodape deve ser mantido.
+ Revisao  : 5 temas com icone proprio; botao de tema a direita do menu.
+
+ COMO ESTE ARQUIVO ESTA ORGANIZADO
+ ===========================================================================
+ 1. <head>      : meta tags, fontes e o CSS completo dentro de <b:skin>.
+ 2. <body>      : estrutura em 5 blocos ->
+                  #menu-wrapper     (menu principal + botao de tema)
+                  #header-wrapper   (cabecalho / titulo do blog)
+                  #crosscol-wrapper (menu de paginas + posts populares)
+                  #content-wrapper  (#main-wrapper + #sidebar-wrapper)
+                                    #main-wrapper tem #home-wrapper,
+                                    so visivel na primeira pagina
+                  #footer-wrapper   (rodape + creditos)
+ 3. <b:widget>  : cada gadget do Blogger. O codigo dentro de <b:includable>
+                  e o HTML que o Blogger gera; so edite se souber o que faz.
+
+ ONDE MEXER PARA PERSONALIZAR
+ ===========================================================================
+ - Cores, fontes e larguras : bloco ":root" logo no inicio do CSS.
+ - Nada mais precisa ser tocado para trocar a identidade visual do blog.
+=============================================================================
+--><html expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+
+  <!-- ================= TEMA: ANTI-PISCA =================
+       Tem de ser o PRIMEIRO script da pagina e ficar antes de
+       qualquer CSS. Le a escolha guardada e marca-a no <html>
+       antes da primeira pintura, para o leitor nao ver o tema
+       claro a piscar antes de o escuro entrar. -->
+  <script>
+    //<![CDATA[
+    (function () {
+      try {
+        var t = localStorage.getItem('tema');
+        if (t) document.documentElement.setAttribute('data-tema', t);
+      } catch (e) { /* modo privado: segue o tema do sistema */ }
+    })();
+    //]]>
+  </script>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script src='https://cdn.jsdelivr.net/gh/igormedeiroz/blog@main/scripts/slug-decodificator.js' type='text/javascript'/>
+  <link href='https://igormedeiroz.github.io/blog/style/historico-infame.css' rel='stylesheet' type='text/css'/>
+  
+  <!-- ================= META BASICAS ================= -->
+  <meta content='width=device-width, initial-scale=1.0' name='viewport'/>
+  <meta content='Sua descricao aqui' name='description'/>
+  <meta content='blogger' name='generator'/>
+
+  <!-- Injeta os metadados obrigatorios do Blogger (feeds, open graph, etc.).
+       Deve aparecer UMA unica vez. -->
+  <b:include data='blog' name='all-head-content'/>
+
+  <!-- ================= TITULO DA ABA =================
+       Home  -> titulo do blog
+       Outras-> nome da pagina/post + titulo do blog -->
+  <b:if cond='data:blog.pageType == &quot;index&quot;'>
+    <title><data:blog.pageTitle/></title>
+  <b:else/>
+    <title><data:blog.pageName/> - <data:blog.title/></title>
+  </b:if>
+
+  
+  <!-- ================= FONTES =================
+       Carregada em HTTPS (em HTTP o navegador bloqueia no blogspot).
+       Para voltar ao titulo em letra cursiva original, descomente a linha
+       da fonte Sacramento e ajuste a variavel ==fonte-titulo no CSS. -->
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;display=swap' rel='stylesheet' type='text/css'/>
+  <!-- <link href='https://fonts.googleapis.com/css?family=Sacramento&amp;display=swap' rel='stylesheet' type='text/css'/> -->
+  <link href='https://fonts.googleapis.com' rel='preconnect'/>
+  <link crossorigin='crossorigin' href='https://fonts.gstatic.com' rel='preconnect'/>
+  <link href='https://fonts.googleapis.com/css2?family=Victor+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap' rel='stylesheet'/>
+  <link href='https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&amp;display=swap' rel='stylesheet'/>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css' rel='stylesheet' type='text/css'/>
+      
+    
+<b:skin><![CDATA[/*
+=============================================================================
+  FOLHA DE ESTILO
+  ---------------------------------------------------------------------------
+  01. Temas (:root)          <- personalize tudo aqui
+  01b. Tokens fixos (fontes, tamanhos, larguras)
+  02. Reset e base
+  03. Tipografia
+  04. Estrutura / wrappers
+  05. Cabecalho
+  06. Menu principal (topo / barra inferior)
+  06b. Menu no telemovel
+  07. Posts populares (destaques)
+  08. Posts
+  09. Postagens relacionadas
+  10. Sidebar
+  11. Comentarios
+  12. Paginacao
+  13. Rodape
+  14. Responsivo
+  15. Editor Layout do Blogger
+  16. Botao de tema
+=============================================================================
+*/
+
+/* ------------------------------------------------------------------
+   01. TEMAS
+   Cada tema e apenas um conjunto de variaveis. Para criar um novo,
+   copie um bloco :root[data-tema="..."], mude o nome e junte-o ao
+   array TEMAS do script que fica no fim do <body>.
+
+   Sem o atributo data-tema  -> segue a preferencia do sistema.
+   Com data-tema="escuro"    -> escolha explicita do leitor, guardada
+                                no localStorage do navegador dele.
+   ------------------------------------------------------------------ */
+
+/* --- Tema CLARO (predefinido) --- */
+:root{
+  color-scheme: light;
+  --cor-fundo:        #ffffff;   /* fundo da pagina                    */
+  --cor-texto:        #262626;   /* texto corrido                      */
+  --cor-texto-suave:  #8c8c8c;   /* datas, autor, legendas             */
+  --cor-titulo:       #111111;   /* titulos                            */
+  --cor-link:         #666666;   /* links em repouso                   */
+  --cor-link-hover:   #111111;   /* links sob o cursor                 */
+  --cor-borda:        #ececec;   /* linhas divisorias                  */
+  --cor-superficie:   #fafafa;   /* fundos leves (citacoes, botoes)    */
+  --cor-contraste:    #ffffff;   /* texto sobre fundo escuro           */
+  --cor-veu:          rgba(255,255,255,.88);  /* overlay dos destaques */
+}
+
+/* --- Tema ESCURO --- */
+:root[data-tema="escuro"]{
+  color-scheme: dark;
+  --cor-fundo:        #121212;
+  --cor-texto:        #d8d8d8;
+  --cor-texto-suave:  #7d7d7d;
+  --cor-titulo:       #f2f2f2;
+  --cor-link:         #a3a3a3;
+  --cor-link-hover:   #ffffff;
+  --cor-borda:        #2b2b2b;
+  --cor-superficie:   #1c1c1c;
+  --cor-contraste:    #121212;
+  --cor-veu:          rgba(18,18,18,.88);
+}
+
+/* --- Modo automatico: aplica o escuro se o sistema pedir escuro
+       e o leitor ainda nao tiver escolhido nada. --- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-tema]){
+    color-scheme: dark;
+    --cor-fundo:        #121212;
+    --cor-texto:        #d8d8d8;
+    --cor-texto-suave:  #7d7d7d;
+    --cor-titulo:       #f2f2f2;
+    --cor-link:         #a3a3a3;
+    --cor-link-hover:   #ffffff;
+    --cor-borda:        #2b2b2b;
+    --cor-superficie:   #1c1c1c;
+    --cor-contraste:    #121212;
+    --cor-veu:          rgba(18,18,18,.88);
+  }
+}
+
+/* --- Tema SEPIA (exemplo de terceiro tema) --- */
+:root[data-tema="sepia"]{
+  color-scheme: light;
+  --cor-fundo:        #f4ecd8;
+  --cor-texto:        #3b2f22;
+  --cor-texto-suave:  #8a7a63;
+  --cor-titulo:       #2a2019;
+  --cor-link:         #6b5942;
+  --cor-link-hover:   #2a2019;
+  --cor-borda:        #ddd0b6;
+  --cor-superficie:   #ebe0c8;
+  --cor-contraste:    #f4ecd8;
+  --cor-veu:          rgba(244,236,216,.88);
+}
+
+/* --- Tema TERMINAL (exemplo: verde sobre preto) --- */
+:root[data-tema="terminal"]{
+  color-scheme: dark;
+  --cor-fundo:        #0b0f0b;
+  --cor-texto:        #9ae69a;
+  --cor-texto-suave:  #4f7a4f;
+  --cor-titulo:       #c8ffc8;
+  --cor-link:         #6fbf6f;
+  --cor-link-hover:   #c8ffc8;
+  --cor-borda:        #1d2a1d;
+  --cor-superficie:   #101710;
+  --cor-contraste:    #0b0f0b;
+  --cor-veu:          rgba(11,15,11,.88);
+}
+
+/* --- Tema RISO: rosa, azul ultramar e vermelho ---
+       Tres tintas tiradas de um poster de risografia. Os tons foram
+       escurecidos o suficiente para o texto cumprir o contraste
+       minimo AA (4.5:1): o vermelho original ficava em 3.7:1. --- */
+:root[data-tema="riso"]{
+  color-scheme: light;
+  --cor-fundo:        #ffdcd4;   /* rosa do papel              */
+  --cor-texto:        #2b2f5c;   /* azul ultramar escuro       */
+  --cor-texto-suave:  #68607a;
+  --cor-titulo:       #1d2147;
+  --cor-link:         #3f5bb5;   /* azul de impressao          */
+  --cor-link-hover:   #b3280f;   /* vermelho da terceira tinta */
+  --cor-borda:        #f0bcb2;
+  --cor-superficie:   #ffe9e4;
+  --cor-contraste:    #ffdcd4;
+  --cor-veu:          rgba(255,220,212,.9);
+}
+
+/* ------------------------------------------------------------------
+   01b. TOKENS QUE NAO MUDAM COM O TEMA
+   Fontes, tamanhos e larguras ficam aqui, definidos uma unica vez.
+   ------------------------------------------------------------------ */
+:root{
+  /* -- Tipografia -- */
+  --fonte-base:   "Inconsolata", monospace;
+  --fonte-auxiliar: "Victor Mono", monospace;
+  --fonte-auxiliar2: "Aboreto", sans-serif;
+  --fonte-titulo: var(--fonte-base);
+  --texto-xs:     11px;   /* metadados, rodape do post */
+  --texto-sm:     13px;   /* sidebar, comentarios       */
+  --texto-base:   15px;   /* corpo do post              */
+  --titulo-blog:  34px;
+  --titulo-post:  24px;
+  --altura-linha: 1.75;
+  --espaco-letra: .12em;  /* usado nos textos em maiusculas */
+
+  /* -- Layout -- */
+  --largura-site:    1040px;  /* largura maxima do conteudo   */
+  --largura-sidebar: 230px;
+  --largura-leitura: 760px;   /* largura sem sidebar          */
+  --gap:             44px;    /* espaco entre post e sidebar  */
+  --espaco:          24px;    /* unidade base de respiro      */
+  --transicao:       .2s ease;
+}
+
+/* ------------------------------------------------------------------
+   02. RESET E BASE
+   ------------------------------------------------------------------ */
+*, *::before, *::after{ box-sizing:border-box; }
+*{ margin:0; padding:0; list-style:none; }
+
+body{
+  background:var(--cor-fundo);
+  color:var(--cor-texto);
+  font-family:var(--fonte-base);
+  font-size:var(--texto-base);
+  line-height:var(--altura-linha);
+  overflow-x:hidden;
+}
+/* Suaviza a troca de tema sem animar tudo (animar a pagina inteira
+   causa engasgos em listas longas). */
+body{ transition:background-color .25s ease, color .25s ease; }
+
+img{ max-width:100%; height:auto; border:0; }
+.clear{ clear:both; }
+
+i{font-family: var(--fonte-auxiliar);}
+
+a{color:var(--cor-link); text-decoration:none; transition:color var(--transicao); }
+a:visited{ color:var(--cor-link); }
+a:hover{ color:var(--cor-link-hover); }
+/* ------------------------------------------------------------------
+   03. TIPOGRAFIA
+   h1 = titulo do blog | h2 = titulos de widgets | h3 = titulo do post
+   ------------------------------------------------------------------ */
+h1, h2, h3, h4{
+  font-family:var(--fonte-titulo);
+  font-weight:400;
+  color:var(--cor-titulo);
+  margin:0 0 10px;
+  line-height:1.3;
+}
+h1{ font-size:var(--titulo-blog); font-weight:300; letter-spacing:.04em; text-align:center; }
+h2{
+  font-size:var(--texto-xs);
+  font-weight:600;
+  letter-spacing:var(--espaco-letra);
+  text-transform:uppercase;
+}
+h3{ font-size:var(--titulo-post); font-weight:400; }
+h4{ font-size:var(--texto-sm); font-weight:600; }
+
+/* Classe utilitaria: textos pequenos em maiusculas (metadados) */
+.date-header, .fn, .comment-link, .post-footer, #blog-pager, .creditos{
+  font-size:var(--texto-xs);
+  text-transform:uppercase;
+  letter-spacing:var(--espaco-letra);
+  color:var(--cor-texto-suave);
+}
+
+/* ------------------------------------------------------------------
+   04. ESTRUTURA / WRAPPERS
+   Sem floats: o conteudo usa flexbox, o que dispensa hacks de largura.
+   ------------------------------------------------------------------ */
+#header-wrapper{ width:100%; padding:60px 20px 30px; }
+
+#outer-wrapper{
+  width:100%;
+  max-width:var(--largura-site);
+  margin:0 auto 80px;
+  padding:0 20px;
+}
+#crosscol-wrapper{ width:100%; margin:0 auto 50px; }
+
+#content-wrapper{
+  display:flex;
+  align-items:flex-start;
+  gap:var(--gap);
+}
+#main-wrapper{ flex:1 1 auto; min-width:0; word-wrap:break-word; }
+#sidebar-wrapper{ flex:0 0 var(--largura-sidebar); width:var(--largura-sidebar); word-wrap:break-word; }
+
+/* Paginas sem sidebar (home, marcadores, arquivo, paginas estaticas):
+   o conteudo ocupa toda a largura, mas com um limite de leitura
+   confortavel e centrado. Ajuste em --largura-leitura. */
+#content-wrapper.sem-sidebar #main-wrapper{
+  max-width:var(--largura-leitura);
+  margin:0 auto;
+}
+
+/* A sidebar so aparece na pagina de um post. Escondida por CSS e nao
+   por <b:if>, para continuar visivel e editavel no painel Layout. */
+#content-wrapper.sem-sidebar #sidebar-wrapper{ display:none; }
+
+/* --- HOMEPAGE ---
+   Na primeira pagina mostra-se a apresentacao e escondem-se os posts;
+   nas restantes paginas e ao contrario. Feito por CSS (e nao por
+   <b:if>) para as duas seccoes continuarem editaveis no painel Layout. */
+#home-wrapper{ display:none; }
+#content-wrapper.pagina-home #home-wrapper{ display:block; }
+#content-wrapper.pagina-home #main .Blog,
+#content-wrapper.pagina-home #blog-pager,
+#content-wrapper.pagina-home .feed-links{ display:none; }
+
+/* A mesa precisa de toda a largura, sem o limite de leitura. */
+#content-wrapper.pagina-home #main-wrapper{ max-width:none; }
+
+/* --- PAGINAS DE LISTA (marcador, pesquisa, arquivo) ---
+   Cada post vira um cartao com titulo e data. O Blogger envolve os
+   posts em .date-outer > .date-posts; display:contents tira essas
+   caixas do fluxo para os cartoes serem filhos diretos da grelha. */
+#content-wrapper.pagina-lista #main-wrapper{ max-width:none; }
+
+.pagina-lista .blog-posts{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(230px, 1fr));
+  gap:14px;
+  margin-bottom:40px;
+}
+.pagina-lista .date-outer,
+.pagina-lista .date-posts{ display:contents; }
+
+.pagina-lista .post-outer{ display:flex; }
+
+.pagina-lista .post{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:14px;
+  width:100%;
+  min-height:130px;
+  margin:0;
+  padding:18px;
+  background:var(--cor-superficie);
+  border:1px solid var(--cor-borda);
+  border-radius:3px;
+  transition:transform var(--transicao),
+             border-color var(--transicao),
+             box-shadow var(--transicao);
+}
+
+/* Efeito ao passar o cursor: o cartao levanta um pouco. */
+.pagina-lista .post:hover{
+  transform:translateY(-3px);
+  border-color:var(--cor-texto-suave);
+  box-shadow:0 6px 18px rgba(0,0,0,.10);
+}
+.pagina-lista .post:hover .post-title a{ color:var(--cor-link-hover); }
+
+/* Titulo */
+.pagina-lista .post h3.post-title{ margin:0; }
+.pagina-lista .post h3 a,
+.pagina-lista .post h3 strong{
+  font-size:15px;
+  line-height:1.4;
+  font-weight:600;
+  color:var(--cor-titulo);
+  transition:color var(--transicao);
+}
+
+/* O link do titulo cobre o cartao todo, para se poder clicar
+   em qualquer ponto. */
+.pagina-lista .post h3 a::after{
+  content:'';
+  position:absolute;
+  inset:0;
+}
+
+/* Data: sem a linha divisoria e sem os restantes metadados. */
+.pagina-lista .post-header{ order:2; }
+.pagina-lista .post-header-line-1{
+  gap:8px;
+  padding:0;
+  border:0;
+}
+.pagina-lista .date-header{
+  font-size:10px;
+  color:var(--cor-texto-suave);
+}
+
+/* Tudo o resto sai do cartao. */
+.pagina-lista .post-body,
+.pagina-lista .post-footer,
+.pagina-lista .jump-link,
+.pagina-lista .post-comment-link,
+.pagina-lista .post-author,
+.pagina-lista #at-gambar,
+.pagina-lista .comments,
+.pagina-lista .status-msg-border{ display:none; }
+
+/* Mensagem "Mostrando postagens com o marcador X".
+   Como fica dentro de .blog-posts, tambem e um item da grelha:
+   sem o grid-column ocuparia a primeira celula e empurrava o
+   primeiro cartao para o lado. */
+.pagina-lista .status-msg-wrap{
+  grid-column:1 / -1;
+  position:static;
+  width:100%;
+  margin:0 0 12px;
+}
+.pagina-lista .status-msg-body{
+  position:static;
+  padding:0;
+  text-align:left;
+  font-size:var(--texto-xs);
+  letter-spacing:var(--espaco-letra);
+  text-transform:uppercase;
+  color:var(--cor-texto-suave);
+}
+
+@media screen and (max-width:600px){
+  .pagina-lista .blog-posts{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .pagina-lista .post{ min-height:0; }
+}
+
+#footer-wrapper{ width:100%; }
+
+.post-body a,
+.post p a {
+  color: var(--cor-texto-suave);
+  text-decoration: none;
+  padding-bottom: 3px;
+  /*border-bottom: 1.5px dotted var(--cor-texto-suave); */
+  transition: .25s ease;
+}
+
+.post-body a:hover,
+.post p a:hover {
+  color: var(--accent);
+   /* border-bottom-color: var(--accent); */
+}
+
+/* ------------------------------------------------------------------
+   05. CABECALHO
+   ------------------------------------------------------------------ */
+#header-inner{ margin:0 auto; background-position:center; }
+#header{ text-align:center; }
+#header h1{ margin:0; }
+#header a{ color:var(--cor-titulo); }
+#header a:hover{ color:var(--cor-texto-suave); }
+#header .description{
+  max-width:640px;
+  margin:12px auto 0;
+  font-size:var(--texto-xs);
+  text-transform:uppercase;
+  letter-spacing:var(--espaco-letra);
+  color:var(--cor-texto-suave);
+}
+#header img{ margin:0 auto; }
+
+/* ------------------------------------------------------------------
+   06. MENU PRINCIPAL  (widget PageList + botao de tema)
+   Ecra grande : barra no topo, presa ao rolar, SO TEXTO.
+   Telemovel   : barra fixa em baixo, SO ICONES.
+   Os icones sao injetados pelo script no fim do <body> e ficam
+   escondidos no ecra grande; os rotulos fazem o inverso.
+
+   Centragem: o widget do Blogger envolve a lista em tres <div>
+   aninhadas. Com display:contents essas caixas deixam de contar
+   para o layout, e os itens do menu passam a ser filhos diretos
+   do flex, o que permite centrar e distribuir com exatidao.
+   ------------------------------------------------------------------ */
+#menu-wrapper{
+  position:sticky;
+  top:0;
+  z-index:900;
+  width:100%;
+  background:var(--cor-fundo);
+  border-bottom:1px solid var(--cor-borda);
+}
+
+.menu-topo{
+  position:relative;      /* referencia para o botao de tema absoluto */
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  gap:0;
+  max-width:var(--largura-site);
+  margin:0 auto;
+  padding:0 20px;
+}
+
+/* As caixas do widget saem do fluxo do flex. */
+.menu-topo .section,
+.menu-topo .widget,
+.menu-topo .widget-content,
+.menu-topo #PageList1 ul{ display:contents; }
+.menu-topo h2{ display:none; }
+
+#PageList1 li{ display:flex; margin:0; }
+
+#PageList1 a,
+#tema-toggle{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:15px 14px;
+  border:0;
+  background:transparent;
+  font-family:var(--fonte-base);
+  font-size:var(--texto-xs);
+  font-weight:600;
+  letter-spacing:var(--espaco-letra);
+  text-transform:uppercase;
+  line-height:1;
+  color:var(--cor-texto-suave);
+  cursor:pointer;
+  -webkit-appearance:none;
+  appearance:none;
+  transition:color var(--transicao);
+}
+#PageList1 a:visited{ color:var(--cor-texto-suave); }
+#PageList1 a:hover,
+#tema-toggle:hover{ color:var(--cor-titulo); }
+#PageList1 .selected a{ color:var(--cor-titulo); }
+
+#PageList1 a:focus-visible,
+#tema-toggle:focus-visible{
+  outline:2px solid var(--cor-link-hover);
+  outline-offset:-4px;
+}
+
+/* O botao de tema sai do fluxo e encosta a direita da barra. Assim os
+   links das paginas ficam centrados no meio real do ecra, em vez de
+   serem empurrados para a esquerda pela largura do botao. */
+#tema-toggle{
+  position:absolute;
+  right:20px;
+  top:0;
+  bottom:0;
+  margin:0;
+  padding-left:14px;
+  border-left:0;
+}
+
+/* O icone herda a cor do texto e nunca encolhe. */
+.menu-icone{
+  flex:0 0 auto;
+  width:21px;
+  height:21px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:1.6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+/* No ecra grande: so texto nas paginas... */
+#PageList1 .menu-icone{ display:none; }
+
+/* ...mas o botao de tema mantem sempre o icone, nos dois tamanhos.
+   O nome do tema fica ao lado dele no ecra grande. */
+#tema-toggle .menu-icone{ display:block; }
+
+/* Como o menu passou para o topo, o cabecalho respira menos. */
+#header-wrapper{ padding:44px 20px 26px; }
+
+/* ------------------------------------------------------------------
+   06b. MENU NO TELEMOVEL
+   Barra fixa no fundo, so icones, itens com a mesma largura.
+   O padding-bottom no body impede que a barra tape o fim do
+   conteudo; env(safe-area-inset-bottom) trata da barra de gestos
+   do iPhone.
+   ------------------------------------------------------------------ */
+@media screen and (max-width:700px){
+  #menu-wrapper{
+    position:fixed;
+    top:auto;
+    bottom:0;
+    left:0;
+    right:0;
+    border-bottom:0;
+    border-top:1px solid var(--cor-borda);
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+
+  body{ padding-bottom:76px; }
+
+  .menu-topo{ padding:0; }
+
+  /* Cada item ocupa exatamente a mesma fatia da largura, incluindo
+     o botao de tema. Sem larguras minimas: nada desalinha. */
+  #PageList1 li,
+  #tema-toggle{ flex:1 1 0; min-width:0; }
+
+  #PageList1 a{ flex:1 1 auto; }
+
+  #PageList1 a,
+  #tema-toggle{ padding:15px 0; }
+
+  /* No telemovel volta a ser um item normal da barra inferior. */
+  #tema-toggle{ position:static; margin:0; padding:15px 0; border-left:0; }
+
+  /* So icones. */
+  #PageList1 .menu-icone{ display:block; }
+  .menu-rotulo{
+    position:absolute;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    clip:rect(0 0 0 0);
+    white-space:nowrap;
+  }
+
+  #header-wrapper{ padding:28px 16px 18px; }
+}
+
+/* ------------------------------------------------------------------
+   07. POSTS POPULARES EM DESTAQUE (3 colunas no topo)
+   O titulo aparece por cima da imagem ao passar o cursor.
+   ------------------------------------------------------------------ */
+.crosscol .PopularPosts ul{
+  display:flex;
+  flex-wrap:wrap;
+  gap:2%;
+}
+.crosscol .PopularPosts ul li{
+  position:relative;
+  flex:0 0 32%;
+  max-height:240px;
+  margin:0 0 2%;
+  overflow:hidden;
+}
+.crosscol .PopularPosts img{ width:100%; height:240px; object-fit:cover; display:block; }
+.crosscol .PopularPosts .item-content{ position:relative; }
+.crosscol .PopularPosts .item-title a{
+  position:absolute;
+  inset:0;                      /* mesmo que top/right/bottom/left:0 */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 8%;
+  background:var(--cor-veu);
+  color:var(--cor-titulo);
+  font-size:var(--texto-xs);
+  font-weight:600;
+  text-align:center;
+  text-transform:uppercase;
+  letter-spacing:var(--espaco-letra);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity var(--transicao);
+}
+.crosscol .PopularPosts .item-content:hover .item-title a,
+.crosscol .PopularPosts .item-thumbnail-only:hover .item-title a{
+  opacity:1;
+  visibility:visible;
+}
+.crosscol .PopularPosts .item-snippet{ display:none; }
+
+/* ------------------------------------------------------------------
+   08. POSTS
+   ------------------------------------------------------------------ */
+.post{ margin:0 auto 70px; }
+.post h3.post-title{ margin:0 0 12px; }
+.post h3 a, .post h3 a:visited, .post h3 strong{ display:block; color:var(--cor-titulo); font-weight:400; }
+.post h3 a:hover{ color:var(--cor-link); }
+
+/* Linha de metadados: autor - data - comentarios, separados por barra */
+.post-header-line-1{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:14px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--cor-borda);
+}
+.post-header-line-1 > span:empty{ display:none; }
+.fn a, .comment-link, .date-header{ color:var(--cor-texto-suave); }
+.fn a:hover, .comment-link:hover{ color:var(--cor-link-hover); }
+
+.post-body{ margin:26px auto 40px; }
+.post-body p{ margin:0 0 1.2em; }
+.post img, table.tr-caption-container{ max-width:100%; height:auto; }
+.tr-caption-container img{ border:0; padding:0; }
+.tr-caption, .legend{
+  margin:0 auto 24px;
+  padding:8px 0;
+  font-size:var(--texto-sm);
+  font-style:italic;
+  color:var(--cor-texto-suave);
+}
+.post blockquote{
+  margin:28px 0;
+  padding:20px 26px;
+  border-left:2px solid var(--cor-titulo);
+  background:var(--cor-superficie);
+}
+.post-body blockquote{ font-style:italic; }
+.post ul, .post ol{ margin:0 0 1.2em 22px; }
+.post li{ list-style:disc; margin:6px 0; }
+.post ol li{ list-style:decimal; }
+
+/* Botao "Leia mais" */
+.jump-link{ margin:0 0 40px; }
+.jump-link a{
+  display:inline-block;
+  padding:10px 22px;
+  border:1px solid var(--cor-borda);
+  font-size:var(--texto-xs);
+  text-transform:uppercase;
+  letter-spacing:var(--espaco-letra);
+  transition:background var(--transicao), color var(--transicao);
+}
+.jump-link a:hover{ background:var(--cor-titulo); color:var(--cor-contraste); }
+
+/* Rodape do post: compartilhar a esquerda, marcadores/data a direita */
+.post-footer{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding-top:16px;
+  border-top:1px solid var(--cor-borda);
+}
+.post-footer a, .post-footer a:visited{ color:var(--cor-texto-suave); }
+.post-footer a:hover{ color:var(--cor-link-hover); }
+.post-footer-line-2{ text-align:right; }
+.post-labels a{ margin-left:4px; }
+
+/* Links de compartilhamento (agora em texto, sem imagens externas) */
+.compartilhar{ display:inline-flex; gap:16px; }
+.compartilhar a{ color:var(--cor-texto-suave); }
+.compartilhar a:hover{ color:var(--cor-link-hover); }
+
+/* ------------------------------------------------------------------
+   09. POSTAGENS RELACIONADAS  (#at-gambar)
+   Depende de um script externo; veja o comentario no <head>.
+   ------------------------------------------------------------------ */
+#at-gambar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:0 0 60px;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:var(--espaco-letra);
+  text-align:center;
+}
+#at-gambar h2{ display:none; }
+#at-gambar a{ flex:1 1 120px; color:var(--cor-texto-suave); opacity:.85; transition:opacity var(--transicao); }
+#at-gambar a:hover{ opacity:1; }
+#at-gambar img{ width:100%; height:118px; object-fit:cover; }
+.box-related{ line-height:1.4; }
+
+/* ------------------------------------------------------------------
+   10. SIDEBAR
+   Cada gadget e um cartao com o mesmo fundo dos comentarios. Fica
+   colada ao topo ao rolar (sticky), o que compensa a coluna ser
+   agora mais estreita: aproveita melhor o espaco em posts longos.
+   ------------------------------------------------------------------ */
+.sidebar{ font-size:var(--texto-sm); }
+
+#sidebar-wrapper{
+  position:sticky;
+  top:70px;              /* altura da barra de menu + folga */
+  align-self:flex-start;
+}
+
+.sidebar .widget{
+  margin:0 0 16px;
+  padding:16px;
+  border-radius:3px;
+}
+.sidebar .widget:last-child{ margin-bottom:0; }
+
+/* Um gadget so com imagem nao precisa de moldura dupla. */
+.sidebar .Image{ padding:0; overflow:hidden; }
+.sidebar .Image .widget-content img{ margin:0; display:block; width:100%; }
+.sidebar .Image h2{ margin:14px 18px 0; }
+
+.sidebar h2{
+  margin:0 0 12px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--cor-borda);
+  text-align:left;
+}
+.sidebar .widget-content img{ margin:10px auto; display:block; }
+.sidebar a, .sidebar a:visited{ color:var(--cor-texto); }
+.sidebar a:hover{ color:var(--cor-texto-suave); }
+.sidebar li{ margin:0 0 8px; padding:0; color:var(--cor-texto-suave); }
+.sidebar li:last-child{ margin-bottom:0; }
+.sidebar .label-size{ display:inline-block; margin:0 8px 8px 0; font-size:var(--texto-xs); }
+
+/* ------------------------------------------------------------------
+   11. COMENTARIOS
+   Cada comentario e um cartao com fundo proprio. Os avatares foram
+   removidos: o Blogger serve-os do Google, muitas vezes sao a
+   silhueta cinzenta por omissao, e sem eles a coluna fica alinhada.
+   ------------------------------------------------------------------ */
+.comments{ width:100%; margin:40px auto 0; }
+.comments h4{
+  margin:0 0 20px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--cor-borda);
+}
+
+/* --- Sem fotos de perfil --- */
+.avatar-image-container,
+.comments .avatar-image-container,
+.comments .avatar-image-container img,
+.comments-content .avatar-image-container,
+.comment-block .avatar-image-container,
+#comments-block .avatar-image-container{ display:none !important; }
+
+/* Sem avatar, o Blogger deixa a indentacao antiga; anulamos. */
+.comments .comment-block,
+.comments .comments-content .comment-replies,
+.comments .comments-content .comment-thread{ margin-left:0; }
+.comments .comments-content .comment-content{ margin-left:0; }
+
+/* --- Cartao de cada comentario --- */
+.comments .comments-content .comment{
+  margin:0 0 14px;
+  padding:0;
+  border:0;
+  background:transparent;
+  list-style:none;
+}
+.comments .comments-content .comment .comment-block,
+#comments-block .comment-body{
+  padding:18px 20px;
+  background:var(--cor-superficie);
+  border:1px solid var(--cor-borda);
+  border-radius:3px;
+}
+
+/* Respostas: recuadas e com uma marca a esquerda. */
+.comments .comments-content .comment-replies{
+  margin-left:22px;
+  padding-left:16px;
+  border-left:2px solid var(--cor-borda);
+}
+
+.comment-content{ margin:8px 0 0; font-size:var(--texto-sm); color:var(--cor-texto); }
+.comments .comments-content .user{
+  margin:0;
+  font-size:var(--texto-sm);
+  font-weight:600;
+  font-style:normal;
+  text-transform:uppercase;
+  letter-spacing:var(--espaco-letra);
+  color:var(--cor-titulo);
+}
+.comments-content .datetime{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:var(--espaco-letra);
+  color:var(--cor-texto-suave);
+}
+.comments-content .datetime a{ color:var(--cor-texto-suave); }
+
+#comments-block .comment-author{
+  margin:0 0 6px;
+  font-size:var(--texto-sm);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--espaco-letra);
+  color:var(--cor-titulo);
+}
+#comments-block .comment-body{ margin:0 0 14px; }
+#comments-block .comment-body p{ margin:0; }
+#comments-block .comment-footer{
+  margin:0 0 22px;
+  padding:0 20px;
+  font-size:var(--texto-xs);
+  text-transform:uppercase;
+  letter-spacing:var(--espaco-letra);
+}
+
+.comments .comment .comment-actions a,
+.comments .comment .continue a{
+  display:inline-block;
+  margin:12px 8px 0 0;
+  padding:6px 12px;
+  border:1px solid var(--cor-borda);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:var(--espaco-letra);
+  color:var(--cor-texto-suave);
+  cursor:pointer;
+  transition:background var(--transicao), color var(--transicao);
+}
+.comments .comment .comment-actions a:hover,
+.comments .comment .continue a:hover{
+  background:var(--cor-titulo);
+  color:var(--cor-contraste);
+}
+
+.deleted-comment{ font-style:italic; color:var(--cor-texto-suave); }
+.comments .comments-replybox{ max-width:100%; }
+.comments .comment-form{
+  margin-top:26px;
+  padding:18px 20px;
+  background:var(--cor-superficie);
+  border:1px solid var(--cor-borda);
+  border-radius:3px;
+}
+.comments .comment-form h4{ border:0; padding:0; margin:0 0 8px; }
+
+/* ------------------------------------------------------------------
+   12. PAGINACAO
+   Setas em texto (<- ->) no lugar das imagens externas antigas.
+   ------------------------------------------------------------------ */
+#blog-pager{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  width:100%;
+  padding:20px 0;
+  border-top:1px solid var(--cor-borda);
+}
+#blog-pager a{ color:var(--cor-texto-suave); }
+#blog-pager a:hover{ color:var(--cor-link-hover); }
+#blog-pager-newer-link{ order:3; }
+#blog-pager-older-link{ order:1; }
+#home-link{ order:2; }
+#blog-pager-newer-link a::after{ content:" \2192"; }   /* seta para a direita */
+#blog-pager-older-link a::before{ content:"\2190 "; }  /* seta para a esquerda */
+.feed-links{ display:none; }
+
+/* ------------------------------------------------------------------
+   13. RODAPE
+   ------------------------------------------------------------------ */
+.footer{
+  width:100%;
+  max-width:var(--largura-site);
+  margin:0 auto;
+  padding:0 20px;
+  font-size:var(--texto-sm);
+}
+#creditos{ width:100%; border-top:1px solid var(--cor-borda); }
+.creditos{
+  padding:22px 10px;
+  text-align:center;
+  font-size:10px;
+  color:var(--cor-texto-suave);
+}
+
+/* ------------------------------------------------------------------
+   14. RESPONSIVO
+   Um unico ponto de quebra: abaixo de 900px tudo vira coluna unica.
+   ------------------------------------------------------------------ */
+@media screen and (max-width:900px){
+  :root{ --titulo-blog:28px; --titulo-post:20px; --texto-base:14px; --gap:0px; }
+
+  #header-wrapper{ padding:40px 16px 20px; }
+  #outer-wrapper{ padding:0 16px; margin-bottom:50px; }
+
+  #content-wrapper{ display:block; }
+  #main-wrapper, #sidebar-wrapper{ width:100%; flex:none; }
+  #sidebar-wrapper{ margin-top:50px; position:static; }
+
+  .crosscol .PopularPosts ul li{ flex:0 0 49%; }
+  .post{ margin-bottom:50px; }
+  .post-footer{ justify-content:flex-start; }
+  .post-footer-line-2{ text-align:left; }
+}
+
+@media screen and (max-width:600px){
+  .crosscol .PopularPosts ul li{ flex:0 0 100%; }
+  #at-gambar{ display:none; }
+}
+
+/* ------------------------------------------------------------------
+   15. EDITOR LAYOUT DO BLOGGER
+   A pagina de Layout usa <body id="layout"> e carrega este mesmo CSS.
+   Estas regras existem so para que todas as seccoes fiquem visiveis e
+   editaveis no painel. Nao afetam o blog publicado.
+   ------------------------------------------------------------------ */
+body#layout #content-wrapper{ display:flex; gap:20px; }
+body#layout #main-wrapper{ max-width:none; margin:0; }
+body#layout #content-wrapper.sem-sidebar #sidebar-wrapper{
+  display:block !important;
+  width:auto;
+  flex:1;
+}
+body#layout #header-wrapper,
+body#layout #crosscol-wrapper,
+body#layout #menu-wrapper,
+body#layout #footer-wrapper{ padding:0; }
+body#layout #menu-wrapper{ position:static; }
+body#layout .menu-topo{ display:block; }
+body#layout .menu-topo .section,
+body#layout .menu-topo .widget,
+body#layout .menu-topo .widget-content,
+body#layout .menu-topo #PageList1 ul{ display:block; }
+body#layout #home-wrapper{ display:block; }
+body#layout .date-outer,
+body#layout .date-posts{ display:block; }
+body#layout #tema-toggle{ display:none; }
+body#layout body{ padding-bottom:0; }
+
+/* ------------------------------------------------------------------
+   16. BOTAO DE TEMA
+   O aspeto vem da seccao 06: o botao e apenas mais um item do menu.
+   Aqui ficam so os ajustes proprios dele.
+   ------------------------------------------------------------------ */
+#tema-toggle{ -webkit-appearance:none; appearance:none; }
+
+/* Respeita quem pediu menos animacoes nas definicoes do sistema. */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    transition-duration:.01ms !important;
+    animation-duration:.01ms !important;
+  }
+}
+]]></b:skin>
+
+    <!-- ================= PAGINAS ESTATICAS =================
+       Numa pagina estatica o layout fica limpo: sem sidebar, sem
+       rodape do post, sem comentarios e sem paginacao. -->
+  <b:if cond='data:blog.pageType == &quot;static_page&quot;'>
+    <style type='text/css'>
+      .blog-pager, #sidebar-wrapper, #blog-pager, .marcadores,
+      .post-footer-line, .post-footer, #side-wrapper,
+      #comments, .post-header, .post-title, #header-wrapper, #blog-pager, #post-footer { display:none; !important }
+      
+      #main-wrapper { width:100% !important; max-width:none !important; }
+  
+    </style>
+  </b:if>
+  
+    <b:if cond='not (data:view.url == &quot;https://www.igormedeiroz.com/p/blogroll.html&quot;)'>
+  <style>
+    #BlogList1 {
+      display: none !important;
+    }
+    
+    .hide, #related-posts h4 {
+    	display:none;
+    }
+    
+  </style>
+</b:if>
+  
+      <b:if cond='not (data:view.url == &quot;https://www.igormedeiroz.com/p/arquivo.html&quot;)'>
+  <style>
+    #Label1 {
+      display: none !important;
+    }
+    
+    .hide, #related-posts h4 {
+    	display:none;
+    }
+    
+  </style>
+</b:if>
+  
+  
+  
+ <b:if cond='not (data:view.url == &quot;https://www.igormedeiroz.com/p/contato.html&quot;)'>
+  <style>
+    #ContactForm1 {
+      display: none !important;
+    }
+    
+    .hide, #related-posts h4 {
+    	display:none;
+    }
+    
+  </style>
+</b:if>
+  
+  <!-- ================= CONFIG. DAS POSTAGENS RELACIONADAS =================
+       O widget #at-gambar (final de cada post) precisa do script abaixo.
+       ATENCAO: o host original (yourjavascript.com) pode estar fora do ar.
+       Se os relacionados nao aparecerem, hospede o arquivo terkait-v8.js
+       em outro lugar e troque a URL, ou remova as duas tags <script>. -->
+  <script>
+    var defaultnoimage = &quot;https://3.bp.blogspot.com/-zP87C2q9yog/UVopoHY30SI/AAAAAAAAE5k/AIyPvrpGLn8/s100/picture_not_available.png&quot;;
+    var maxresults = 5;
+    var splittercolor = &quot;#ececec&quot;;
+    var relatedpoststitle = &quot;Posts Relacionados:&quot;;
+  </script>
+  <script src='https://yourjavascript.com/1376828511/terkait-v8.js' type='text/javascript'/>
+
+
+  </head>
+
+  <body>
+
+    <!-- ================= MENU PRINCIPAL =================
+         Barra no topo (ecra grande) ou fixa em baixo (telemovel).
+         Contem o widget Paginas e o botao de tema. Os icones sao
+         acrescentados pelo script no fim do <body>. -->
+    <div id='menu-wrapper'>
+      <nav aria-label='Menu principal' class='menu-topo'>
+
+                <b:section class='menu' id='menu' maxwidgets='1' showaddelement='no'>
+                  <b:widget id='PageList1' locked='false' title='Páginas' type='PageList' version='1'>
+                    <b:widget-settings>
+                      <b:widget-setting name='pageListJson'><![CDATA[{"395579416045985828":{"href":"https://www.igormedeiroz.com/p/blog.html","position":1,"title":"blog"},"429264964123889320":{"href":"https://www.igormedeiroz.com/p/navegue.html","position":2,"title":"+"},"1823572247140042333":{"href":"https://www.igormedeiroz.com/p/fotografia.html","position":0,"title":"fotografia"}}]]></b:widget-setting>
+                      <b:widget-setting name='homeTitle'>Página inicial</b:widget-setting>
+                    </b:widget-settings>
+                    <b:includable id='main'>
+  <!-- Sempre uma lista: o layout responsivo trata do telemovel,
+       por isso o <select> do modo movel do Blogger nao e usado. -->
+  <b:if cond='data:title != &quot;&quot;'><h2><data:title/></h2></b:if>
+  <div class='widget-content'>
+    <ul>
+      <b:loop values='data:links' var='link'>
+        <b:if cond='data:link.isCurrentPage'>
+          <li class='selected'><a expr:href='data:link.href'><data:link.title/></a></li>
+        <b:else/>
+          <li><a expr:href='data:link.href'><data:link.title/></a></li>
+        </b:if>
+      </b:loop>
+    </ul>
+    <b:include name='quickedit'/>
+  </div>
+</b:includable>
+                  </b:widget>
+                </b:section>
+
+        <button aria-label='Mudar o tema do blog' id='tema-toggle' type='button'>
+          <span class='tema-ponto'/>
+          <span class='menu-rotulo' id='tema-nome'>Tema</span>
+        </button>
+
+      </nav>
+    </div>
+
+    <div id='header-wrapper'>
+      <b:section class='header' id='header' maxwidgets='1' showaddelement='no'>
+        <b:widget id='Header1' locked='true' title='Igor Medeiroz (Cabeçalho)' type='Header' version='1'>
+          <b:widget-settings>
+            <b:widget-setting name='displayUrl'/>
+            <b:widget-setting name='displayHeight'>0</b:widget-setting>
+            <b:widget-setting name='sectionWidth'>-1</b:widget-setting>
+            <b:widget-setting name='useImage'>false</b:widget-setting>
+            <b:widget-setting name='shrinkToFit'>false</b:widget-setting>
+            <b:widget-setting name='imagePlacement'>BEHIND</b:widget-setting>
+            <b:widget-setting name='displayWidth'>0</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+
+  <b:if cond='data:useImage'>
+    <b:if cond='data:imagePlacement == &quot;BEHIND&quot;'>
+      <!--
+      Show image as background to text. You can't really calculate the width
+      reliably in JS because margins are not taken into account by any of
+      clientWidth, offsetWidth or scrollWidth, so we don't force a minimum
+      width if the user is using shrink to fit.
+      This results in a margin-width's worth of pixels being cropped. If the
+      user is not using shrink to fit then we expand the header.
+      -->
+      <b:if cond='data:mobile'>
+          <div id='header-inner'>
+            <div class='titlewrapper' style='background: transparent'>
+              <h1 class='title' style='background: transparent; border-width: 0px'>
+                <b:include name='title'/>
+              </h1>
+            </div>
+            <b:include name='description'/>
+          </div>
+        <b:else/>
+          <div expr:style='&quot;background-image: url(\&quot;&quot; + data:sourceUrl + &quot;\&quot;); &quot;                        + &quot;background-position: &quot;                        + data:backgroundPositionStyleStr + &quot;; &quot;                        + data:widthStyleStr                        + &quot;min-height: &quot; + data:height                        + &quot;_height: &quot; + data:height                        + &quot;background-repeat: no-repeat; &quot;' id='header-inner'>
+            <div class='titlewrapper' style='background: transparent'>
+              <h1 class='title' style='background: transparent; border-width: 0px'>
+                <b:include name='title'/>
+              </h1>
+            </div>
+            <b:include name='description'/>
+          </div>
+        </b:if>
+    <b:else/>
+      <!--Show the image only-->
+      <div id='header-inner'>
+        <a expr:href='data:blog.homepageUrl' style='display: block'>
+          <img expr:alt='data:title' expr:height='data:height' expr:id='data:widget.instanceId + &quot;_headerimg&quot;' expr:src='data:sourceUrl' expr:width='data:width' style='display: block'/>
+        </a>
+        <!--Show the description-->
+        <b:if cond='data:imagePlacement == &quot;BEFORE_DESCRIPTION&quot;'>
+          <b:include name='description'/>
+        </b:if>
+      </div>
+    </b:if>
+  <b:else/>
+    <!--No header image -->
+    <div id='header-inner'>
+      <div class='titlewrapper'>
+        <h1 class='title'>
+          <b:include name='title'/>
+        </h1>
+      </div>
+      <b:include name='description'/>
+    </div>
+  </b:if>
+</b:includable>
+          <b:includable id='description'>
+  <div class='descriptionwrapper'>
+    <p class='description'><span><data:description/></span></p>
+  </div>
+</b:includable>
+          <b:includable id='title'>
+  <b:if cond='data:blog.url == data:blog.homepageUrl'>
+    <data:title/>
+  <b:else/>
+    <a expr:href='data:blog.homepageUrl'><data:title/></a>
+  </b:if>
+</b:includable>
+        </b:widget>
+      </b:section>
+    </div>
+
+  	<div id='outer-wrapper'><div id='wrap2'>
+
+	<div id='crosscol-wrapper'>
+        <b:section class='crosscol' id='crosscol'/>
+    </div>
+	
+    <!-- skip links for text browsers -->
+    <span id='skiplinks' style='display:none;'>
+      <a href='#main'>skip to main </a> |
+      <a href='#sidebar'>skip to sidebar</a>
+    </span>
+
+    <!-- A sidebar so aparece na pagina de um post (pageType == "item").
+         A classe muda conforme o caso, para o CSS ajustar a largura. -->
+    <!-- Classes do #content-wrapper, por tipo de pagina:
+           com-sidebar  / sem-sidebar  -> ha ou nao coluna lateral
+           pagina-home                 -> primeira pagina (a mesa)
+           pagina-lista                -> marcador, pesquisa ou arquivo,
+                                          onde os posts viram cartoes -->
+    <div expr:class='(data:blog.pageType == &quot;item&quot; ? &quot;com-sidebar&quot; : &quot;sem-sidebar&quot;) + (data:blog.url == data:blog.homepageUrl ? &quot; pagina-home&quot; : &quot;&quot;) + (data:blog.searchLabel ? &quot; pagina-lista&quot; : (data:blog.searchQuery ? &quot; pagina-lista&quot; : (data:blog.pageType == &quot;archive&quot; ? &quot; pagina-lista&quot; : &quot;&quot;)))' id='content-wrapper'>
+
+      <div id='main-wrapper'>
+
+        <!-- ================= HOMEPAGE =================
+             Só aparece na primeira pagina do blog. Ponha aqui um
+             gadget HTML/JavaScript com a apresentacao (por exemplo
+             a "mesa" de objetos arrastaveis). Na home, a lista de
+             posts fica escondida; nas outras paginas acontece o
+             inverso. -->
+        <div id='home-wrapper'>
+          <b:section class='home' id='home' showaddelement='yes'>
+            <b:widget id='HTML1' locked='false' title='' type='HTML'>
+              <b:widget-settings>
+                <b:widget-setting name='content'>Oi, você deve ter perpebido que o layout mudou. Nos próximos dias algumas alterações aconteceram por aqui, desculpe o transtorno.</b:widget-setting>
+              </b:widget-settings>
+              <b:includable id='main'>
+  <!-- only display title if it's non-empty -->
+  <b:if cond='data:title != &quot;&quot;'>
+    <h2 class='title'><data:title/></h2>
+  </b:if>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+
+  <b:include name='quickedit'/>
+</b:includable>
+            </b:widget>
+          </b:section>
+        </div>
+
+        <b:section class='main' id='main' showaddelement='no'>
+          <b:widget id='Blog1' locked='true' title='Postagens no blog' type='Blog' version='1'>
+            <b:widget-settings>
+              <b:widget-setting name='commentLabel'>COMENTÁRIOS</b:widget-setting>
+              <b:widget-setting name='showShareButtons'>false</b:widget-setting>
+              <b:widget-setting name='authorLabel'>posted by</b:widget-setting>
+              <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
+              <b:widget-setting name='timestampLabel'>on day</b:widget-setting>
+              <b:widget-setting name='reactionsLabel'/>
+              <b:widget-setting name='showAuthorProfile'>false</b:widget-setting>
+              <b:widget-setting name='style.layout'>1x1</b:widget-setting>
+              <b:widget-setting name='showLocation'>true</b:widget-setting>
+              <b:widget-setting name='showTimestamp'>true</b:widget-setting>
+              <b:widget-setting name='postsPerAd'>1</b:widget-setting>
+              <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
+              <b:widget-setting name='showDateHeader'>false</b:widget-setting>
+              <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
+              <b:widget-setting name='showCommentLink'>true</b:widget-setting>
+              <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
+              <b:widget-setting name='postLocationLabel'>Location:</b:widget-setting>
+              <b:widget-setting name='showAuthor'>false</b:widget-setting>
+              <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
+              <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
+              <b:widget-setting name='showLabels'>true</b:widget-setting>
+              <b:widget-setting name='postLabelsLabel'>labels</b:widget-setting>
+              <b:widget-setting name='showBacklinks'>false</b:widget-setting>
+              <b:widget-setting name='showInlineAds'>false</b:widget-setting>
+              <b:widget-setting name='showReactions'>false</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main' var='top'>
+  <b:if cond='data:mobile == &quot;false&quot;'>
+
+    <!-- posts -->
+    <div class='blog-posts hfeed'>
+
+      <b:include data='top' name='status-message'/>
+
+      <data:defaultAdStart/>
+      <b:loop values='data:posts' var='post'>
+        <b:if cond='data:post.isDateStart'>
+          <b:if cond='data:post.isFirstPost == &quot;false&quot;'>
+            &lt;/div&gt;&lt;/div&gt;
+          </b:if>
+        </b:if>
+        <b:if cond='data:post.isDateStart'>
+          &lt;div class=&quot;date-outer&quot;&gt;
+        </b:if>
+        
+        <b:if cond='data:post.isDateStart'>
+          &lt;div class=&quot;date-posts&quot;&gt;
+        </b:if>
+        <div class='post-outer'>
+        <b:include data='post' name='post'/>
+        <b:if cond='data:blog.pageType == &quot;static_page&quot;'>
+          <b:if cond='data:post.showThreadedComments'>
+            <b:include data='post' name='threaded_comments'/>
+          <b:else/>
+            <b:include data='post' name='comments'/>
+          </b:if>
+        </b:if>
+        <b:if cond='data:blog.pageType == &quot;item&quot;'>
+          <b:if cond='data:post.showThreadedComments'>
+            <b:include data='post' name='threaded_comments'/>
+          <b:else/>
+            <b:include data='post' name='comments'/>
+          </b:if>
+        </b:if>
+        </div>
+        <b:if cond='data:post.includeAd'>
+          <b:if cond='data:post.isFirstPost'>
+            <data:defaultAdEnd/>
+          <b:else/>
+            <data:adEnd/>
+          </b:if>
+          <div class='inline-ad'>
+            <data:adCode/>
+          </div>
+          <data:adStart/>
+        </b:if>
+      </b:loop>
+      <b:if cond='data:numPosts != 0'>
+        &lt;/div&gt;&lt;/div&gt;
+      </b:if>
+      <data:adEnd/>
+    </div>
+
+    <!-- navigation -->
+    <b:include name='nextprev'/>
+
+    <!-- feed links -->
+    <b:include name='feedLinks'/>
+
+    <b:if cond='data:top.showStars'>
+      <script src='//www.google.com/jsapi' type='text/javascript'/>
+      <script type='text/javascript'>
+        google.load(&quot;annotations&quot;, &quot;1&quot;, {&quot;locale&quot;: &quot;<data:top.languageCode/>&quot;});
+        function initialize() {
+          google.annotations.setApplicationId(<data:top.blogspotReviews/>);
+          google.annotations.createAll();
+          google.annotations.fetch();
+        }
+        google.setOnLoadCallback(initialize);
+      </script>
+    </b:if>
+
+  <b:else/>
+    <b:include name='mobile-main'/>
+  </b:if>
+
+  <b:if cond='data:top.showDummy'>
+    <data:top.dummyBootstrap/>
+  </b:if>
+
+</b:includable>
+            <b:includable id='backlinkDeleteIcon' var='backlink'>
+  <span expr:class='&quot;item-control &quot; + data:backlink.adminClass'>
+    <a expr:href='data:backlink.deleteUrl' expr:title='data:top.deleteBacklinkMsg'>
+      <img src='//www.blogger.com/img/icon_delete13.gif'/>
+    </a>
+  </span>
+</b:includable>
+            <b:includable id='backlinks' var='post'>
+  <a name='links'/><h4><data:post.backlinksLabel/></h4>
+  <b:if cond='data:post.numBacklinks != 0'>
+    <dl class='comments-block' id='comments-block'>
+      <b:loop values='data:post.backlinks' var='backlink'>
+        <div class='collapsed-backlink backlink-control'>
+          <dt class='comment-title'>
+            <span class='backlink-toggle-zippy'>&#160;</span>
+            <a expr:href='data:backlink.url' rel='nofollow'><data:backlink.title/></a>
+            <b:include data='backlink' name='backlinkDeleteIcon'/>
+          </dt>
+          <dd class='comment-body collapseable'>
+            <data:backlink.snippet/>
+          </dd>
+          <dd class='comment-footer collapseable'>
+            <span class='comment-author'><data:post.authorLabel/> <data:backlink.author/></span>
+            <span class='comment-timestamp'><data:post.timestampLabel/> <data:backlink.timestamp/></span>
+          </dd>
+        </div>
+      </b:loop>
+    </dl>
+  </b:if>
+  <p class='comment-footer'>
+    <a class='comment-link' expr:href='data:post.createLinkUrl' expr:id='data:widget.instanceId + &quot;_backlinks-create-link&quot;' target='_blank'><data:post.createLinkLabel/></a>
+  </p>
+</b:includable>
+            <b:includable id='comment-form' var='post'>
+  <div class='comment-form'>
+    <a name='comment-form'/>
+    <b:if cond='data:mobile'>
+      <h4 id='comment-post-message'>
+        <a expr:id='data:widget.instanceId + &quot;_comment-editor-toggle-link&quot;' href='javascript:void(0)'><data:postCommentMsg/></a></h4>
+      <p><data:blogCommentMessage/></p>
+      <data:blogTeamBlogMessage/>
+      <a expr:href='data:post.commentFormIframeSrc' id='comment-editor-src'/>
+      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' frameborder='0' height='410' id='comment-editor' name='comment-editor' src='' style='display: none' width='100%'/>
+    <b:else/>
+      <h4 id='comment-post-message'><data:postCommentMsg/></h4>
+      <p><data:blogCommentMessage/></p>
+      <data:blogTeamBlogMessage/>
+      <a expr:href='data:post.commentFormIframeSrc' id='comment-editor-src'/>
+      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' frameborder='0' height='410' id='comment-editor' name='comment-editor' src='' width='100%'/>
+    </b:if>
+    <data:post.friendConnectJs/>
+    <data:post.cmtfpIframe/>
+    <script type='text/javascript'>
+      BLOG_CMT_createIframe(&#39;<data:post.appRpcRelayPath/>&#39;, &#39;<data:post.communityId/>&#39;);
+    </script>
+  </div>
+</b:includable>
+            <b:includable id='commentDeleteIcon' var='comment'>
+  <span expr:class='&quot;item-control &quot; + data:comment.adminClass'>
+    <b:if cond='data:showCmtPopup'>
+      <div class='goog-toggle-button'>
+        <div class='goog-inline-block comment-action-icon'/>
+      </div>
+    <b:else/>
+      <a class='comment-delete' expr:href='data:comment.deleteUrl' expr:title='data:top.deleteCommentMsg'>
+        <img src='//www.blogger.com/img/icon_delete13.gif'/>
+      </a>
+    </b:if>
+  </span>
+</b:includable>
+            <b:includable id='comment_count_picker' var='post'>
+  <b:if cond='data:post.commentSource == 1'>
+    <span class='cmt_count_iframe_holder' expr:data-count='data:post.numComments' expr:data-onclick='data:post.addCommentOnclick' expr:data-post-url='data:post.url' expr:data-url='data:post.canonicalUrl'>
+    </span>
+  <b:else/>
+    <a class='comment-link' expr:href='data:post.addCommentUrl' expr:onclick='data:post.addCommentOnclick'>
+      <data:post.commentLabelFull/>:
+    </a>
+  </b:if>
+</b:includable>
+            <b:includable id='comment_picker' var='post'>
+  <b:if cond='data:post.commentSource == 1'>
+    <b:include data='post' name='iframe_comments'/>
+  <b:elseif cond='data:post.showThreadedComments'/>
+    <b:include data='post' name='threaded_comments'/>
+  <b:else/>
+    <b:include data='post' name='comments'/>
+  </b:if>
+</b:includable>
+            <b:includable id='comments' var='post'>
+  <div class='comments' id='comments'>
+    <a name='comments'/>
+    <b:if cond='data:post.allowComments'>
+      <h4>
+		<b:if cond='data:post.numComments == 0'> Nenhum comentário
+        	<b:else/>
+            	<b:if cond='data:post.numComments == 1'>1 Comentário
+            	<b:else/>
+        	<data:post.numComments/> 
+			<data:top.commentLabelPlural/>
+			</b:if>
+		</b:if>
+      </h4>
+
+      <b:if cond='data:post.commentPagingRequired'>
+        <span class='paging-control-container'>
+          <b:if cond='data:post.hasOlderLinks'>
+            <a expr:class='data:post.oldLinkClass' expr:href='data:post.oldestLinkUrl'><data:post.oldestLinkText/></a>
+              &#160;
+            <a expr:class='data:post.oldLinkClass' expr:href='data:post.olderLinkUrl'><data:post.olderLinkText/></a>
+              &#160;
+          </b:if>
+
+          <data:post.commentRangeText/>
+
+          <b:if cond='data:post.hasNewerLinks'>
+            &#160;
+            <a expr:class='data:post.newLinkClass' expr:href='data:post.newerLinkUrl'><data:post.newerLinkText/></a>
+            &#160;
+            <a expr:class='data:post.newLinkClass' expr:href='data:post.newestLinkUrl'><data:post.newestLinkText/></a>
+          </b:if>
+        </span>
+      </b:if>
+
+      <div expr:id='data:widget.instanceId + &quot;_comments-block-wrapper&quot;'>
+        <dl expr:class='data:post.avatarIndentClass' id='comments-block'>
+          <b:loop values='data:post.comments' var='comment'>
+            <dt expr:class='&quot;comment-author &quot; + data:comment.authorClass' expr:id='data:comment.anchorName'>
+              <b:if cond='data:comment.favicon'>
+                <img expr:src='data:comment.favicon' height='16px' style='margin-bottom:-2px;' width='16px'/>
+              </b:if>
+              <a expr:name='data:comment.anchorName'/>
+              <b:if cond='data:blog.enabledCommentProfileImages'>
+                <data:comment.authorAvatarImage/>
+              </b:if>
+              <b:if cond='data:comment.authorUrl'>
+                <a expr:href='data:comment.authorUrl' rel='nofollow'><data:comment.author/></a>
+              <b:else/>
+                <data:comment.author/>
+              </b:if>
+              <data:commentPostedByMsg/>
+            </dt>
+            <dd class='comment-body' expr:id='data:widget.instanceId + data:comment.cmtBodyIdPostfix'>
+              <b:if cond='data:comment.isDeleted'>
+                <span class='deleted-comment'><data:comment.body/></span>
+              <b:else/>
+                <p>
+                  <data:comment.body/>
+                </p>
+              </b:if>
+            </dd>
+            <dd class='comment-footer'>
+              <span class='comment-timestamp'>
+                <a expr:href='data:comment.url' title='comment permalink'>
+                  <data:comment.timestamp/>
+                </a>
+                <b:include data='comment' name='commentDeleteIcon'/>
+              </span>
+            </dd>
+          </b:loop>
+        </dl>
+      </div>
+
+      <b:if cond='data:post.commentPagingRequired'>
+        <span class='paging-control-container'>
+          <a expr:class='data:post.oldLinkClass' expr:href='data:post.oldestLinkUrl'>
+            <data:post.oldestLinkText/>
+          </a>
+          <a expr:class='data:post.oldLinkClass' expr:href='data:post.olderLinkUrl'>
+            <data:post.olderLinkText/>
+          </a>
+          &#160;
+          <data:post.commentRangeText/>
+          &#160;
+          <a expr:class='data:post.newLinkClass' expr:href='data:post.newerLinkUrl'>
+            <data:post.newerLinkText/>
+          </a>
+          <a expr:class='data:post.newLinkClass' expr:href='data:post.newestLinkUrl'>
+            <data:post.newestLinkText/>
+          </a>
+        </span>
+      </b:if>
+
+      <p class='comment-footer'>
+        <b:if cond='data:post.embedCommentForm'>
+          <b:if cond='data:post.allowNewComments'>
+            <b:include data='post' name='comment-form'/>
+          <b:else/>
+            <data:post.noNewCommentsText/>
+          </b:if>
+        <b:else/>
+          <b:if cond='data:post.allowComments'>
+            <a expr:href='data:post.addCommentUrl' expr:onclick='data:post.addCommentOnclick'><data:postCommentMsg/></a>
+          </b:if>
+        </b:if>
+
+      </p>
+    </b:if>
+    <b:if cond='data:showCmtPopup'>
+      <div id='comment-popup'>
+        <iframe allowtransparency='true' frameborder='0' id='comment-actions' name='comment-actions' scrolling='no'>
+        </iframe>
+      </div>
+    </b:if>
+
+    <div id='backlinks-container'>
+    <div expr:id='data:widget.instanceId + &quot;_backlinks-container&quot;'>
+       <b:if cond='data:post.showBacklinks'>
+         <b:include data='post' name='backlinks'/>
+       </b:if>
+    </div>
+    </div>
+  </div>
+</b:includable>
+            <b:includable id='feedLinks'>
+  <b:if cond='data:blog.pageType != &quot;item&quot;'> <!-- Blog feed links -->
+    <b:if cond='data:feedLinks'>
+      <div class='blog-feeds'>
+        <b:include data='feedLinks' name='feedLinksBody'/>
+      </div>
+    </b:if>
+
+    <b:else/> <!--Post feed links -->
+    <div class='post-feeds'>
+      <b:loop values='data:posts' var='post'>
+        <b:if cond='data:post.allowComments'>
+          <b:if cond='data:post.feedLinks'>
+            <b:include data='post.feedLinks' name='feedLinksBody'/>
+          </b:if>
+        </b:if>
+      </b:loop>
+    </div>
+  </b:if>
+</b:includable>
+            <b:includable id='feedLinksBody' var='links'>
+  <div class='feed-links'>
+  <data:feedLinksMsg/>
+  <b:loop values='data:links' var='f'>
+     <a class='feed-link' expr:href='data:f.url' expr:type='data:f.mimeType' target='_blank'><data:f.name/> (<data:f.feedType/>)</a>
+  </b:loop>
+  </div>
+</b:includable>
+            <b:includable id='iframe_comments' var='post'>
+
+  <b:if cond='data:post.allowIframeComments'>
+    <script expr:src='data:post.iframeCommentSrc' type='text/javascript'/>
+    <div class='cmt_iframe_holder' expr:data-href='data:post.canonicalUrl' expr:data-viewtype='data:post.viewType'/>
+
+    <b:if cond='data:post.embedCommentForm == &quot;false&quot;'>
+      <a expr:href='data:post.addCommentUrl' expr:onclick='data:post.addCommentOnclick'><data:postCommentMsg/></a>
+    </b:if>
+  </b:if>
+</b:includable>
+            <b:includable id='mobile-index-post' var='post'>
+  <div class='mobile-date-outer date-outer'>
+    <b:if cond='data:post.dateHeader'>
+      <div class='date-header'>
+        <span><data:post.dateHeader/></span>
+      </div>
+    </b:if>
+
+    <div class='mobile-post-outer'>
+      <a expr:href='data:post.url'>
+        <h3 class='mobile-index-title entry-title' itemprop='name'>
+          <data:post.title/>
+        </h3>
+
+        <div class='mobile-index-arrow'>&amp;rsaquo;</div>
+
+        <div class='mobile-index-contents'>
+          <b:if cond='data:post.thumbnailUrl'>
+            <div class='mobile-index-thumbnail'>
+              <div class='Image'>
+                <img expr:src='data:post.thumbnailUrl'/>
+              </div>
+            </div>
+          </b:if>
+
+          <div class='post-body'>
+            <b:if cond='data:post.snippet'><data:post.snippet/></b:if>
+          </div>
+        </div>
+
+        <div style='clear: both;'/>
+      </a>
+
+      <div class='mobile-index-comment'>
+        <b:if cond='data:blog.pageType != &quot;static_page&quot;'>
+          <b:if cond='data:post.allowComments'>
+            <a class='comment-link' expr:href='data:post.addCommentUrl' expr:onclick='data:post.addCommentOnclick'>
+            	<b:if cond='data:post.numComments == 0'> Nenhum comentário
+            	<b:else/>
+            		<b:if cond='data:post.numComments == 1'>1 Comentário
+                 	 <b:else/>
+                  <data:post.numComments/> 
+                  <data:top.commentLabelPlural/>
+                  </b:if>
+				</b:if>
+			  </a>
+            </b:if>
+        </b:if>
+      </div>
+    </div>
+  </div>
+</b:includable>
+            <b:includable id='mobile-main' var='top'>
+    <!-- posts -->
+    <div class='blog-posts hfeed'>
+
+      <b:include data='top' name='status-message'/>
+
+      <b:if cond='data:blog.pageType == &quot;index&quot;'>
+        <b:loop values='data:posts' var='post'>
+          <b:include data='post' name='mobile-index-post'/>
+        </b:loop>
+      <b:else/>
+        <b:loop values='data:posts' var='post'>
+          <b:include data='post' name='mobile-post'/>
+        </b:loop>
+      </b:if>
+    </div>
+
+   <b:include name='mobile-nextprev'/>
+</b:includable>
+            <b:includable id='mobile-nextprev'>
+  <div class='blog-pager' id='blog-pager'>
+    <b:if cond='data:newerPageUrl'>
+      <div class='mobile-link-button' id='blog-pager-newer-link'>
+      <a class='blog-pager-newer-link' expr:href='data:newerPageUrl' expr:id='data:widget.instanceId + &quot;_blog-pager-newer-link&quot;' expr:title='data:newerPageTitle'>&amp;lsaquo;</a>
+      </div>
+    </b:if>
+
+    <b:if cond='data:olderPageUrl'>
+      <div class='mobile-link-button' id='blog-pager-older-link'>
+      <a class='blog-pager-older-link' expr:href='data:olderPageUrl' expr:id='data:widget.instanceId + &quot;_blog-pager-older-link&quot;' expr:title='data:olderPageTitle'>&amp;rsaquo;</a>
+      </div>
+    </b:if>
+
+    <div class='mobile-link-button' id='blog-pager-home-link'>
+    <a class='home-link' expr:href='data:blog.homepageUrl'><data:homeMsg/></a>
+    </div>
+
+    <div class='mobile-desktop-link'>
+      <a class='home-link' expr:href='data:desktopLinkUrl'><data:desktopLinkMsg/></a>
+    </div>
+
+  </div>
+  <div class='clear'/>
+</b:includable>
+            <b:includable id='mobile-post' var='post'>
+  <div class='date-outer'>
+    <b:if cond='data:post.dateHeader'>
+      <h2 class='date-header'><span><data:post.dateHeader/></span></h2>
+    </b:if>
+    <div class='date-posts'>
+      <div class='post-outer'>
+
+        <div class='post hentry uncustomized-post-template' itemscope='itemscope' itemtype='http://schema.org/BlogPosting'>
+          <a expr:name='data:post.id'/>
+          <b:if cond='data:post.title'>
+            <h3 class='post-title entry-title' itemprop='name'>
+              <b:if cond='data:post.link'>
+                <a expr:href='data:post.link'><data:post.title/></a>
+              <b:else/>
+                <b:if cond='data:post.url'>
+                  <b:if cond='data:blog.url != data:post.url'>
+                    <a expr:href='data:post.url'><data:post.title/></a>
+                  <b:else/>
+                    <data:post.title/>
+                  </b:if>
+                <b:else/>
+                  <data:post.title/>
+                </b:if>
+              </b:if>
+            </h3>
+          </b:if>
+
+          <div class='post-header'>
+            <div class='post-header-line-1'/>
+          </div>
+
+          <div class='post-body entry-content' expr:id='&quot;post-body-&quot; + data:post.id' itemprop='articleBody'>
+            <data:post.body/>
+            <div style='clear: both;'/> <!-- clear for photos floats -->
+          </div>
+
+          <div class='post-footer'>
+            <div class='post-footer-line post-footer-line-1'>
+              <span class='post-author vcard'>
+                <b:if cond='data:top.showAuthor'>
+                  <b:if cond='data:post.authorProfileUrl'>
+                    <span class='fn'>
+                      <a expr:href='data:post.authorProfileUrl' itemprop='author' rel='author' title='author profile'>
+                        <data:post.author/>
+                      </a>
+                    </span>
+                  <b:else/>
+                    <span class='fn'><data:post.author/></span>
+                  </b:if>
+                </b:if>
+              </span>
+
+              <span class='post-timestamp'>
+                <b:if cond='data:top.showTimestamp'>
+                  <data:top.timestampLabel/>
+                  <b:if cond='data:post.url'>
+                    <a class='timestamp-link' expr:href='data:post.url' itemprop='url' rel='bookmark' title='permanent link'><abbr class='published' expr:title='data:post.timestampISO8601' itemprop='datePublished'><data:post.timestamp/></abbr></a>
+                  </b:if>
+                </b:if>
+              </span>
+
+              <span class='post-comment-link'>
+                <b:if cond='data:blog.pageType != &quot;item&quot;'>
+                  <b:if cond='data:blog.pageType != &quot;static_page&quot;'>
+                    <b:if cond='data:post.allowComments'>
+                      <a class='comment-link' expr:href='data:post.addCommentUrl' expr:onclick='data:post.addCommentOnclick'>
+                          <b:if cond='data:post.numComments == 0'> Nenhum comentário
+                          <b:else/>
+                              <b:if cond='data:post.numComments == 1'>1 Comentário
+                               <b:else/>
+                            <data:post.numComments/> 
+                            <data:top.commentLabelPlural/>
+                            </b:if>
+                          </b:if>
+                        </a>
+                      </b:if>
+                  </b:if>
+                </b:if>
+              </span>
+            </div>
+
+            <div class='post-footer-line post-footer-line-2'>
+              <b:if cond='data:top.showMobileShare'>
+                <div class='mobile-link-button goog-inline-block' id='mobile-share-button'>
+                  <a href='javascript:void(0);'><data:shareMsg/></a>
+                </div>
+              </b:if>
+              <b:if cond='data:top.showDummy'>
+                <div class='goog-inline-block dummy-container'><data:post.dummyTag/></div>
+              </b:if>
+            </div>
+
+          </div>
+        </div>
+
+        <b:if cond='data:blog.pageType == &quot;static_page&quot;'>
+          <b:if cond='data:post.showThreadedComments'>
+            <b:include data='post' name='threaded_comments'/>
+          <b:else/>
+            <b:include data='post' name='comments'/>
+          </b:if>
+        </b:if>
+        <b:if cond='data:blog.pageType == &quot;item&quot;'>
+          <b:if cond='data:post.showThreadedComments'>
+            <b:include data='post' name='threaded_comments'/>
+          <b:else/>
+            <b:include data='post' name='comments'/>
+          </b:if>
+        </b:if>
+      </div>
+    </div>
+  </div>
+</b:includable>
+            <b:includable id='nextprev'>
+  <div class='blog-pager' id='blog-pager'>
+    <b:if cond='data:newerPageUrl'>
+      <span id='blog-pager-newer-link'>
+      <a class='blog-pager-newer-link' expr:href='data:newerPageUrl' expr:id='data:widget.instanceId + &quot;_blog-pager-newer-link&quot;' expr:title='data:newerPageTitle'>Newer</a>
+      </span>
+    </b:if>
+
+    <b:if cond='data:olderPageUrl'>
+      <span id='blog-pager-older-link'>
+      <a class='blog-pager-older-link' expr:href='data:olderPageUrl' expr:id='data:widget.instanceId + &quot;_blog-pager-older-link&quot;' expr:title='data:olderPageTitle'>Older</a>
+      </span>
+    </b:if>
+	<span id='home-link'>
+    <a class='home-link' expr:href='data:blog.homepageUrl'>Home</a>
+    </span>
+
+    <b:if cond='data:mobileLinkUrl'>
+      <div class='blog-mobile-link'>
+        <a expr:href='data:mobileLinkUrl'><data:mobileLinkMsg/></a>
+      </div>
+    </b:if>
+
+  </div>
+  <div class='clear'/>
+</b:includable>
+            <b:includable id='post' var='post'>
+  <div class='post hentry' itemscope='itemscope' itemtype='http://schema.org/BlogPosting'>
+    <a expr:name='data:post.id'/>
+    <b:if cond='data:post.title'>
+      <h3 class='post-title entry-title' itemprop='name'>
+      <b:if cond='data:post.link'>
+        <a expr:href='data:post.link'><data:post.title/></a>
+      <b:else/>
+        <b:if cond='data:post.url'>
+          <b:if cond='data:blog.url != data:post.url'>
+            <a expr:href='data:post.url'><data:post.title/></a>
+          <b:else/>
+            <data:post.title/>
+          </b:if>
+        <b:else/>
+          <data:post.title/>
+        </b:if>
+      </b:if>
+      </h3>
+    </b:if>
+
+    <div class='post-header'>
+      <div class='post-header-line-1'>
+  		<span class='post-author vcard'>
+          <b:if cond='data:top.showAuthor'>
+              <b:if cond='data:post.authorProfileUrl'>
+                <span class='fn'>
+                  <a expr:href='data:post.authorProfileUrl' itemprop='author' rel='author' title='author profile'>
+                    <data:post.author/>
+                  </a>
+                </span>
+              <b:else/>
+                <span class='fn'><data:post.author/></span>
+              </b:if>
+          </b:if>
+        </span>
+        <b:if cond='data:post.dateHeader'>
+        <script>var ultimaFecha = &#39;<data:post.dateHeader/>&#39;;</script>
+        <span class='date-header'><data:post.dateHeader/></span>
+        <b:else/>
+        <span class='date-header'>
+        <script>document.write(ultimaFecha);</script>
+        </span>
+        </b:if>
+	  	<span class='post-comment-link'>
+          <b:if cond='data:blog.pageType != &quot;item&quot;'>
+            <b:if cond='data:blog.pageType != &quot;static_page&quot;'>
+              <b:if cond='data:post.allowComments'>
+                      <a class='comment-link' expr:href='data:post.addCommentUrl' expr:onclick='data:post.addCommentOnclick'>
+                          <b:if cond='data:post.numComments == 0'> Nenhum comentário
+                          <b:else/>
+                          <b:if cond='data:post.numComments == 1'>1 Comentário
+                          <b:else/>
+				          <data:post.numComments/> 
+                         <data:top.commentLabelPlural/>
+                         </b:if>
+                     </b:if>
+                   </a>
+				</b:if>
+            </b:if>
+          </b:if>
+        </span> 
+
+      </div>
+    </div>
+
+    <div class='post-body entry-content' expr:id='&quot;post-body-&quot; + data:post.id' itemprop='articleBody'>
+      <data:post.body/>
+      <div style='clear: both;'/> <!-- clear for photos floats -->
+    </div>
+
+    <b:if cond='data:post.hasJumpLink'>
+      <div class='jump-link'>
+        <a expr:href='data:post.url + &quot;#more&quot;' expr:title='data:post.title'><data:post.jumpText/></a>
+      </div>
+    </b:if>
+
+    <div class='post-footer'>
+    <div class='post-footer-line post-footer-line-1'>
+
+        <b:if cond='data:blog.pageType == &quot;item&quot;'>   
+          
+<!-- LikeBtn.com BEGIN Lovelogic Modified -->
+<span class='likebtn-wrapper ld-heart-btn lovelogic-heart-btn' data-bg_c='transparent' data-bg_c_v='transparent' data-brdr_c='transparent' data-counter_frmt='km' data-counter_zero_show='true' data-dislike_enabled='false' data-ef_voting='push' data-icon_dislike_show='false' data-icon_l='hrt5' data-icon_size='15' data-popup_disabled='true' data-share_enabled='false' data-show_like_label='false' data-theme='custom' data-tooltip_enabled='false' expr:data-identifier='data:post.id'/>
+
+<script>(function(d,e,s){
+if(d.getElementById(&quot;likebtn_wjs&quot;))return;
+a=d.createElement(e);
+m=d.getElementsByTagName(e)[0];
+a.async=1;
+a.id=&quot;likebtn_wjs&quot;;
+a.src=s;
+m.parentNode.insertBefore(a, m)
+})(document,&quot;script&quot;,&quot;//w.likebtn.com/js/w/widget.js&quot;);</script>
+<!-- LikeBtn.com END -->
+</b:if>
+      
+        <span class='compartilhar'>
+        </span>
+	  </div>
+
+      <div class='post-footer-line post-footer-line-2'>
+          <span class='post-timestamp'>
+            <b:if cond='data:top.showTimestamp'>
+            <b:if cond='data:post.url'>
+              <a class='timestamp-link' href='/arquivo' itemprop='url' rel='bookmark' title='Arquivo'><data:post.timestamp/></a>
+            </b:if>
+            </b:if>
+          </span>
+	  <span class='post-icons'>
+        <!-- email post links -->
+        <b:if cond='data:post.emailPostUrl'>
+          <span class='item-action'>
+          <a expr:href='data:post.emailPostUrl' expr:title='data:top.emailPostMsg'>
+              <img alt='' class='icon-action' height='13' src='//img1.blogblog.com/img/icon18_email.gif' width='18'/>
+          </a>
+          </span>
+        </b:if>
+        <!-- quickedit pencil -->
+        <b:include data='post' name='postQuickEdit'/> 
+      </span> 
+	  <div class='post-share-buttons goog-inline-block'>
+        <b:if cond='data:post.sharePostUrl'>
+          <b:include data='post' name='shareButtons'/>
+        </b:if>
+      </div>
+		<span class='post-labels'>
+          <b:if cond='data:post.labels'>
+           /
+            <b:loop values='data:post.labels' var='label'>
+              <a expr:href='data:label.url' rel='tag'><data:label.name/></a><b:if cond='data:label.isLast != &quot;true&quot;'>,</b:if>
+            </b:loop>
+          </b:if>
+        </span>
+	  </div>
+
+      <div class='post-footer-line post-footer-line-3'>
+		<span class='post-location'>
+          <b:if cond='data:top.showLocation'>
+            <b:if cond='data:post.location'>
+              
+              <a href='/mundo' target='_blank' title='Lugares que visitei'><data:post.location.name/></a>
+            </b:if>
+          </b:if>
+        </span> 
+	  </div>
+    </div>
+  </div>
+    <div id='at-gambar'>
+        <b:loop values='data:post.labels' var='label'> <b:if cond='data:label.isLast != &quot;true&quot;'> </b:if> <script expr:src='&quot;/feeds/posts/default/-/&quot; + data:label.name + &quot;?alt=json-in-script&amp;callback=related_results_labels_thumbs&amp;max-results=999&quot;' type='text/javascript'/> </b:loop> <script type='text/javascript'> removeRelatedDuplicates_thumbs(); printRelatedLabels_thumbs(&quot;<data:post.url/>&quot;); </script>
+    </div>
+</b:includable>
+            <b:includable id='postQuickEdit' var='post'>
+  <b:if cond='data:post.editUrl'>
+    <span expr:class='&quot;item-control &quot; + data:post.adminClass'>
+      <a expr:href='data:post.editUrl' expr:title='data:top.editPostMsg'>
+        <img alt='' class='icon-action' height='18' src='//img2.blogblog.com/img/icon18_edit_allbkg.gif' width='18'/>
+      </a>
+    </span>
+  </b:if>
+</b:includable>
+            <b:includable id='shareButtons' var='post'>
+  <b:if cond='data:top.showEmailButton'><a class='goog-inline-block share-button sb-email' expr:href='data:post.sharePostUrl + &quot;&amp;target=email&quot;' expr:title='data:top.emailThisMsg' target='_blank'><span class='share-button-link-text'><data:top.emailThisMsg/></span></a></b:if><b:if cond='data:top.showBlogThisButton'><a class='goog-inline-block share-button sb-blog' expr:href='data:post.sharePostUrl + &quot;&amp;target=blog&quot;' expr:onclick='&quot;window.open(this.href, \&quot;_blank\&quot;, \&quot;height=270,width=475\&quot;); return false;&quot;' expr:title='data:top.blogThisMsg' target='_blank'><span class='share-button-link-text'><data:top.blogThisMsg/></span></a></b:if><b:if cond='data:top.showTwitterButton'><a class='goog-inline-block share-button sb-twitter' expr:href='data:post.sharePostUrl + &quot;&amp;target=twitter&quot;' expr:title='data:top.shareToTwitterMsg' target='_blank'><span class='share-button-link-text'><data:top.shareToTwitterMsg/></span></a></b:if><b:if cond='data:top.showFacebookButton'><a class='goog-inline-block share-button sb-facebook' expr:href='data:post.sharePostUrl + &quot;&amp;target=facebook&quot;' expr:onclick='&quot;window.open(this.href, \&quot;_blank\&quot;, \&quot;height=430,width=640\&quot;); return false;&quot;' expr:title='data:top.shareToFacebookMsg' target='_blank'><span class='share-button-link-text'><data:top.shareToFacebookMsg/></span></a></b:if><b:if cond='data:top.showOrkutButton'><a class='goog-inline-block share-button sb-orkut' expr:href='data:post.sharePostUrl + &quot;&amp;target=orkut&quot;' expr:title='data:top.shareToOrkutMsg' target='_blank'><span class='share-button-link-text'><data:top.shareToOrkutMsg/></span></a></b:if><b:if cond='data:top.showDummy'><div class='goog-inline-block dummy-container'><data:post.dummyTag/></div></b:if>
+</b:includable>
+            <b:includable id='status-message'>
+  <b:if cond='data:navMessage'>
+  <div class='status-msg-wrap'>
+    <div class='status-msg-body'>
+      <data:navMessage/>
+    </div>
+    <div class='status-msg-border'>
+      <div class='status-msg-bg'>
+        <div class='status-msg-hidden'><data:navMessage/></div>
+      </div>
+    </div>
+  </div>
+  <div style='clear: both;'/>
+  </b:if>
+</b:includable>
+            <b:includable id='threaded-comment-form' var='post'>
+  <div class='comment-form'>
+    <a name='comment-form'/>
+    <b:if cond='data:mobile'>
+      <p><data:blogCommentMessage/></p>
+      <data:blogTeamBlogMessage/>
+      <a expr:href='data:post.commentFormIframeSrc' id='comment-editor-src'/>
+      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' frameborder='0' height='410' id='comment-editor' name='comment-editor' src='' style='display: none' width='100%'/>
+    <b:else/>
+      <p><data:blogCommentMessage/></p>
+      <data:blogTeamBlogMessage/>
+      <a expr:href='data:post.commentFormIframeSrc' id='comment-editor-src'/>
+      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' frameborder='0' height='410' id='comment-editor' name='comment-editor' src='' width='100%'/>
+    </b:if>
+    <data:post.friendConnectJs/>
+    <data:post.cmtfpIframe/>
+    <script type='text/javascript'>
+      BLOG_CMT_createIframe(&#39;<data:post.appRpcRelayPath/>&#39;, &#39;<data:post.communityId/>&#39;);
+    </script>
+  </div>
+</b:includable>
+            <b:includable id='threaded_comment_js' var='post'>
+  <script async='async' expr:src='data:post.commentSrc' type='text/javascript'/>
+
+  <script type='text/javascript'>
+    (function() {
+      var items = <data:post.commentJso/>;
+      var msgs = <data:post.commentMsgs/>;
+      var config = <data:post.commentConfig/>;
+
+// <![CDATA[
+      var cursor = null;
+      if (items && items.length > 0) {
+        cursor = parseInt(items[items.length - 1].timestamp) + 1;
+      }
+
+      var bodyFromEntry = function(entry) {
+        if (entry.gd$extendedProperty) {
+          for (var k in entry.gd$extendedProperty) {
+            if (entry.gd$extendedProperty[k].name == 'blogger.contentRemoved') {
+              return '<span class="deleted-comment">' + entry.content.$t + '</span>';
+            }
+          }
+        }
+        return entry.content.$t;
+      }
+
+      var parse = function(data) {
+        cursor = null;
+        var comments = [];
+        if (data && data.feed && data.feed.entry) {
+          for (var i = 0, entry; entry = data.feed.entry[i]; i++) {
+            var comment = {};
+            // comment ID, parsed out of the original id format
+            var id = /blog-(\d+).post-(\d+)/.exec(entry.id.$t);
+            comment.id = id ? id[2] : null;
+            comment.body = bodyFromEntry(entry);
+            comment.timestamp = Date.parse(entry.published.$t) + '';
+            if (entry.author && entry.author.constructor === Array) {
+              var auth = entry.author[0];
+              if (auth) {
+                comment.author = {
+                  name: (auth.name ? auth.name.$t : undefined),
+                  profileUrl: (auth.uri ? auth.uri.$t : undefined),
+                  avatarUrl: (auth.gd$image ? auth.gd$image.src : undefined)
+                };
+              }
+            }
+            if (entry.link) {
+              if (entry.link[2]) {
+                comment.link = comment.permalink = entry.link[2].href;
+              }
+              if (entry.link[3]) {
+                var pid = /.*comments\/default\/(\d+)\?.*/.exec(entry.link[3].href);
+                if (pid && pid[1]) {
+                  comment.parentId = pid[1];
+                }
+              }
+            }
+            comment.deleteclass = 'item-control blog-admin';
+            if (entry.gd$extendedProperty) {
+              for (var k in entry.gd$extendedProperty) {
+                if (entry.gd$extendedProperty[k].name == 'blogger.itemClass') {
+                  comment.deleteclass += ' ' + entry.gd$extendedProperty[k].value;
+                }
+              }
+            }
+            comments.push(comment);
+          }
+        }
+        return comments;
+      };
+
+      var paginator = function(callback) {
+        if (hasMore()) {
+          var url = config.feed + '?alt=json&v=2&orderby=published&reverse=false&max-results=50';
+          if (cursor) {
+            url += '&published-min=' + new Date(cursor).toISOString();
+          }
+          window.bloggercomments = function(data) {
+            var parsed = parse(data);
+            cursor = parsed.length < 50 ? null
+                : parseInt(parsed[parsed.length - 1].timestamp) + 1
+            callback(parsed);
+            window.bloggercomments = null;
+          }
+          url += '&callback=bloggercomments';
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = url;
+          document.getElementsByTagName('head')[0].appendChild(script);
+        }
+      };
+      var hasMore = function() {
+        return !!cursor;
+      };
+      var getMeta = function(key, comment) {
+        if ('iswriter' == key) {
+          var matches = !!comment.author
+              && comment.author.name == config.authorName
+              && comment.author.profileUrl == config.authorUrl;
+          return matches ? 'true' : '';
+        } else if ('deletelink' == key) {
+          return config.baseUri + '/delete-comment.g?blogID='
+               + config.blogId + '&postID=' + comment.id;
+        } else if ('deleteclass' == key) {
+          return comment.deleteclass;
+        }
+        return '';
+      };
+
+      var replybox = null;
+      var replyUrlParts = null;
+      var replyParent = undefined;
+
+      var onReply = function(commentId, domId) {
+        if (replybox == null) {
+          // lazily cache replybox, and adjust to suit this style:
+          replybox = document.getElementById('comment-editor');
+          if (replybox != null) {
+            replybox.height = '250px';
+            replybox.style.display = 'block';
+            replyUrlParts = replybox.src.split('#');
+          }
+        }
+        if (replybox && (commentId !== replyParent)) {
+          document.getElementById(domId).insertBefore(replybox, null);
+          replybox.src = replyUrlParts[0]
+              + (commentId ? '&parentID=' + commentId : '')
+              + '#' + replyUrlParts[1];
+          replyParent = commentId;
+        }
+      };
+
+      var hash = (window.location.hash || '#').substring(1);
+      var startThread, targetComment;
+      if (/^comment-form_/.test(hash)) {
+        startThread = hash.substring('comment-form_'.length);
+      } else if (/^c[0-9]+$/.test(hash)) {
+        targetComment = hash.substring(1);
+      }
+
+      // Configure commenting API:
+      var configJso = {
+        'maxDepth': config.maxThreadDepth
+      };
+      var provider = {
+        'id': config.postId,
+        'data': items,
+        'loadNext': paginator,
+        'hasMore': hasMore,
+        'getMeta': getMeta,
+        'onReply': onReply,
+        'rendered': true,
+        'initComment': targetComment,
+        'initReplyThread': startThread,
+        'config': configJso,
+        'messages': msgs
+      };
+
+      var render = function() {
+        if (window.goog && window.goog.comments) {
+          var holder = document.getElementById('comment-holder');
+          window.goog.comments.render(holder, provider);
+        }
+      };
+
+      // render now, or queue to render when library loads:
+      if (window.goog && window.goog.comments) {
+        render();
+      } else {
+        window.goog = window.goog || {};
+        window.goog.comments = window.goog.comments || {};
+        window.goog.comments.loadQueue = window.goog.comments.loadQueue || [];
+        window.goog.comments.loadQueue.push(render);
+      }
+    })();
+// ]]>
+  </script>
+</b:includable>
+            <b:includable id='threaded_comments' var='post'>
+  <div class='comments' id='comments'>
+    <a name='comments'/>
+    <h4>
+      <b:if cond='data:post.numComments == 0'> Nenhum comentário
+        	<b:else/>
+            	<b:if cond='data:post.numComments == 1'>1 Comentário
+            	<b:else/>
+        	<data:post.numComments/> 
+			<data:top.commentLabelPlural/>
+			</b:if>
+		</b:if>
+    </h4>
+
+    <div class='comments-content'>
+      <b:if cond='data:post.embedCommentForm'>
+        <b:include data='post' name='threaded_comment_js'/>
+      </b:if>
+      <div id='comment-holder'>
+         <data:post.commentHtml/>
+      </div>
+    </div>
+
+    <p class='comment-footer'>
+      <b:if cond='data:post.allowNewComments'>
+        <b:include data='post' name='threaded-comment-form'/>
+      <b:else/>
+        <data:post.noNewCommentsText/>
+      </b:if>
+    </p>
+
+    <b:if cond='data:showCmtPopup'>
+      <div id='comment-popup'>
+        <iframe allowtransparency='true' frameborder='0' id='comment-actions' name='comment-actions' scrolling='no'>
+        </iframe>
+      </div>
+    </b:if>
+
+    <div id='backlinks-container'>
+    <div expr:id='data:widget.instanceId + &quot;_backlinks-container&quot;'>
+       <b:if cond='data:post.showBacklinks'>
+         <b:include data='post' name='backlinks'/>
+       </b:if>
+    </div>
+    </div>
+  </div>
+</b:includable>
+          </b:widget>
+          <b:widget id='BlogList1' locked='false' title='My Blog List' type='BlogList'>
+            <b:widget-settings>
+              <b:widget-setting name='showItemThumbnail'>false</b:widget-setting>
+              <b:widget-setting name='sortType'>LAST_UPDATE_DESCENDING</b:widget-setting>
+              <b:widget-setting name='numItemsToShow'>9</b:widget-setting>
+              <b:widget-setting name='showTimePeriodSinceLastUpdate'>true</b:widget-setting>
+              <b:widget-setting name='showIcon'>false</b:widget-setting>
+              <b:widget-setting name='showItemTitle'>true</b:widget-setting>
+              <b:widget-setting name='showItemSnippet'>false</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+    <!-- only display title if it's non-empty -->
+    <b:if cond='data:title != &quot;&quot;'>
+      <h2 class='title'><data:title/></h2>
+    </b:if>
+
+    <div class='widget-content'>
+      <div class='blog-list-container' expr:id='data:widget.instanceId + &quot;_container&quot;'>
+        <ul expr:id='data:widget.instanceId + &quot;_blogs&quot;'>
+          <b:loop values='data:items' var='item'>
+            <li expr:style='data:item.displayStyle'>
+              <div class='blog-icon'>
+                <b:if cond='data:showIcon'>
+                  <img expr:data-lateloadsrc='data:item.blogIconUrl' height='16' width='16'/>
+                </b:if>
+              </div>
+              <div class='blog-content'>
+                <div class='blog-title'>
+                  <a expr:href='data:item.blogUrl' target='_blank'>
+                    <data:item.blogTitle/></a>
+                </div>
+                <div class='item-content'>
+                  <b:if cond='data:showItemThumbnail and data:item.itemThumbnail'>
+                    <div class='item-thumbnail'>
+                      <a expr:href='data:item.blogUrl' target='_blank'>
+                        <img alt='' border='0' expr:height='data:item.itemThumbnail.height' expr:src='data:item.itemThumbnail.url' expr:width='data:item.itemThumbnail.width'/>
+                      </a>
+                    </div>
+                  </b:if>
+                  <b:if cond='data:showItemTitle'>
+                    <span class='item-title'>
+                      <b:tag cond='data:item.itemUrl != &quot;&quot;' expr:href='data:item.itemUrl' name='a' target='_blank'>
+                        <data:item.itemTitle/>
+                      </b:tag>
+                    </span>
+                  </b:if>
+                  <b:if cond='data:showItemSnippet'>
+                    <b:if cond='data:showItemTitle'>
+                      -
+                    </b:if>
+                    <span class='item-snippet'>
+                      <data:item.itemSnippet/>
+                    </span>
+                  </b:if>
+                  <b:if cond='data:showTimePeriodSinceLastUpdate'>
+                    <div class='item-time'>
+                      <data:item.timePeriodSinceLastUpdate/>
+                    </div>
+                  </b:if>
+                </div>
+              </div>
+              <div style='clear: both;'/>
+            </li>
+          </b:loop>
+        </ul>
+
+        <b:if cond='data:numItemsToShow != 0 and data:totalItems &gt; data:numItemsToShow'>
+          <div class='show-option'>
+            <span expr:id='data:widget.instanceId + &quot;_show-n&quot;' style='display: none;'>
+              <a href='javascript:void(0)' onclick='return false;'>
+                <data:showNText/>
+              </a>
+            </span>
+            <span expr:id='data:widget.instanceId + &quot;_show-all&quot;' style='margin-left: 5px;'>
+              <a href='javascript:void(0)' onclick='return false;'>
+                <data:showAllText/>
+              </a>
+            </span>
+          </div>
+        </b:if>
+
+        <b:include name='quickedit'/>
+      </div>
+    </div>
+  </b:includable>
+          </b:widget>
+          <b:widget id='Label1' locked='false' title='Marcadores' type='Label'>
+            <b:widget-settings>
+              <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
+              <b:widget-setting name='display'>LIST</b:widget-setting>
+              <b:widget-setting name='selectedLabelsList'/>
+              <b:widget-setting name='showType'>ALL</b:widget-setting>
+              <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <b:if cond='data:title != &quot;&quot;'>
+    <h2><data:title/></h2>
+  </b:if>
+  <div expr:class='&quot;widget-content &quot; + data:display + &quot;-label-widget-content&quot;'>
+    <b:if cond='data:display == &quot;list&quot;'>
+      <ul>
+        <b:loop values='data:labels' var='label'>
+          <li>
+            <b:if cond='data:blog.url == data:label.url'>
+              <span expr:dir='data:blog.languageDirection'><data:label.name/></span>
+            <b:else/>
+              <a expr:dir='data:blog.languageDirection' expr:href='data:label.url'><data:label.name/></a>
+            </b:if>
+            <b:if cond='data:showFreqNumbers'>
+              <span dir='ltr'>(<data:label.count/>)</span>
+            </b:if>
+          </li>
+        </b:loop>
+      </ul>
+    <b:else/>
+      <b:loop values='data:labels' var='label'>
+        <span expr:class='&quot;label-size label-size-&quot; + data:label.cssSize'>
+          <b:if cond='data:blog.url == data:label.url'>
+            <span expr:dir='data:blog.languageDirection'><data:label.name/></span>
+          <b:else/>
+            <a expr:dir='data:blog.languageDirection' expr:href='data:label.url'><data:label.name/></a>
+          </b:if>
+          <b:if cond='data:showFreqNumbers'>
+            <span class='label-count' dir='ltr'>(<data:label.count/>)</span>
+          </b:if>
+        </span>
+      </b:loop>
+    </b:if>
+    <b:include name='quickedit'/>
+  </div>
+</b:includable>
+          </b:widget>
+          <b:widget id='ContactForm1' locked='false' title='Formulário de contato' type='ContactForm'>
+            <b:includable id='main'>
+  <b:if cond='data:title != &quot;&quot;'>
+    <h2 class='title'><data:title/></h2>
+  </b:if>
+  <div class='contact-form-widget'>
+    <div class='form'>
+      <form name='contact-form'>
+        <p/>
+        <data:contactFormNameMsg/>
+        <br/>
+        <input class='contact-form-name' expr:id='data:widget.instanceId + &quot;_contact-form-name&quot;' name='name' size='30' type='text' value=''/>
+        <p/>
+        <data:contactFormEmailMsg/> <span style='font-weight: bolder;'>*</span>
+        <br/>
+        <input class='contact-form-email' expr:id='data:widget.instanceId + &quot;_contact-form-email&quot;' name='email' size='30' type='text' value=''/>
+        <p/>
+        <data:contactFormMessageMsg/> <span style='font-weight: bolder;'>*</span>
+        <br/>
+        <textarea class='contact-form-email-message' cols='25' expr:id='data:widget.instanceId + &quot;_contact-form-email-message&quot;' name='email-message' rows='5'/>
+        <p/>
+        <input class='contact-form-button contact-form-button-submit' expr:id='data:widget.instanceId + &quot;_contact-form-submit&quot;' expr:value='data:contactFormSendMsg' type='button'/>
+        <p/>
+        <div style='text-align: center; max-width: 222px; width: 100%'>
+          <p class='contact-form-error-message' expr:id='data:widget.instanceId + &quot;_contact-form-error-message&quot;'/>
+          <p class='contact-form-success-message' expr:id='data:widget.instanceId + &quot;_contact-form-success-message&quot;'/>
+        </div>
+      </form>
+    </div>
+  </div>
+  <b:include name='quickedit'/>
+</b:includable>
+          </b:widget>
+        </b:section>
+      </div>
+
+      <div id='sidebar-wrapper'>
+        <b:section class='sidebar' id='sidebar' preferred='yes'>
+          <b:widget id='Image1' locked='false' title='' type='Image'>
+            <b:widget-settings>
+              <b:widget-setting name='displayUrl'>https://blogger.googleusercontent.com/img/a/AVvXsEiswQ_uH2Lbv4nRlujZvTUt26p_JsFqNTCs8AkzaM-YCAoREr_reOPhAPBL7RVs1VhuVHroWs3UPzdvC46QbU1HtE7_BWyS83Waf1SmxpONbpen3ahgv69-ORY-K4hJQ4PlQMfuf36vFr5naNw-v_E7dZZnPxTMNVZL3qVXtBxSIvE4CrJrtTGNNR9_CM8=s1599</b:widget-setting>
+              <b:widget-setting name='displayHeight'>1599</b:widget-setting>
+              <b:widget-setting name='sectionWidth'>975</b:widget-setting>
+              <b:widget-setting name='shrinkToFit'>false</b:widget-setting>
+              <b:widget-setting name='displayWidth'>1066</b:widget-setting>
+              <b:widget-setting name='link'>https://igormedeiroz.blogspot.com/sobre</b:widget-setting>
+              <b:widget-setting name='caption'/>
+            </b:widget-settings>
+            <b:includable id='main'>
+    <b:if cond='data:title != &quot;&quot;'>
+      <h2><data:title/></h2>
+    </b:if>
+    <div class='widget-content'>
+      <b:tag cond='data:link' expr:href='data:link' name='a'>
+        <img expr:alt='data:title' expr:height='data:height' expr:id='data:widget.instanceId + &quot;_img&quot;' expr:src='data:sourceUrl' expr:width='data:width'/>
+      </b:tag>
+      <br/>
+      <b:if cond='data:caption'>
+        <span class='caption'><data:caption/></span>
+      </b:if>
+    </div>
+    <b:include name='quickedit'/>
+  </b:includable>
+          </b:widget>
+          <b:widget id='HTML3' locked='false' title='' type='HTML'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<div class="sidebar-leituras">
+  <h2 class="widget-title">Últimas Leituras</h2>
+  <div id="sidebar-leituras-lista">a carregar...</div>
+  <a href="/leituras" class="sl-mais">mais livros →</a>
+</div>
+
+<style>
+.sidebar-leituras {
+  margin-bottom: 30px;
+}
+.sidebar-leituras .widget-title {
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+#sidebar-leituras-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sl-card {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-decoration: none;
+  color: inherit;
+}
+.sl-card:hover .sl-titulo {
+  text-decoration: underline;
+}
+
+.sl-capa {
+  width: 50px;
+  flex-shrink: 0;
+  aspect-ratio: 2 / 3;    /* proporção padrão de capa de livro */
+  overflow: hidden;
+  background: #eee;
+}
+.sl-capa img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.sl-info {
+  font-size: 0.85em;
+  line-height: 1.4;
+}
+.sl-titulo {
+  font-weight: 600;
+}
+.sl-autor {
+  color: #888;
+  font-size: 0.9em;
+}
+.sl-nota {
+  font-size: 0.8em;
+  margin-top: 2px;
+}
+
+.sl-mais {
+  display: block;
+  margin-top: 14px;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: inherit;
+  text-decoration: none;
+}
+.sl-mais:hover {
+  text-decoration: underline;
+}
+</style>
+
+<script>
+async function carregarUltimasLeituras() {
+  // max-results=2: o feed do Blogger já vem do post mais recente para
+  // o mais antigo, por isso pedir só 2 já traz as duas últimas leituras
+  // sem precisar de ordenar nada.
+  const url = "/feeds/posts/default/-/leituras?alt=json&max-results=2";
+  const container = document.getElementById("sidebar-leituras-lista");
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    const entradas = data.feed.entry || [];
+
+    if (!entradas.length) {
+      container.innerHTML = "Ainda não há leituras.";
+      return;
+    }
+
+    let html = "";
+    entradas.forEach(item => {
+      const link = item.link.find(l => l.rel === "alternate").href;
+      const conteudo = item.content?.$t || item.summary?.$t || "";
+
+      // primeira imagem do post
+      const imgMatch = conteudo.match(/<img[^>]+src="([^">]+)"/i);
+      const imagem = imgMatch ? imgMatch[1] : "";
+
+      // parse do HTML para tirar nome do livro e autor
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(conteudo, "text/html");
+
+      const livroEl = doc.querySelector(".nome-livro");
+      const livro = livroEl ? livroEl.textContent.trim() : item.title.$t;
+
+      const autorEl = doc.querySelector(".autor");
+      const autor = autorEl ? autorEl.textContent.trim() : "";
+
+      const notaMatch = conteudo.match(/<div[^>]*class=["'][^"']*\bnota\b[^"']*["'][^>]*>(.*?)<\/div>/is);
+      const nota = notaMatch ? notaMatch[1].trim() : "";
+
+      html += `
+        <a href="${link}" target="_blank" class="sl-card">
+          <div class="sl-capa">
+            ${imagem ? `<img src="${imagem}" alt="${livro}" loading="lazy">` : ""}
+          </div>
+          <div class="sl-info">
+            <div class="sl-titulo">${livro}</div>
+            ${autor ? `<div class="sl-autor">${autor}</div>` : ""}
+            ${nota ? `<div class="sl-nota">${nota}</div>` : ""}
+          </div>
+        </a>
+      `;
+    });
+
+    container.innerHTML = html;
+  } catch (e) {
+    console.error("Últimas leituras:", e);
+    container.innerHTML = "";
+  }
+}
+carregarUltimasLeituras();
+</script>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <!-- only display title if it's non-empty -->
+  <b:if cond='data:title != &quot;&quot;'>
+    <h2 class='title'><data:title/></h2>
+  </b:if>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+
+  <b:include name='quickedit'/>
+</b:includable>
+          </b:widget>
+          <b:widget id='HTML2' locked='false' title='' type='HTML'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<!-- =========================================================
+     WIDGET DE SIDEBAR - último status
+     Cole num gadget HTML/JavaScript da sidebar.
+
+     Mostra apenas o post mais recente com o marcador "status"
+     e um botao + que leva a pagina com todos.
+
+     ONDE MEXER: bloco CONFIG, no inicio do JavaScript.
+     ========================================================= -->
+
+<style>
+.status-widget{
+  font-family:var(--fonte-base, monospace);
+  font-size:var(--texto-sm, 13px);
+  line-height:1.6;
+}
+
+/* --- Cabecalho: titulo + botao --- */
+.status-widget .sw-topo{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 0 10px;
+}
+.status-widget .sw-titulo{
+  margin:0;
+  font-size:var(--texto-xs, 11px);
+  font-weight:600;
+  letter-spacing:var(--espaco-letra, .12em);
+  text-transform:uppercase;
+  color:var(--cor-titulo, #111);
+}
+
+.status-widget .sw-mais{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  height:22px;
+  border:1px solid var(--cor-borda, #ececec);
+  border-radius:50%;
+  font-size:14px;
+  line-height:1;
+  color:var(--cor-texto-suave, #8c8c8c);
+  text-decoration:none;
+  transition:background .18s ease, color .18s ease, border-color .18s ease;
+}
+.status-widget .sw-mais:hover{
+  background:var(--cor-titulo, #111);
+  border-color:var(--cor-titulo, #111);
+  color:var(--cor-contraste, #fff);
+}
+.status-widget .sw-mais:focus-visible{
+  outline:2px solid var(--cor-link-hover, #111);
+  outline-offset:2px;
+}
+
+/* --- O post --- */
+.status-widget .sw-post{
+  padding:16px;
+  background:var(--cor-fundo, #fff);
+  border:1px dotted var(--cor-borda, #c1c1c1);
+  border-radius:3px;
+  transition:border-color .18s ease;
+}
+.status-widget .sw-post:hover{ border-color:var(--cor-texto-suave, #8c8c8c); }
+
+.status-widget .sw-conteudo{ color:var(--cor-texto, #262626); }
+.status-widget .sw-conteudo p{ margin:0 0 .6em; }
+.status-widget .sw-conteudo p:last-child{ margin-bottom:0; }
+.status-widget .sw-conteudo img,
+.status-widget .sw-conteudo iframe{ display:none; }
+
+.status-widget .sw-conteudo a{
+  color:var(--cor-link, #666);
+  border-bottom:1px solid var(--cor-borda, #ececec);
+}
+.status-widget .sw-conteudo a:hover{
+  color:var(--cor-link-hover, #111);
+  border-bottom-color:currentColor;
+}
+
+.status-widget .sw-data{
+  display:block;
+  margin-top:12px;
+  font-size:10px;
+  letter-spacing:.06em;
+  color:var(--cor-texto-suave, #8c8c8c);
+  text-decoration:none;
+}
+.status-widget .sw-data:hover{ color:var(--cor-titulo, #111); }
+
+.status-widget .sw-estado{
+  padding:16px 0;
+  font-size:12px;
+  color:var(--cor-texto-suave, #8c8c8c);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .status-widget .sw-mais,
+  .status-widget .sw-post{ transition:none; }
+}
+</style>
+
+
+<div class="status-widget">
+
+  <div class="sw-topo">
+    <h2 class="sw-titulo">Status</h2>
+    <a class="sw-mais" href="/status" title="Ver todos os status">+</a>
+  </div>
+
+  <div id="statusWidget">
+    <p class="sw-estado">a carregar...</p>
+  </div>
+
+</div>
+
+
+<script>
+//<![CDATA[
+(function () {
+  "use strict";
+
+  /* =======================================================
+     CONFIG
+     ======================================================= */
+  var BLOG     = "https://status.igormedeiroz.com";  // sem barra no fim
+  var MARCADOR = "status";                            // marcador a filtrar
+  var ESPERA   = 8000;                                // limite, em ms
+
+  // O filtro vai no proprio endereco (/-/marcador): so vem um post,
+  // ja filtrado, em vez de descarregar centenas para descartar quase
+  // todos. O "json-in-script" e JSONP -- ver a nota mais abaixo.
+  var FEED = BLOG + "/feeds/posts/default/-/" +
+             encodeURIComponent(MARCADOR) +
+             "?alt=json-in-script&max-results=1";
+
+  var alvo = document.getElementById("statusWidget");
+  if (!alvo) return;
+
+  /* =======================================================
+     AUXILIARES
+     ======================================================= */
+  function ligacao(entrada) {
+    var links = entrada.link || [];
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].rel === "alternate") return links[i].href;
+    }
+    return "";
+  }
+
+  function formatarData(txt) {
+    var d = new Date(txt);
+    if (isNaN(d.getTime())) return "";
+    function dois(n) { return String(n).padStart(2, "0"); }
+    return dois(d.getDate()) + "." + dois(d.getMonth() + 1) + "." +
+           String(d.getFullYear()).slice(-2) + " " +
+           dois(d.getHours()) + ":" + dois(d.getMinutes());
+  }
+
+  function aviso(texto) {
+    alvo.innerHTML = "";
+    var p = document.createElement("p");
+    p.className = "sw-estado";
+    p.textContent = texto;
+    alvo.appendChild(p);
+  }
+
+  /* Limpa o HTML que vem do feed.
+
+     Duas regras diferentes:
+       - etiquetas perigosas (script, iframe, ...) saem com o
+         conteudo todo;
+       - etiquetas apenas indesejadas (div, table, font, ...) sao
+         DESEMBRULHADAS: a etiqueta desaparece, o texto fica.
+
+     A distincao importa: o Blogger costuma envolver o corpo do
+     post em <div class="separator">, e apagar a div levava o
+     texto atras. */
+  function limpar(html) {
+    var caixa = document.createElement("div");
+    caixa.innerHTML = html;
+
+    var perigosas = ["SCRIPT", "STYLE", "IFRAME", "OBJECT", "EMBED",
+                     "FORM", "INPUT", "BUTTON", "LINK", "META",
+                     "SVG", "NOSCRIPT", "IMG", "VIDEO", "AUDIO"];
+
+    var manter = ["P", "BR", "A", "EM", "I", "STRONG", "B", "U", "S",
+                  "BLOCKQUOTE", "SPAN", "CODE", "UL", "OL", "LI", "SMALL"];
+
+    (function percorrer(no) {
+      [].slice.call(no.childNodes).forEach(function (el) {
+        if (el.nodeType !== 1) return;                 // texto: fica
+
+        if (perigosas.indexOf(el.tagName) > -1) {
+          el.parentNode.removeChild(el);
+          return;
+        }
+
+        percorrer(el);                                  // primeiro os filhos
+
+        // Atributos: so href/target/rel sobrevivem, e so em links.
+        [].slice.call(el.attributes).forEach(function (at) {
+          var n = at.name.toLowerCase();
+          var ok = el.tagName === "A" &&
+                   (n === "href" || n === "target" || n === "rel");
+          if (!ok) el.removeAttribute(at.name);
+        });
+
+        if (el.tagName === "A") {
+          var href = el.getAttribute("href") || "";
+          if (!/^(https?:|\/|#)/i.test(href)) el.removeAttribute("href");
+          el.setAttribute("rel", "noopener");
+        }
+
+        // Nao esta na lista: desembrulha, mantendo o que tem dentro.
+        if (manter.indexOf(el.tagName) === -1) {
+          var pai = el.parentNode;
+          while (el.firstChild) pai.insertBefore(el.firstChild, el);
+          pai.removeChild(el);
+        }
+      });
+    })(caixa);
+
+    return caixa;
+  }
+
+  /* =======================================================
+     CARREGAR  (JSONP)
+     O feed vem de outro dominio e o Blogger nao envia os
+     cabecalhos CORS, por isso o fetch() seria bloqueado pelo
+     navegador. O JSONP contorna isso: pede-se o feed como um
+     <script> que chama uma funcao nossa com os dados dentro.
+     ======================================================= */
+  function jsonp(url) {
+    return new Promise(function (resolve, reject) {
+      var nome = "swFeed_" + Date.now() + "_" +
+                 Math.floor(Math.random() * 1e6);
+      var script = document.createElement("script");
+      var temporizador;
+
+      function limpar() {
+        clearTimeout(temporizador);
+        try { delete window[nome]; } catch (e) { window[nome] = undefined; }
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      window[nome] = function (dados) { limpar(); resolve(dados); };
+
+      script.src = url + "&callback=" + nome;
+      script.onerror = function () { limpar(); reject(new Error("falha de rede")); };
+
+      temporizador = setTimeout(function () {
+        limpar();
+        reject(new Error("tempo esgotado"));
+      }, ESPERA);
+
+      document.head.appendChild(script);
+    });
+  }
+
+  jsonp(FEED)
+    .then(function (dados) {
+      var entradas = (dados && dados.feed && dados.feed.entry) || [];
+      if (!entradas.length) { aviso("Nenhum status ainda."); return; }
+
+      var e = entradas[0];
+      var html = (e.content && e.content.$t) ||
+                 (e.summary && e.summary.$t) || "";
+      var url  = ligacao(e);
+
+      alvo.innerHTML = "";
+
+      var post = document.createElement("div");
+      post.className = "sw-post";
+
+      var conteudo = document.createElement("div");
+      conteudo.className = "sw-conteudo";
+
+      var limpo = limpar(html);
+      if (!limpo.textContent.trim()) {
+        // Nada sobrou (post so com imagem, por exemplo): cai para o
+        // texto simples, sem marcacao nenhuma.
+        var bruto = document.createElement("div");
+        bruto.innerHTML = html;
+        var texto = bruto.textContent.replace(/\s+/g, " ").trim();
+        if (!texto) { aviso("O último status não tem texto."); return; }
+        limpo = document.createElement("div");
+        limpo.appendChild(document.createTextNode(texto));
+      }
+      conteudo.appendChild(limpo);
+      post.appendChild(conteudo);
+
+      var data = formatarData((e.published && e.published.$t) || "");
+      if (data) {
+        var d;
+        if (url) {
+          d = document.createElement("a");
+          d.href = url;
+        } else {
+          d = document.createElement("span");
+        }
+        d.className = "sw-data";
+        d.textContent = data;
+        post.appendChild(d);
+      }
+
+      alvo.appendChild(post);
+    })
+    .catch(function (err) {
+      console.error("Status:", err);
+      aviso("Não foi possível carregar.");
+    });
+})();
+//]]]]><![CDATA[>
+</script>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <!-- only display title if it's non-empty -->
+  <b:if cond='data:title != &quot;&quot;'>
+    <h2 class='title'><data:title/></h2>
+  </b:if>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+
+  <b:include name='quickedit'/>
+</b:includable>
+          </b:widget>
+          <b:widget id='HTML5' locked='false' title='' type='HTML'>
+            <b:widget-settings>
+              <b:widget-setting name='content'><![CDATA[<a href="/album-de-fotos"> <div class="polaroid"  style="--tamanho: 20%;">
+<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgsZ1JriTI3n27rREufDrdk4UOH6W82923NVtXaKeIOhS-cYnaaLjC35ZdaizqzqJQ5S3dPP7sqjSPKNbvSaHxlsZcE43EKk-mb7w2Rac36MV_FKyzogeC0jlvOCsXSXNXB5q3tPYV9TAH_XkXz6KrSg73JyK0875uF2_21MTQ_Z1wbD4tYITFG0rtKDX8/s1600/IMG_7578.JPEG" alt="Minha Foto" /> 
+  <div class="caption">Oceanário, 2026</div>
+</div></a>]]></b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+  <!-- only display title if it's non-empty -->
+  <b:if cond='data:title != &quot;&quot;'>
+    <h2 class='title'><data:title/></h2>
+  </b:if>
+  <div class='widget-content'>
+    <data:content/>
+  </div>
+
+  <b:include name='quickedit'/>
+</b:includable>
+          </b:widget>
+        </b:section>
+      </div>
+
+      <!-- spacer for skins that want sidebar and main to be the same height-->
+      <div class='clear'>&#160;</div>
+
+    </div> <!-- end content-wrapper -->
+
+  </div></div> <!-- end outer-wrapper -->
+
+    <div id='footer-wrapper'>
+      <b:section class='footer' id='footer'/>
+    </div>
+	<div id='creditos'>
+      <div class='creditos'>///////// @igormedeiroz</div>
+    </div>
+  <b:include data='blog' name='google-analytics'/>
+
+  <!-- ================= SCRIPTS =================
+       jQuery numa unica versao, em HTTPS, mais os ajustes dos posts
+       populares da sidebar: troca a miniatura de 72px por uma de 350px
+       e corta titulo/resumo para caber no espaco. -->
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js' type='text/javascript'/>
+  <script type='text/javascript'>
+    //<![CDATA[
+    jQuery(function($){
+      $('.popular-posts img').attr('src', function(e, t){
+        return t.replace('/s72-c/', '/s350-c/');
+      });
+      $('.popular-posts ul li .item-snippet').each(function(){
+        var txt = $(this).text().substr(0, 60);
+        var j = txt.lastIndexOf(' ');
+        if (j > 10) { $(this).text(txt.substr(0, j).replace(/[?,!\.\-:;]*$/, '...')); }
+      });
+      $('.popular-posts ul li .item-content a').each(function(){
+        var txt = $(this).text().substr(0, 60);
+        var j = txt.lastIndexOf(' ');
+        if (j >= 6) { $(this).text(txt.substr(0, j).replace(/[?,!\.\-:;]*$/, ' (+ mais)')); }
+      });
+    });
+    //]]>
+  </script>
+
+  <!-- ================= MENU: ICONES =================
+       O widget Paginas do Blogger so sabe gerar texto. Este script
+       poe um icone SVG em cada item, escolhido pelo nome da pagina.
+
+       PARA JUNTAR OU TROCAR UM ICONE:
+       acrescente uma entrada ao array ICONES. O campo "termos" lista
+       as palavras a procurar no nome da pagina (sem acentos e em
+       minusculas); "svg" e o desenho, num viewBox de 24x24. -->
+  <script type='text/javascript'>
+    //<![CDATA[
+    (function () {
+      var ICONES = [
+        { termos: ['home', 'inicio', 'principal'],
+          svg: '<path d="M3 10.6 12 3.5l9 7.1"/><path d="M5.6 9.4V20h12.8V9.4"/><path d="M9.8 20v-5.4h4.4V20"/>' },
+        { termos: ['sobre', 'about', 'quem', 'autor', 'perfil'],
+          svg: '<circle cx="12" cy="8" r="3.4"/><path d="M4.8 20c0-3.6 3.2-5.6 7.2-5.6s7.2 2 7.2 5.6"/>' },
+        { termos: ['blog', 'post', 'artigo', 'texto', 'escrit'],
+          svg: '<path d="M5 4h14v16H5z"/><path d="M8.5 8.5h7M8.5 12h7M8.5 15.5h4"/>' },
+        { termos: ['arquivo', 'historico', 'log'],
+          svg: '<path d="M3.5 7h17v3h-17z"/><path d="M5 10v10h14V10"/><path d="M10 14h4"/>' },
+        { termos: ['marcador', 'tag', 'categoria', 'label'],
+          svg: '<path d="M3.5 12.5 12 4h7.5v7.5L11 20z"/><circle cx="16" cy="8" r="1.3"/>' },
+        { termos: ['foto', 'imagem', 'galeria', 'photo'],
+          svg: '<path d="M3.5 5.5h17v13h-17z"/><circle cx="8.5" cy="10" r="1.6"/><path d="m4 16 5-4.5 4.5 4 3-2.5 4 3.5"/>' },
+        { termos: ['mapa', 'map', 'viagem', 'lugar'],
+          svg: '<path d="m3.5 6.5 5.5-2 6 2 5.5-2v13l-5.5 2-6-2-5.5 2z"/><path d="M9 4.5v13M15 6.5v13"/>' },
+        { termos: ['contato', 'contacto', 'email', 'fala', 'mensagem'],
+          svg: '<path d="M3.5 6h17v12h-17z"/><path d="m3.5 7 8.5 6 8.5-6"/>' },
+        { termos: ['link', 'projeto', 'stuff', 'coisa'],
+          svg: '<path d="M10 13.5a4 4 0 0 0 5.7 0l2.6-2.6a4 4 0 0 0-5.7-5.7l-1.3 1.3"/><path d="M14 10.5a4 4 0 0 0-5.7 0l-2.6 2.6a4 4 0 0 0 5.7 5.7l1.3-1.3"/>' },
+        { termos: ['livro', 'leitura', 'book', 'biblioteca'],
+          svg: '<path d="M4.5 4.5h11a2.5 2.5 0 0 1 2.5 2.5v13H7a2.5 2.5 0 0 1-2.5-2.5z"/><path d="M18 20h1.5V4.5H18"/>' },
+        { termos: ['busca', 'pesquis', 'search'],
+          svg: '<circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 4.5 4.5"/>' },
+        { termos: ['rss', 'feed', 'assinar'],
+          svg: '<path d="M5 12a7 7 0 0 1 7 7"/><path d="M5 6.5A12.5 12.5 0 0 1 17.5 19"/><circle cx="5.8" cy="18.2" r="1.4"/>' }
+      ];
+
+      // Usado quando o nome da pagina nao corresponde a nenhum termo.
+      var ICONE_PADRAO = '<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.2"/>';
+
+      function semAcentos(t) {
+        return t.toLowerCase()
+                .normalize ? t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                           : t.toLowerCase();
+      }
+
+      function escolher(texto) {
+        var t = semAcentos(texto);
+        for (var i = 0; i < ICONES.length; i++) {
+          for (var j = 0; j < ICONES[i].termos.length; j++) {
+            if (t.indexOf(ICONES[i].termos[j]) > -1) return ICONES[i].svg;
+          }
+        }
+        return ICONE_PADRAO;
+      }
+
+      function montar(desenho) {
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'menu-icone');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('aria-hidden', 'true');
+        svg.innerHTML = desenho;
+        return svg;
+      }
+
+      // O icone do botao de tema nao e tratado aqui: muda conforme o
+      // tema escolhido, por isso vive no script TEMA: TROCA.
+      var links = document.querySelectorAll('#PageList1 li a');
+      for (var i = 0; i < links.length; i++) {
+        var a = links[i];
+        if (a.querySelector('.menu-icone')) continue;   // ja tratado
+
+        var rotulo = document.createElement('span');
+        rotulo.className = 'menu-rotulo';
+        rotulo.textContent = a.textContent.trim();
+
+        a.textContent = '';
+        a.appendChild(montar(escolher(rotulo.textContent)));
+        a.appendChild(rotulo);
+      }
+    })();
+    //]]>
+  </script>
+
+  <!-- ================= TEMA: TROCA =================
+       Cada clique avanca para o tema seguinte da lista. Para juntar
+       um tema novo: crie o bloco :root[data-tema="..."] no CSS e
+       acrescente uma linha ao array TEMAS abaixo. -->
+  <script type='text/javascript'>
+    //<![CDATA[
+    (function () {
+      /* Cada tema tem nome e desenho proprios. O "icone" e o conteudo
+         de um <svg viewBox="0 0 24 24">, sem a etiqueta exterior. */
+      var TEMAS = [
+        { id: 'claro', nome: '',
+          icone: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M21.4 12H19M5 12H2.6M18.6 5.4 16.9 7.1M7.1 16.9l-1.7 1.7M18.6 18.6 16.9 16.9M7.1 7.1 5.4 5.4"/>' },
+        { id: 'escuro', nome: '',
+          icone: '<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/>' },
+        { id: 'sepia', nome: '',
+          icone: '<path d="M4.5 8h12v6a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4z"/><path d="M16.5 9.5h1.8a2.2 2.2 0 0 1 0 4.4h-1.8"/><path d="M7.5 3.5v2M10.5 3.5v2M13.5 3.5v2"/>' },
+        { id: 'terminal', nome: '',
+          icone: '<rect x="2.8" y="4.5" width="18.4" height="15" rx="2"/><path d="m7 9.5 3 2.5-3 2.5"/><path d="M12.5 15h4.5"/>' }
+      ];
+
+      var raiz = document.documentElement;
+      var btn  = document.getElementById('tema-toggle');
+      var alvo = document.getElementById('tema-nome');
+      if (!btn || !alvo) return;
+
+      /* O <svg> e criado uma vez; depois so se troca o desenho la
+         dentro, a cada mudanca de tema. */
+      var svg = btn.querySelector('.menu-icone');
+      if (!svg) {
+        svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'menu-icone');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('aria-hidden', 'true');
+        var ponto = btn.querySelector('.tema-ponto');
+        if (ponto) btn.replaceChild(svg, ponto);
+        else btn.insertBefore(svg, btn.firstChild);
+      }
+
+      // Sem escolha guardada, mostra o tema que o sistema esta a aplicar.
+      function atual() {
+        var t = raiz.getAttribute('data-tema');
+        if (t) return t;
+        return (window.matchMedia &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches)
+          ? 'escuro' : 'claro';
+      }
+
+      function indice(id) {
+        for (var i = 0; i < TEMAS.length; i++) {
+          if (TEMAS[i].id === id) return i;
+        }
+        return 0;
+      }
+
+      function pintar() {
+        var i = indice(atual());
+        svg.innerHTML = TEMAS[i].icone;
+        alvo.textContent = TEMAS[i].nome;
+        btn.title = 'Tema atual: ' + TEMAS[i].nome +
+                    '. Clique para ' + TEMAS[(i + 1) % TEMAS.length].nome + '.';
+      }
+
+      btn.addEventListener('click', function () {
+        var novo = TEMAS[(indice(atual()) + 1) % TEMAS.length].id;
+        raiz.setAttribute('data-tema', novo);
+        try { localStorage.setItem('tema', novo); } catch (e) {}
+        pintar();
+      });
+
+      // Se o leitor nunca escolheu, acompanha as mudancas do sistema.
+      if (window.matchMedia) {
+        var mq = window.matchMedia('(prefers-color-scheme: dark)');
+        var aoMudar = function () { if (!raiz.getAttribute('data-tema')) pintar(); };
+        if (mq.addEventListener) mq.addEventListener('change', aoMudar);
+        else if (mq.addListener) mq.addListener(aoMudar);
+      }
+
+      pintar();
+    })();
+    //]]>
+  </script>
+
+</body>
+</html>

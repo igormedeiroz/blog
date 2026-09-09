@@ -2,17 +2,30 @@
 /* -----------------------------------------------------------------------------
    01. DIVISOR DE POST
    -------------------------------------------------------------------------- */
-.divisor{
-  margin:32px auto;
-  text-align:center;
-  font-size:1.6rem;
-  line-height:1;
-  color:var(--acento);
-  letter-spacing:8px;
-  user-select:none;
+.divisor {
+  margin: 32px auto;
+  text-align: center;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--acento);
+  letter-spacing: 8px;
+  user-select: none;
 }
-.divisor::before{ content:'\2736'; }
- 
+
+.divisor::before {
+  content: '\2736';
+  display: inline-block;
+  animation: girar 3s linear infinite;
+}
+
+@keyframes girar {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
  
 /* -----------------------------------------------------------------------------
    02. BOTAO DE LIKE  (plugin LikeBtn)

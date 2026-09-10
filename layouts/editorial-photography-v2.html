@@ -1,0 +1,1767 @@
+<style>
+
+/* =========================================================
+   IGOR MEDEIROZ
+   EDITORIAL PHOTOGRAPHY
+   BLOGGER — PORTFOLIO
+
+   Duas vistas do mesmo acervo:
+     INDEX   -> a lista original, numerada, com a imagem a
+                flutuar junto ao cursor ao passar por cima.
+     GALLERY -> grelha de fotos, agrupada por categoria
+                (o campo data-portfolio-type de cada post),
+                para ver muito mais fotos de uma vez.
+
+   As duas partilham os mesmos dados (um so pedido ao feed);
+   o alternador so troca qual das duas fica visivel.
+   ========================================================= */
+
+
+/* =========================================================
+   FONTES
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Inter:wght@300;400;500&display=swap');
+
+
+/* =========================================================
+   VARIÁVEIS
+   ========================================================= */
+
+:root {
+
+  --editorial-bg: #f3f1ec;
+  --editorial-text: #111111;
+  --editorial-muted: #77736d;
+
+  --editorial-line: rgba(17,17,17,.16);
+
+  --editorial-padding-x: 34px;
+
+  /* Tamanho das imagens pedido ao Blogger. A pre-visualizacao que
+     flutua na vista Index e maior do que os quadrados da Gallery,
+     por isso pedimos dois tamanhos diferentes. */
+  --editorial-img-index: s1600;
+  --editorial-img-gallery: s800;
+
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+html,
+body {
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  width: 100%;
+  min-height: 100%;
+
+  background:
+    var( --cor-fundo) !important;
+
+  color:
+    var(--editorial-text);
+
+}
+
+  #outer-wrapper {
+    width: 100%;
+    max-width:100%;
+    margin: 0 auto 0px !important;
+    padding: 0 20px;
+  }
+  
+#changing-word {
+  display: inline-block;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+#changing-word.is-changing {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* =========================================================
+   BLOGGER — REMOVER LAYOUT ORIGINAL
+   ========================================================= */
+
+#menu-wrapper,
+#header-wrapper,
+#header,
+.header-outer,
+.sidebar,
+.sidebar-wrapper,
+.blog-pager,
+.post-title,
+.post-header,
+.post-footer,
+.date-header,
+.blog-feeds,
+.feed-links,
+.status-msg-wrap,
+.post-labels {
+  display: none !important;
+}
+
+
+/* =========================================================
+   BLOGGER — CONTAINERS
+   ========================================================= */
+
+.container,
+.content-outer,
+.content-inner,
+.main-outer,
+.main-inner,
+.main,
+.post,
+.post-body {
+
+  width: 100% !important;
+
+  max-width: none !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  border: 0 !important;
+
+  background:
+    transparent !important;
+
+}
+
+
+/* =========================================================
+   POST
+   ========================================================= */
+
+.post {
+
+  min-height: 100vh;
+
+}
+
+
+/* =========================================================
+   PÁGINA EDITORIAL
+   ========================================================= */
+
+.igor-editorial {
+
+  position: relative;
+
+  box-sizing: border-box;
+
+  width: 100%;
+
+  min-height: 100vh;
+
+  padding:
+    28px
+    var(--editorial-padding-x)
+    0;
+
+
+  color:
+    var(--editorial-text);
+
+  font-family:
+    "Inter",
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-weight: 300;
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.editorial-header {
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    auto
+    1fr;
+
+  align-items: start;
+
+  width: 100%;
+
+  padding-bottom: 26px;
+
+  border-bottom:
+    1px solid
+    var(--editorial-line);
+
+}
+
+
+/* ---------------------------------------------------------
+   NOME
+   --------------------------------------------------------- */
+
+.editorial-name {
+
+  margin: 0;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 10px;
+
+  line-height: 1;
+
+  letter-spacing: .12em;
+
+  text-transform: uppercase;
+
+}
+
+
+/* ---------------------------------------------------------
+   SECÇÃO
+   --------------------------------------------------------- */
+
+.editorial-section {
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  line-height: 1;
+
+  letter-spacing: .14em;
+
+  text-transform: uppercase;
+
+  color:
+    var(--editorial-muted);
+
+}
+
+
+/* ---------------------------------------------------------
+   NAVEGAÇÃO
+   --------------------------------------------------------- */
+
+.editorial-nav {
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+  gap: 24px;
+
+}
+
+
+.editorial-nav a {
+
+  color:
+    var(--editorial-text) !important;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  line-height: 1;
+
+  letter-spacing: .12em;
+
+  text-decoration: none !important;
+
+  text-transform: uppercase;
+
+  border: 0 !important;
+
+  transition:
+    opacity .3s ease;
+
+}
+
+
+.editorial-nav a:hover {
+
+  opacity: .45;
+
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.editorial-intro {
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(240px, 1fr);
+
+  column-gap: 60px;
+
+  padding:
+    75px
+    0
+    56px;
+
+}
+
+
+/* ---------------------------------------------------------
+   TÍTULO
+   --------------------------------------------------------- */
+
+.editorial-intro h1 {
+
+  margin: 0;
+
+  padding: 0;
+
+  max-width: 850px;
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size:
+    clamp(44px, 6.2vw, 70px);
+
+  font-weight: 400;
+
+  line-height: .88;
+
+  letter-spacing: -.065em;
+
+}
+
+
+/* ---------------------------------------------------------
+   DESCRIÇÃO
+   --------------------------------------------------------- */
+
+.editorial-intro-info {
+
+  align-self: end;
+
+  justify-self: end;
+
+  width: 100%;
+
+  max-width: 285px;
+
+  margin: 0;
+
+  padding: 0;
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size: 11px;
+
+  font-weight: 300;
+
+  line-height: 1.75;
+
+  color:
+    var(--editorial-muted);
+
+}
+
+
+.editorial-intro-info span {
+
+  display: block;
+
+  margin-bottom: 17px;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  line-height: 1;
+
+  letter-spacing: .15em;
+
+  text-transform: uppercase;
+
+  color:
+    var(--editorial-text);
+
+}
+
+
+/* =========================================================
+   ALTERNADOR DE VISTA  (Index / Gallery)
+
+   As duas linhas finas, muito proximas uma da outra, sao um
+   gesto tipografico de revista impressa (uma "regra dupla").
+   A vista escolhida fica guardada no navegador do leitor.
+   ========================================================= */
+
+.editorial-viewswitch {
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 22px;
+
+  margin-bottom: 6px;
+
+  padding-bottom: 14px;
+
+  border-bottom: 1px solid var(--editorial-line);
+
+}
+
+
+.editorial-viewswitch button {
+
+  margin: 0;
+  padding: 0;
+
+  background: none;
+  border: 0;
+
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+
+  color: var(--editorial-muted);
+
+  cursor: pointer;
+
+  transition: color .3s ease;
+
+}
+
+
+.editorial-viewswitch button:hover {
+  color: var(--editorial-text);
+}
+
+
+.editorial-viewswitch button.is-active {
+  color: var(--editorial-text);
+}
+
+
+.editorial-viewswitch .conta {
+  color: var(--editorial-muted);
+}
+
+
+/* =========================================================
+   LISTA DE PROJETOS  (vista "Index")
+   ========================================================= */
+
+.editorial-projects {
+
+  display: none;
+
+  width: 100%;
+
+  margin: 0;
+
+  padding: 0;
+
+  border-top:
+    1px solid
+    var(--editorial-line);
+
+}
+
+.editorial-projects.is-active {
+  display: block;
+}
+
+
+/* =========================================================
+   PROJETO
+   ========================================================= */
+
+.editorial-project {
+
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    80px
+    minmax(0, 1fr)
+    190px;
+
+  align-items: center;
+
+  width: 100%;
+
+  min-height: 116px;
+
+  box-sizing: border-box;
+
+  border-bottom:
+    1px solid
+    var(--editorial-line);
+
+  color:
+    var(--editorial-text) !important;
+
+  text-decoration: none !important;
+
+  cursor: pointer;
+
+  border-left: 0 !important;
+  border-right: 0 !important;
+
+}
+
+
+/* =========================================================
+   NÚMERO
+   ========================================================= */
+
+.project-number {
+
+  display: block;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  line-height: 1;
+
+  letter-spacing: .04em;
+
+  color: #99948d;
+
+}
+
+
+/* =========================================================
+   TÍTULO
+   ========================================================= */
+
+.project-title {
+
+  display: block;
+
+  margin: 0;
+
+  padding: 0;
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size:
+    clamp(27px, 3vw, 45px);
+
+  font-weight: 300;
+
+  line-height: 1;
+
+  letter-spacing: -.045em;
+
+  transform:
+    translateX(0);
+
+  transition:
+
+    transform .65s
+    cubic-bezier(.16,1,.3,1),
+
+    opacity .4s ease;
+
+}
+
+
+.editorial-project:hover
+.project-title {
+
+  transform:
+    translateX(13px);
+
+}
+
+
+/* =========================================================
+   METADATA
+   ========================================================= */
+
+.project-meta {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  justify-self: end;
+
+  margin: 0;
+
+  padding: 0;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  font-weight: 400;
+
+  line-height: 1.65;
+
+  letter-spacing: .1em;
+
+  text-align: right;
+
+  text-transform: uppercase;
+
+  color:
+    var(--editorial-muted);
+
+}
+
+
+/* =========================================================
+   IMAGEM FLUTUANTE  (so na vista Index)
+   ========================================================= */
+
+.project-image {
+
+  position: fixed;
+
+  z-index: 999;
+
+  top: 50%;
+
+  left: 50%;
+
+  display: block;
+
+  width:
+    min(390px, 34vw);
+
+  height: auto;
+
+  max-height: 68vh;
+
+  object-fit: cover;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  opacity: 0;
+
+  transform:
+
+    translate(-50%, -50%)
+
+    scale(.94);
+
+  filter:
+    grayscale(5%);
+
+  box-shadow:
+
+    0 25px 70px
+    rgba(0,0,0,.13);
+
+  transition:
+
+    opacity .45s ease,
+
+    transform .7s
+    cubic-bezier(.16,1,.3,1);
+
+}
+
+
+.editorial-project:hover
+.project-image {
+
+  opacity: 1;
+
+  transform:
+
+    translate(-50%, -50%)
+
+    scale(1);
+
+}
+
+
+/* =========================================================
+   GALERIA POR CATEGORIA  (vista "Gallery")
+   ========================================================= */
+
+.editorial-gallery {
+
+  display: none;
+
+  width: 100%;
+
+  margin: 0;
+
+  padding: 0;
+
+  border-top: 1px solid var(--editorial-line);
+  padding-top: 44px;
+
+}
+
+.editorial-gallery.is-active {
+  display: block;
+}
+
+
+.gallery-categoria {
+  margin-bottom: 52px;
+}
+
+.gallery-categoria:last-child {
+  margin-bottom: 0;
+}
+
+
+.gallery-categoria-titulo {
+
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+
+  border-bottom: 1px solid var(--editorial-line);
+
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--editorial-text);
+
+}
+
+
+.gallery-grid {
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 3px;
+
+}
+
+
+.gallery-item {
+
+  position: relative;
+
+  display: block;
+
+  aspect-ratio: 4 / 5;
+
+  overflow: hidden;
+
+  background: #e4e0d6;
+
+  text-decoration: none !important;
+  border: 0 !important;
+
+}
+
+
+.gallery-item img {
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  filter: grayscale(4%);
+
+  transition:
+    transform .8s cubic-bezier(.16,1,.3,1),
+    filter .5s ease;
+
+}
+
+
+.gallery-item:hover img {
+  transform: scale(1.045);
+  filter: grayscale(0%);
+}
+
+
+.gallery-item-legenda {
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  padding: 16px 16px 13px;
+
+  background: linear-gradient(to top, rgba(0,0,0,.6), rgba(0,0,0,0) 80%);
+
+  opacity: 0;
+  transform: translateY(6px);
+
+  transition:
+    opacity .35s ease,
+    transform .35s ease;
+
+}
+
+
+.gallery-item:hover .gallery-item-legenda {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.gallery-item-titulo {
+
+  display: block;
+
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #fff;
+
+}
+
+
+.gallery-item-meta {
+
+  display: block;
+
+  margin-top: 3px;
+
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.75);
+
+}
+
+
+/* Sem JavaScript (ou enquanto o feed nao chega): a Gallery fica
+   visivel por omissao, para a pagina nunca parecer vazia. */
+.no-js .editorial-gallery { display: block; }
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.editorial-footer {
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr
+    1fr;
+
+  align-items: center;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  margin-top: auto;
+
+  padding:
+    21px
+    0
+    20px;
+
+  border-top:
+    1px solid
+    var(--editorial-line);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: .1em;
+
+  text-transform: uppercase;
+
+  color:
+    var(--editorial-muted);
+
+}
+
+
+.editorial-footer
+div:nth-child(2) {
+
+  text-align: center;
+
+}
+
+
+.editorial-footer
+div:last-child {
+
+  text-align: right;
+
+}
+
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+.igor-editorial a,
+.igor-editorial a:hover {
+
+  border-bottom:
+    0 !important;
+
+  text-decoration:
+    none !important;
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  :root {
+
+    --editorial-padding-x: 24px;
+
+  }
+
+
+  .editorial-section {
+
+    display: none;
+
+  }
+
+
+  .editorial-header {
+
+    grid-template-columns:
+      1fr
+      1fr;
+
+  }
+
+
+  .editorial-nav {
+
+    justify-content:
+      flex-end;
+
+  }
+
+
+  .editorial-intro {
+
+    grid-template-columns:
+      1fr;
+
+    padding:
+      60px
+      0
+      48px;
+
+  }
+
+
+  .editorial-intro-info {
+
+    justify-self:
+      start;
+
+    margin-top:
+      45px;
+
+  }
+
+
+  .editorial-project {
+
+    grid-template-columns:
+      55px
+      minmax(0,1fr)
+      120px;
+
+  }
+
+
+  .project-image {
+
+    width:
+      45vw;
+
+  }
+
+
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  :root {
+
+    --editorial-padding-x: 18px;
+
+  }
+
+
+  .igor-editorial {
+
+    padding-top:
+      20px;
+
+  }
+
+
+  /* Header */
+
+  .editorial-header {
+
+    padding-bottom:
+      22px;
+
+  }
+
+
+  .editorial-name {
+
+    font-size:
+      8px;
+
+  }
+
+
+  .editorial-nav {
+
+    gap:
+      14px;
+
+  }
+
+
+  .editorial-nav a {
+
+    font-size:
+      8px;
+
+  }
+
+
+  /* Intro */
+
+  .editorial-intro {
+
+    padding:
+      48px
+      0
+      36px;
+
+  }
+
+
+  .editorial-intro h1 {
+
+    font-size:
+      clamp(48px, 15vw, 52px);
+
+    line-height:
+      .9;
+
+  }
+
+
+  .editorial-intro-info {
+
+    max-width:
+      230px;
+
+    margin-top:
+      38px;
+
+    font-size:
+      10px;
+
+    line-height:
+      1.7;
+
+  }
+
+
+  /* Alternador */
+
+  .editorial-viewswitch {
+    justify-content: flex-start;
+  }
+
+
+  /* Projetos */
+
+  .editorial-project {
+
+    grid-template-columns:
+      35px
+      minmax(0,1fr);
+
+    min-height:
+      90px;
+
+  }
+
+
+  .project-number {
+
+    font-size:
+      8px;
+
+  }
+
+
+  .project-title {
+
+    font-size:
+      23px;
+
+  }
+
+
+  .project-meta {
+
+    display:
+      none;
+
+  }
+
+
+  /*
+     Não usamos hover de imagem no touch.
+  */
+
+  .project-image {
+
+    display:
+      none;
+
+  }
+
+
+  /* Gallery no telemovel: duas colunas, legenda sempre visivel
+     (nao ha "hover" real ao toque). */
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+  }
+
+  .gallery-item-legenda {
+    opacity: 1;
+    transform: none;
+    background: linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,0) 70%);
+  }
+
+  .gallery-item-titulo { font-size: 11px; }
+
+
+  /* Footer */
+
+  .editorial-footer {
+
+    grid-template-columns:
+      1fr;
+
+    gap:
+      9px;
+
+    padding:
+      19px
+      0
+      17px;
+
+    font-size:
+      7px;
+
+  }
+
+
+  .editorial-footer div,
+  .editorial-footer
+  div:nth-child(2),
+  .editorial-footer
+  div:last-child {
+
+    text-align:
+      left;
+
+  }
+
+}
+
+
+/* =========================================================
+   ECRÃ PEQUENO
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .editorial-intro h1 {
+
+    font-size:
+      45px;
+
+  }
+
+
+  .editorial-project {
+
+    min-height:
+      82px;
+
+  }
+
+
+  .project-title {
+
+    font-size:
+      21px;
+
+  }
+
+}
+
+
+/* =========================================================
+   ACESSIBILIDADE
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .project-image,
+  .project-title,
+  .editorial-nav a,
+  .gallery-item img,
+  .gallery-item-legenda {
+
+    transition:
+      none !important;
+
+  }
+
+}
+
+</style>
+
+
+<!-- =======================================================
+     PORTFOLIO
+     ======================================================= -->
+
+<div class="igor-editorial">
+
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <header class="editorial-header">
+
+    <div class="editorial-name">
+      Igor Medeiroz
+    </div>
+
+    <div class="editorial-section">
+      Photography — Collections
+    </div>
+
+    <nav class="editorial-nav">
+
+      <a href="/p/sobre.html">
+        About
+      </a>
+
+      <a href="/p/contato.html">
+        Contact
+      </a>
+
+    </nav>
+
+  </header>
+
+
+  <!-- =====================================================
+       INTRO
+       ===================================================== -->
+
+  <section class="editorial-intro">
+
+    <h1>
+      Photography <br>
+      as a way of <br>
+      <span id="changing-word">remembering.</span>
+    </h1>
+
+
+    <div class="editorial-intro-info">
+
+      <span>
+        Selected work
+      </span>
+
+      A collection of photographs,
+      projects and visual studies
+      developed over time.
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ALTERNADOR DE VISTA
+       ===================================================== -->
+
+  <div class="editorial-viewswitch" role="tablist" aria-label="Modo de visualização">
+    <button aria-selected="true" class="is-active" data-view="index" role="tab" type="button">
+      Index <span class="conta" id="contagem-index"></span>
+    </button>
+    <button aria-selected="false" data-view="gallery" role="tab" type="button">
+      Gallery
+    </button>
+  </div>
+
+
+  <!-- =====================================================
+       VISTA 1 — INDEX (lista numerada)
+       ===================================================== -->
+
+  <main class="editorial-projects is-active" id="editorial-index">
+
+    <!-- Preenchido pelo script a partir do feed do Blogger. -->
+
+  </main>
+
+
+  <!-- =====================================================
+       VISTA 2 — GALLERY (grelha por categoria)
+       ===================================================== -->
+
+  <div class="editorial-gallery" id="editorial-gallery">
+
+    <!-- Preenchido pelo script a partir do feed do Blogger. -->
+
+  </div>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+  <footer class="editorial-footer">
+    <div>© Igor Medeiroz</div>
+    <div>Photography</div>
+    <div>Lisbon / Portugal</div>
+  </footer>
+
+
+</div>
+
+
+<script>
+(function () {
+
+  "use strict";
+
+  /* =======================================================
+     CONFIGURACAO
+     ======================================================= */
+
+  var FEED_URL = "/feeds/posts/default/-/fotografia?alt=json&max-results=50";
+  var CHAVE_VISTA = "editorial_vista"; // guarda a escolha no navegador
+
+  var elIndex   = document.getElementById("editorial-index");
+  var elGallery = document.getElementById("editorial-gallery");
+  var elContagem = document.getElementById("contagem-index");
+  var botoes = document.querySelectorAll(".editorial-viewswitch button");
+
+  if (!elIndex || !elGallery) return;
+
+  /* =======================================================
+     ESCAPAR HTML
+     Evita que titulos dos posts possam quebrar a estrutura.
+     ======================================================= */
+  function escapeHTML(valor) {
+    if (!valor) return "";
+    return String(valor)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function getPostLink(post) {
+    if (!post.link) return "#";
+    var link = post.link.find(function (item) { return item.rel === "alternate"; });
+    return link ? link.href : "#";
+  }
+
+  function getPostContent(post) {
+    if (post.content && post.content.$t) return post.content.$t;
+    if (post.summary && post.summary.$t) return post.summary.$t;
+    return "";
+  }
+
+  /* Tamanho da imagem parametrizavel: a pre-visualizacao da vista
+     Index e maior do que os quadrados da Gallery. */
+  function getFirstImage(post, content, tamanho) {
+    if (post.media$thumbnail && post.media$thumbnail.url) {
+      return post.media$thumbnail.url.replace(/\/s[0-9]+(-c)?\//, "/" + tamanho + "/");
+    }
+    var temp = document.createElement("div");
+    temp.innerHTML = content;
+    var img = temp.querySelector("img");
+    if (img && img.src) {
+      return img.src.replace(/\/s[0-9]+(-c)?\//, "/" + tamanho + "/");
+    }
+    return "";
+  }
+
+  /* Le data-portfolio-type e data-portifolio-local do HTML do post.
+     ATENCAO: a ortografia dos dois atributos e diferente no
+     original ("portfolio" vs "portifolio") -- confirme qual das
+     duas grafias usa mesmo nos seus posts, ou a categoria pode
+     nao ser encontrada. */
+  function getMetadata(content) {
+    var temp = document.createElement("div");
+    temp.innerHTML = content;
+    var el = temp.querySelector(".portfolio[data-portfolio-type], .portfolio[data-portifolio-local]");
+    if (!el) return { type: "", local: "" };
+    return {
+      type: (el.getAttribute("data-portfolio-type") || "").trim(),
+      local: (el.getAttribute("data-portifolio-local") || "").trim()
+    };
+  }
+
+  /* =======================================================
+     TRANSFORMAR CADA POST NUM OBJETO SIMPLES
+     As duas vistas partilham estes dados.
+     ======================================================= */
+  function paraProjeto(post, indice) {
+    var content = getPostContent(post);
+    var metadata = getMetadata(content);
+    return {
+      numero: String(indice + 1).padStart(2, "0"),
+      titulo: post.title ? post.title.$t : "Untitled",
+      link: getPostLink(post),
+      imagemIndex: getFirstImage(post, content, "s1600"),
+      imagemGaleria: getFirstImage(post, content, "s800"),
+      tipo: metadata.type,
+      local: metadata.local
+    };
+  }
+
+  /* =======================================================
+     VISTA: INDEX  (lista + imagem flutuante)
+     ======================================================= */
+  function montarLinha(projeto) {
+    var a = document.createElement("a");
+    a.className = "editorial-project";
+    a.href = projeto.link;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+
+    var metaHTML = "";
+    if (projeto.tipo) metaHTML += "<span>" + escapeHTML(projeto.tipo) + "</span>";
+    if (projeto.local) metaHTML += "<span>" + escapeHTML(projeto.local) + "</span>";
+
+    a.innerHTML =
+      '<span class="project-number">' + projeto.numero + "</span>" +
+      '<span class="project-title">' + escapeHTML(projeto.titulo) + "</span>" +
+      '<span class="project-meta">' + metaHTML + "</span>" +
+      (projeto.imagemIndex
+        ? '<img class="project-image" src="' + escapeHTML(projeto.imagemIndex) + '" alt="" loading="lazy" draggable="false">'
+        : "");
+
+    return a;
+  }
+
+  function renderIndex(lista) {
+    elIndex.innerHTML = "";
+    if (elContagem) elContagem.textContent = lista.length ? "(" + lista.length + ")" : "";
+
+    if (!lista.length) {
+      elIndex.innerHTML = mensagemVazia("No projects found.");
+      return;
+    }
+    lista.forEach(function (projeto) {
+      elIndex.appendChild(montarLinha(projeto));
+    });
+  }
+
+  /* =======================================================
+     VISTA: GALLERY  (grelha agrupada por categoria)
+     Categorias sem nome (sem data-portfolio-type) caem num
+     grupo "Selected Work" no fim. A ordem dos grupos segue a
+     ordem em que aparecem no feed (mais recente primeiro).
+     ======================================================= */
+  function montarAzulejo(projeto) {
+    var a = document.createElement("a");
+    a.className = "gallery-item";
+    a.href = projeto.link;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+
+    a.innerHTML =
+      (projeto.imagemGaleria
+        ? '<img alt="" draggable="false" loading="lazy" src="' + escapeHTML(projeto.imagemGaleria) + '">'
+        : "") +
+      '<span class="gallery-item-legenda">' +
+        '<span class="gallery-item-titulo">' + escapeHTML(projeto.titulo) + "</span>" +
+        (projeto.local ? '<span class="gallery-item-meta">' + escapeHTML(projeto.local) + "</span>" : "") +
+      "</span>";
+
+    return a;
+  }
+
+  function renderGallery(lista) {
+    elGallery.innerHTML = "";
+
+    if (!lista.length) {
+      elGallery.innerHTML = mensagemVazia("No projects found.");
+      return;
+    }
+
+    var grupos = {};
+    var ordem = [];
+    var SEM_CATEGORIA = "Selected Work";
+
+    lista.forEach(function (projeto) {
+      var chave = projeto.tipo || SEM_CATEGORIA;
+      if (!grupos[chave]) { grupos[chave] = []; ordem.push(chave); }
+      grupos[chave].push(projeto);
+    });
+
+    // "Selected Work" (sem categoria) vai sempre para o fim.
+    ordem.sort(function (a, b) {
+      if (a === SEM_CATEGORIA) return 1;
+      if (b === SEM_CATEGORIA) return -1;
+      return 0;
+    });
+
+    ordem.forEach(function (chave) {
+      var bloco = document.createElement("section");
+      bloco.className = "gallery-categoria";
+
+      var titulo = document.createElement("h2");
+      titulo.className = "gallery-categoria-titulo";
+      titulo.innerHTML = escapeHTML(chave) +
+        ' <span class="conta">(' + grupos[chave].length + ")</span>";
+      bloco.appendChild(titulo);
+
+      var grid = document.createElement("div");
+      grid.className = "gallery-grid";
+      grupos[chave].forEach(function (projeto) {
+        grid.appendChild(montarAzulejo(projeto));
+      });
+      bloco.appendChild(grid);
+
+      elGallery.appendChild(bloco);
+    });
+  }
+
+  function mensagemVazia(texto) {
+    return '<div style="padding:40px 0;font-family:\'DM Mono\',monospace;' +
+      'font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#77736d;">' +
+      escapeHTML(texto) + "</div>";
+  }
+
+  /* =======================================================
+     ALTERNAR VISTA
+     ======================================================= */
+  function lerVistaGuardada() {
+    try { return localStorage.getItem(CHAVE_VISTA); } catch (e) { return null; }
+  }
+  function gravarVista(v) {
+    try { localStorage.setItem(CHAVE_VISTA, v); } catch (e) {}
+  }
+
+  function mostrarVista(vista) {
+    elIndex.classList.toggle("is-active", vista === "index");
+    elGallery.classList.toggle("is-active", vista === "gallery");
+    botoes.forEach(function (b) {
+      var ativo = b.getAttribute("data-view") === vista;
+      b.classList.toggle("is-active", ativo);
+      b.setAttribute("aria-selected", ativo ? "true" : "false");
+    });
+    gravarVista(vista);
+  }
+
+  botoes.forEach(function (b) {
+    b.addEventListener("click", function () {
+      mostrarVista(b.getAttribute("data-view"));
+    });
+  });
+
+  /* =======================================================
+     CARREGAR O FEED  (uma vez; alimenta as duas vistas)
+     ======================================================= */
+  fetch(FEED_URL)
+    .then(function (res) {
+      if (!res.ok) throw new Error("Não foi possível carregar o feed.");
+      return res.json();
+    })
+    .then(function (data) {
+      var entradas = (data && data.feed && data.feed.entry) || [];
+      var projetos = entradas.map(paraProjeto);
+
+      renderIndex(projetos);
+      renderGallery(projetos);
+
+      var guardada = lerVistaGuardada();
+      if (guardada === "gallery") mostrarVista("gallery");
+    })
+    .catch(function (erro) {
+      console.error("Portfolio:", erro);
+      var msg = mensagemVazia("Unable to load projects.");
+      elIndex.innerHTML = msg;
+      elGallery.innerHTML = msg;
+    });
+
+})();
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  var element = document.getElementById("changing-word");
+  if (!element) return;
+
+  var words = [
+    "remembering.",
+    "seeing.",
+    "feeling.",
+    "observing.",
+    "discovering.",
+    "connecting."
+  ];
+
+  var wordIndex = 0;
+  var letterIndex = 0;
+  var deleting = false;
+
+  var typingSpeed = 100;
+  var deletingSpeed = 70;
+  var pauseAfterWriting = 2500;
+  var pauseAfterDeleting = 500;
+
+  function animateWord() {
+
+    var currentWord = words[wordIndex];
+
+    if (!deleting) {
+
+      element.textContent = currentWord.substring(0, letterIndex + 1);
+      letterIndex++;
+
+      if (letterIndex === currentWord.length) {
+        setTimeout(function () { deleting = true; animateWord(); }, pauseAfterWriting);
+      } else {
+        setTimeout(animateWord, typingSpeed);
+      }
+
+    } else {
+
+      element.textContent = currentWord.substring(0, letterIndex - 1);
+      letterIndex--;
+
+      if (letterIndex === 0) {
+        wordIndex = (wordIndex + 1) % words.length;
+        deleting = false;
+        setTimeout(animateWord, pauseAfterDeleting);
+      } else {
+        setTimeout(animateWord, deletingSpeed);
+      }
+    }
+  }
+
+  animateWord();
+
+});
+</script>

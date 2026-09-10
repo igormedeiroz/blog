@@ -1,0 +1,1723 @@
+<style>
+
+/* =========================================================
+   IGOR MEDEIROZ
+   EDITORIAL PHOTOGRAPHY
+   BLOGGER — PORTFOLIO
+   ========================================================= */
+
+
+/* =========================================================
+   FONTES
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Inter:wght@300;400;500&display=swap');
+
+
+/* =========================================================
+   VARIÁVEIS
+   ========================================================= */
+
+:root {
+
+  --editorial-bg: #f3f1ec;
+  --editorial-text: #111111;
+  --editorial-muted: #77736d;
+
+  --editorial-line: rgba(17,17,17,.16);
+
+  --editorial-padding-x: 34px;
+
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+html,
+body {
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  width: 100%;
+  min-height: 100%;
+
+  background:
+    var( --cor-fundo) !important;
+
+  color:
+    var(--editorial-text);
+
+}
+
+  #outer-wrapper {
+    width: 100%;
+    max-width:100%;
+    margin: 0 auto 0px !important;
+    padding: 0 20px;
+  }
+  
+#changing-word {
+  display: inline-block;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+#changing-word.is-changing {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* =========================================================
+   BLOGGER — REMOVER LAYOUT ORIGINAL
+   ========================================================= */
+
+#menu-wrapper,
+#header-wrapper,
+#header,
+.header-outer,
+.sidebar,
+.sidebar-wrapper,
+.blog-pager,
+.post-title,
+.post-header,
+.post-footer,
+.date-header,
+.blog-feeds,
+.feed-links,
+.status-msg-wrap,
+.post-labels {
+  display: none !important;
+}
+
+
+/* =========================================================
+   BLOGGER — CONTAINERS
+   ========================================================= */
+
+.container,
+.content-outer,
+.content-inner,
+.main-outer,
+.main-inner,
+.main,
+.post,
+.post-body {
+
+  width: 100% !important;
+
+  max-width: none !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  border: 0 !important;
+
+  background:
+    transparent !important;
+
+}
+
+
+/* =========================================================
+   POST
+   ========================================================= */
+
+.post {
+
+  min-height: 100vh;
+
+}
+
+
+/* =========================================================
+   PÁGINA EDITORIAL
+   ========================================================= */
+
+.igor-editorial {
+
+  position: relative;
+
+  box-sizing: border-box;
+
+  width: 100%;
+
+  min-height: 100vh;
+
+  padding:
+    28px
+    var(--editorial-padding-x)
+    0;
+
+
+  color:
+    var(--editorial-text);
+
+  font-family:
+    "Inter",
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-weight: 300;
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.editorial-header {
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    auto
+    1fr;
+
+  align-items: start;
+
+  width: 100%;
+
+  padding-bottom: 26px;
+
+  border-bottom:
+    1px solid
+    var(--editorial-line);
+
+}
+
+
+/* ---------------------------------------------------------
+   NOME
+   --------------------------------------------------------- */
+
+.editorial-name {
+
+  margin: 0;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 10px;
+
+  line-height: 1;
+
+  letter-spacing: .12em;
+
+  text-transform: uppercase;
+
+}
+
+
+/* ---------------------------------------------------------
+   SECÇÃO
+   --------------------------------------------------------- */
+
+.editorial-section {
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  line-height: 1;
+
+  letter-spacing: .14em;
+
+  text-transform: uppercase;
+
+  color:
+    var(--editorial-muted);
+
+}
+
+
+/* ---------------------------------------------------------
+   NAVEGAÇÃO
+   --------------------------------------------------------- */
+
+.editorial-nav {
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+  gap: 24px;
+
+}
+
+
+.editorial-nav a {
+
+  color:
+    var(--editorial-text) !important;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  line-height: 1;
+
+  letter-spacing: .12em;
+
+  text-decoration: none !important;
+
+  text-transform: uppercase;
+
+  border: 0 !important;
+
+  transition:
+    opacity .3s ease;
+
+}
+
+
+.editorial-nav a:hover {
+
+  opacity: .45;
+
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.editorial-intro {
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(240px, 1fr);
+
+  column-gap: 60px;
+
+  padding:
+    75px
+    0
+    90px;
+
+}
+
+
+/* ---------------------------------------------------------
+   TÍTULO
+   --------------------------------------------------------- */
+
+.editorial-intro h1 {
+
+  margin: 0;
+
+  padding: 0;
+
+  max-width: 850px;
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size:
+    clamp(44px, 6.2vw, 70px);
+
+  font-weight: 400;
+
+  line-height: .88;
+
+  letter-spacing: -.065em;
+
+}
+
+
+/* ---------------------------------------------------------
+   DESCRIÇÃO
+   --------------------------------------------------------- */
+
+.editorial-intro-info {
+
+  align-self: end;
+
+  justify-self: end;
+
+  width: 100%;
+
+  max-width: 285px;
+
+  margin: 0;
+
+  padding: 0;
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size: 11px;
+
+  font-weight: 300;
+
+  line-height: 1.75;
+
+  color:
+    var(--editorial-muted);
+
+}
+
+
+.editorial-intro-info span {
+
+  display: block;
+
+  margin-bottom: 17px;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  line-height: 1;
+
+  letter-spacing: .15em;
+
+  text-transform: uppercase;
+
+  color:
+    var(--editorial-text);
+
+}
+
+
+/* =========================================================
+   LISTA DE PROJETOS
+   ========================================================= */
+
+.editorial-projects {
+
+  flex: 1 1 auto;
+
+  width: 100%;
+
+  margin: 0;
+
+  padding: 0;
+
+  border-top:
+    1px solid
+    var(--editorial-line);
+
+}
+
+
+/* =========================================================
+   PROJETO
+   ========================================================= */
+
+.editorial-project {
+
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    80px
+    minmax(0, 1fr)
+    190px;
+
+  align-items: center;
+
+  width: 100%;
+
+  min-height: 116px;
+
+  box-sizing: border-box;
+
+  border-bottom:
+    1px solid
+    var(--editorial-line);
+
+  color:
+    var(--editorial-text) !important;
+
+  text-decoration: none !important;
+
+  cursor: pointer;
+
+  border-left: 0 !important;
+  border-right: 0 !important;
+
+}
+
+
+/* =========================================================
+   NÚMERO
+   ========================================================= */
+
+.project-number {
+
+  display: block;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  line-height: 1;
+
+  letter-spacing: .04em;
+
+  color: #99948d;
+
+}
+
+
+/* =========================================================
+   TÍTULO
+   ========================================================= */
+
+.project-title {
+
+  display: block;
+
+  margin: 0;
+
+  padding: 0;
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size:
+    clamp(27px, 3vw, 45px);
+
+  font-weight: 300;
+
+  line-height: 1;
+
+  letter-spacing: -.045em;
+
+  transform:
+    translateX(0);
+
+  transition:
+
+    transform .65s
+    cubic-bezier(.16,1,.3,1),
+
+    opacity .4s ease;
+
+}
+
+
+.editorial-project:hover
+.project-title {
+
+  transform:
+    translateX(13px);
+
+}
+
+
+/* =========================================================
+   METADATA
+   ========================================================= */
+
+.project-meta {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  justify-self: end;
+
+  margin: 0;
+
+  padding: 0;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  font-weight: 400;
+
+  line-height: 1.65;
+
+  letter-spacing: .1em;
+
+  text-align: right;
+
+  text-transform: uppercase;
+
+  color:
+    var(--editorial-muted);
+
+}
+
+
+/* =========================================================
+   IMAGEM FLUTUANTE
+   ========================================================= */
+
+.project-image {
+
+  position: fixed;
+
+  z-index: 999;
+
+  top: 50%;
+
+  left: 50%;
+
+  display: block;
+
+  width:
+    min(390px, 34vw);
+
+  height: auto;
+
+  max-height: 68vh;
+
+  object-fit: cover;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  opacity: 0;
+
+  transform:
+
+    translate(-50%, -50%)
+
+    scale(.94);
+
+  filter:
+    grayscale(5%);
+
+  box-shadow:
+
+    0 25px 70px
+    rgba(0,0,0,.13);
+
+  transition:
+
+    opacity .45s ease,
+
+    transform .7s
+    cubic-bezier(.16,1,.3,1);
+
+}
+
+
+.editorial-project:hover
+.project-image {
+
+  opacity: 1;
+
+  transform:
+
+    translate(-50%, -50%)
+
+    scale(1);
+
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.editorial-footer {
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr
+    1fr;
+
+  align-items: center;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  margin-top: auto;
+
+  padding:
+    21px
+    0
+    20px;
+
+  border-top:
+    1px solid
+    var(--editorial-line);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: .1em;
+
+  text-transform: uppercase;
+
+  color:
+    var(--editorial-muted);
+
+}
+
+
+.editorial-footer
+div:nth-child(2) {
+
+  text-align: center;
+
+}
+
+
+.editorial-footer
+div:last-child {
+
+  text-align: right;
+
+}
+
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+.igor-editorial a,
+.igor-editorial a:hover {
+
+  border-bottom:
+    0 !important;
+
+  text-decoration:
+    none !important;
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  :root {
+
+    --editorial-padding-x: 24px;
+
+  }
+
+
+  .editorial-section {
+
+    display: none;
+
+  }
+
+
+  .editorial-header {
+
+    grid-template-columns:
+      1fr
+      1fr;
+
+  }
+
+
+  .editorial-nav {
+
+    justify-content:
+      flex-end;
+
+  }
+
+
+  .editorial-intro {
+
+    grid-template-columns:
+      1fr;
+
+    padding:
+      60px
+      0
+      65px;
+
+  }
+
+
+  .editorial-intro-info {
+
+    justify-self:
+      start;
+
+    margin-top:
+      45px;
+
+  }
+
+
+  .editorial-project {
+
+    grid-template-columns:
+      55px
+      minmax(0,1fr)
+      120px;
+
+  }
+
+
+  .project-image {
+
+    width:
+      45vw;
+
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  :root {
+
+    --editorial-padding-x: 18px;
+
+  }
+
+
+  .igor-editorial {
+
+    padding-top:
+      20px;
+
+  }
+
+
+  /* Header */
+
+  .editorial-header {
+
+    padding-bottom:
+      22px;
+
+  }
+
+
+  .editorial-name {
+
+    font-size:
+      8px;
+
+  }
+
+
+  .editorial-nav {
+
+    gap:
+      14px;
+
+  }
+
+
+  .editorial-nav a {
+
+    font-size:
+      8px;
+
+  }
+
+
+  /* Intro */
+
+  .editorial-intro {
+
+    padding:
+      48px
+      0
+      55px;
+
+  }
+
+
+  .editorial-intro h1 {
+
+    font-size:
+      clamp(48px, 15vw, 52px);
+
+    line-height:
+      .9;
+
+  }
+
+
+  .editorial-intro-info {
+
+    max-width:
+      230px;
+
+    margin-top:
+      38px;
+
+    font-size:
+      10px;
+
+    line-height:
+      1.7;
+
+  }
+
+
+  /* Projetos */
+
+  .editorial-project {
+
+    grid-template-columns:
+      35px
+      minmax(0,1fr);
+
+    min-height:
+      90px;
+
+  }
+
+
+  .project-number {
+
+    font-size:
+      8px;
+
+  }
+
+
+  .project-title {
+
+    font-size:
+      23px;
+
+  }
+
+
+  .project-meta {
+
+    display:
+      none;
+
+  }
+
+
+  /*
+     Não usamos hover de imagem no touch.
+  */
+
+  .project-image {
+
+    display:
+      none;
+
+  }
+
+
+  /* Footer */
+
+  .editorial-footer {
+
+    grid-template-columns:
+      1fr;
+
+    gap:
+      9px;
+
+    padding:
+      19px
+      0
+      17px;
+
+    font-size:
+      7px;
+
+  }
+
+
+  .editorial-footer div,
+  .editorial-footer
+  div:nth-child(2),
+  .editorial-footer
+  div:last-child {
+
+    text-align:
+      left;
+
+  }
+
+}
+
+
+/* =========================================================
+   ECRÃ PEQUENO
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .editorial-intro h1 {
+
+    font-size:
+      45px;
+
+  }
+
+
+  .editorial-project {
+
+    min-height:
+      82px;
+
+  }
+
+
+  .project-title {
+
+    font-size:
+      21px;
+
+  }
+
+}
+
+
+/* =========================================================
+   ACESSIBILIDADE
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .project-image,
+  .project-title,
+  .editorial-nav a {
+
+    transition:
+      none !important;
+
+  }
+
+}
+
+</style>
+
+
+<!-- =======================================================
+     PORTFOLIO
+     ======================================================= -->
+
+<div class="igor-editorial">
+
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <header class="editorial-header">
+
+    <div class="editorial-name">
+      Igor Medeiroz
+    </div>
+
+    <div class="editorial-section">
+      Photography — Collections
+    </div>
+
+    <nav class="editorial-nav">
+
+      <a href="/p/sobre.html">
+        About
+      </a>
+
+      <a href="/p/contato.html">
+        Contact
+      </a>
+      
+
+
+    </nav>
+
+  </header>
+
+
+  <!-- =====================================================
+       INTRO
+       ===================================================== -->
+
+  <section class="editorial-intro">
+
+  <h1>
+    Photography <br>
+    as a way of <br>
+    <span id="changing-word">remembering.</span>
+  </h1>
+
+
+    <div class="editorial-intro-info">
+
+      <span>
+        Selected work
+      </span>
+
+      A collection of photographs,
+      projects and visual studies
+      developed over time.
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PROJETOS
+       ===================================================== -->
+
+  <main
+    class="editorial-projects"
+    id="editorial-projects"
+  >
+
+    <!--
+      Os projetos serão inseridos automaticamente
+      através do feed do Blogger.
+    -->
+
+  </main>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+
+
+
+<script>
+
+(function () {
+
+  "use strict";
+
+
+  /* =======================================================
+     CONFIGURAÇÃO
+     ======================================================= */
+
+  const FEED_URL =
+    "/feeds/posts/default/-/fotografia?alt=json&max-results=50";
+
+
+  const portfolio =
+    document.getElementById(
+      "editorial-projects"
+    );
+
+
+  if (!portfolio) {
+    return;
+  }
+
+
+  /* =======================================================
+     ESCAPAR HTML
+     
+     Evita que títulos dos posts possam quebrar
+     a estrutura do HTML.
+     ======================================================= */
+
+  function escapeHTML(value) {
+
+    if (!value) {
+      return "";
+    }
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  /* =======================================================
+     ENCONTRAR LINK DO POST
+     ======================================================= */
+
+  function getPostLink(post) {
+
+    if (!post.link) {
+      return "#";
+    }
+
+
+    const link =
+      post.link.find(function (item) {
+
+        return item.rel === "alternate";
+
+      });
+
+
+    return link
+      ? link.href
+      : "#";
+
+  }
+
+
+  /* =======================================================
+     OBTER CONTEÚDO
+     ======================================================= */
+
+  function getPostContent(post) {
+
+    if (post.content && post.content.$t) {
+
+      return post.content.$t;
+
+    }
+
+
+    if (post.summary && post.summary.$t) {
+
+      return post.summary.$t;
+
+    }
+
+
+    return "";
+
+  }
+
+
+  /* =======================================================
+     OBTER PRIMEIRA IMAGEM
+     ======================================================= */
+
+  function getFirstImage(post, content) {
+
+    /*
+       Primeiro tenta o campo media do Blogger.
+    */
+
+    if (
+      post.media$thumbnail &&
+      post.media$thumbnail.url
+    ) {
+
+      let image =
+        post.media$thumbnail.url;
+
+      /*
+         Thumbnail do Blogger costuma vir pequena.
+         Tentamos obter uma versão maior.
+      */
+
+      image =
+        image.replace(
+          /\/s[0-9]+(-c)?\//,
+          "/s1600/"
+        );
+
+      return image;
+
+    }
+
+
+    /*
+       Se não encontrou no media thumbnail,
+       procura uma imagem no HTML do post.
+    */
+
+    const temp =
+      document.createElement("div");
+
+    temp.innerHTML =
+      content;
+
+
+    const image =
+      temp.querySelector("img");
+
+
+    if (image && image.src) {
+
+      return image.src;
+
+    }
+
+
+    return "";
+
+  }
+
+
+  /* =======================================================
+     OBTER METADADOS
+     
+     Procura:
+
+     data-portfolio-type="Fashion"
+
+     data-portifolio-local="Lisbon"
+
+     dentro do conteúdo do post.
+     ======================================================= */
+
+  function getMetadata(content) {
+
+    const temp =
+      document.createElement("div");
+
+    temp.innerHTML =
+      content;
+
+
+    const portfolioElement =
+      temp.querySelector(
+        ".portfolio[data-portfolio-type], .portfolio[data-portifolio-local]"
+      );
+
+
+    if (!portfolioElement) {
+
+      return {
+
+        type: "",
+        local: ""
+
+      };
+
+    }
+
+
+    const type =
+      portfolioElement.getAttribute(
+        "data-portfolio-type"
+      ) || "";
+
+
+    const local =
+      portfolioElement.getAttribute(
+        "data-portifolio-local"
+      ) || "";
+
+
+    return {
+
+      type:
+        type.trim(),
+
+      local:
+        local.trim()
+
+    };
+
+  }
+
+
+  /* =======================================================
+     CRIAR PROJETO
+     ======================================================= */
+
+  function createProject(
+    post,
+    index
+  ) {
+
+    const title =
+      post.title
+        ? post.title.$t
+        : "Untitled";
+
+
+    const content =
+      getPostContent(post);
+
+
+    const link =
+      getPostLink(post);
+
+
+    const image =
+      getFirstImage(
+        post,
+        content
+      );
+
+
+    const metadata =
+      getMetadata(
+        content
+      );
+
+
+    /*
+       Número com dois dígitos.
+       1 → 01
+       2 → 02
+       etc.
+    */
+
+    const number =
+      String(index + 1)
+        .padStart(2, "0");
+
+
+    /*
+       Cria o elemento.
+    */
+
+    const project =
+      document.createElement("a");
+
+
+    project.className =
+      "editorial-project";
+
+
+    project.href =
+      link;
+
+
+    project.target =
+      "_blank";
+
+
+    project.rel =
+      "noopener noreferrer";
+
+
+    /*
+       Conteúdo do metadata.
+
+       Se houver type:
+
+       FASHION
+
+       Se houver local:
+
+       LISBON
+    */
+
+    let metadataHTML = "";
+
+
+    if (metadata.type) {
+
+      metadataHTML +=
+        `<span>${escapeHTML(metadata.type)}</span>`;
+
+    }
+
+
+    if (metadata.local) {
+
+      metadataHTML +=
+        `<span>${escapeHTML(metadata.local)}</span>`;
+
+    }
+
+
+    /*
+       HTML do projeto.
+    */
+
+    project.innerHTML = `
+
+      <span class="project-number">
+        ${number}
+      </span>
+
+
+      <span class="project-title">
+        ${escapeHTML(title)}
+      </span>
+
+
+      <span class="project-meta">
+        ${metadataHTML}
+      </span>
+
+
+      ${
+        image
+          ? `
+            <img
+              class="project-image"
+              src="${escapeHTML(image)}"
+              alt=""
+              loading="lazy"
+              draggable="false"
+            >
+          `
+          : ""
+      }
+
+    `;
+
+
+    return project;
+
+  }
+
+
+  /* =======================================================
+     CARREGAR FEED
+     ======================================================= */
+
+  async function loadPortfolio() {
+
+    try {
+
+      const response =
+        await fetch(
+          FEED_URL
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Não foi possível carregar o feed."
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      const entries =
+        data &&
+        data.feed &&
+        data.feed.entry
+          ? data.feed.entry
+          : [];
+
+
+      /*
+         Limpa o conteúdo.
+      */
+
+      portfolio.innerHTML = "";
+
+
+      /*
+         Caso não existam posts.
+      */
+
+      if (!entries.length) {
+
+        portfolio.innerHTML = `
+
+          <div
+            style="
+              padding:40px 0;
+              font-family:'DM Mono',monospace;
+              font-size:9px;
+              letter-spacing:.1em;
+              text-transform:uppercase;
+              color:#77736d;
+            "
+          >
+
+            No projects found.
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      /*
+         Cria os projetos.
+      */
+
+      entries.forEach(
+        function (post, index) {
+
+          const project =
+            createProject(
+              post,
+              index
+            );
+
+
+          portfolio.appendChild(
+            project
+          );
+
+        }
+      );
+
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Portfolio:",
+        error
+      );
+
+
+      portfolio.innerHTML = `
+
+        <div
+          style="
+            padding:40px 0;
+            font-family:'DM Mono',monospace;
+            font-size:9px;
+            letter-spacing:.1em;
+            text-transform:uppercase;
+            color:#77736d;
+          "
+        >
+
+          Unable to load projects.
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+  /* =======================================================
+     INICIAR
+     ======================================================= */
+
+  loadPortfolio();
+
+
+})();
+
+</script>
+<section class="editorial-intro">
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const element = document.getElementById("changing-word");
+
+  const words = [
+    "remembering.",
+    "seeing.",
+    "feeling.",
+    "observing.",
+    "discovering.",
+    "connecting."
+  ];
+
+  let wordIndex = 0;
+  let letterIndex = 0;
+  let deleting = false;
+
+  const typingSpeed = 100;
+  const deletingSpeed = 70;
+  const pauseAfterWriting = 2500;
+  const pauseAfterDeleting = 500;
+
+  function animateWord() {
+
+    const currentWord = words[wordIndex];
+
+    if (!deleting) {
+
+      // ESCREVER
+      element.textContent = currentWord.substring(0, letterIndex + 1);
+      letterIndex++;
+
+      if (letterIndex === currentWord.length) {
+
+        setTimeout(function () {
+          deleting = true;
+          animateWord();
+        }, pauseAfterWriting);
+
+      } else {
+        setTimeout(animateWord, typingSpeed);
+      }
+
+    } else {
+
+      // APAGAR
+      element.textContent = currentWord.substring(0, letterIndex - 1);
+      letterIndex--;
+
+      if (letterIndex === 0) {
+
+        wordIndex = (wordIndex + 1) % words.length;
+        deleting = false;
+
+        setTimeout(animateWord, pauseAfterDeleting);
+
+      } else {
+        setTimeout(animateWord, deletingSpeed);
+      }
+    }
+  }
+
+  // começa a escrever a primeira palavra
+  animateWord();
+
+});
+</script>

@@ -555,4 +555,52 @@ sup a{
     .08em;
 
 }
- 
+
+
+/* ------------------------------------------------------------------
+   BLOCOS DE CODIGO  (<pre> e <code>)
+   Encaixa a seguir a secao 08 (POSTS), perto do blockquote.
+   ------------------------------------------------------------------ */
+.post code,
+.post pre{
+  font-family:var(--fonte-base);
+  font-size:.92em;
+}
+
+/* Codigo em linha, fora de um bloco <pre>. */
+.post code{
+  padding:.15em .4em;
+  background:var(--cor-superficie);
+  border:1px solid var(--cor-borda);
+  border-radius:3px;
+  color:var(--cor-titulo);
+}
+
+/* Bloco de codigo. */
+.post pre{
+  margin:0 0 1.2em;
+  padding:18px 20px;
+  overflow-x:auto;
+  background:var(--cor-superficie);
+  border:1px solid var(--cor-borda);
+  border-left:1px solid var(--cor-titulo);
+  border-radius:3px;
+  line-height:1.6;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* Dentro de <pre>, o <code> perde a moldura propria -- senao fica
+   caixa dentro de caixa. */
+.post pre code{
+  padding:0;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  color:inherit;
+  white-space:pre;
+}
+
+/* Barra de scroll discreta (Chrome/Edge/Safari). */
+.post pre::-webkit-scrollbar{ height:3px; }
+.post pre::-webkit-scrollbar-thumb{ background:var(--cor-borda); border-radius:3px; }
+.post pre::-webkit-scrollbar-track{ background:transparent; }

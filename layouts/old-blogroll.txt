@@ -1,0 +1,192 @@
+<style>
+
+.circulo {
+    border-radius: 50%;
+    position: absolute;
+    height: 150px;
+    width: 150px;
+    mix-blend-mode: multiply; /* faz a mistura */
+}
+
+/* círculo 1 */
+.c1 {
+    background: #ff582e; /* vermelho */
+}
+
+/* círculo 2 */
+.c2 {
+    background: #2e8bff; /* azul */
+}
+
+.c3 {
+  background: #f5f242 /* vermelho #ff582e; */;
+}
+</style>
+<div style="text-align: right;"><i>das coisas que leio para distrair, sorrir ou chorar. / </i>
+
+
+<a class="eb-random nav-topo" href="#" id="entreblogs-webring">Surprise surprise</a>
+
+</div>
+
+<div style="text-align: right;"><br />
+</div>
+<div class="circulo c1"></div>
+<div class="circulo c2"></div>
+<div class="circulo c3"></div>
+
+
+<style>
+  
+  /* Container principal */
+#BlogList1, #BlogList1_container {
+  max-width: 900px;       /* define largura máxima */
+  margin: 0 auto;   
+  padding: 15px;
+
+}
+
+/* Título do widget */
+#BlogList1 h2.title {
+  font-size: 22px;
+  margin-bottom: 15px;
+  text-align: center;
+  display:none;
+}
+
+/* Lista de blogs (ul) */
+#BlogList1 .blog-list-container ul {
+    margin: 0 auto;
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+/* Cada item do blog (li) */
+#BlogList1 .blog-list-container li {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+ 
+}
+
+/* Hover nos itens */
+#BlogList1 .blog-list-container li:hover {
+
+}
+
+/* Ícone do blog */
+#BlogList1 .blog-list-container .blog-icon img {
+  margin: 0px 8px 0px 0px;
+}
+
+/* Conteúdo do blog */
+#BlogList1 .blog-list-container .blog-content {
+  flex: 1;
+}
+
+/* Título do blog */
+#BlogList1 .blog-list-container .blog-title {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #222222;
+}
+
+  
+#BlogList1 .blog-list-container .blog-title a {
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: none !important;
+  color: #000;
+}
+
+#BlogList1 .blog-list-container .blog-title a:hover {
+  text-decoration: underline;
+}
+
+/* Thumbnail do item */
+#BlogList1 .blog-list-container .item-thumbnail img {
+  width: 100%;
+  height: auto;
+  margin-top: 0px;
+}
+
+/* Snippet do item */
+#BlogList1 .blog-list-container .item-snippet {
+  font-size: 11px;
+  color: #555;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+/* Tempo desde a última atualização */
+#BlogList1 .blog-list-container .item-time {
+  font-size: 10px;
+  color: #999;
+  margin-top: 5px;
+}
+
+/* Links gerais */
+#BlogList1 .blog-list-container a {
+  text-decoration: none;
+}
+
+#BlogList1 .blog-list-container a:hover {
+  text-decoration: underline;
+  color:  #ebd723;
+}
+
+/* Responsivo para mobile */
+@media screen and (max-width: 600px) {
+  #BlogList1 .blog-list-container ul {
+    grid-template-columns: 1fr;
+  }
+}
+
+  .blog-title{
+   font-weight: 0 !important;
+  }
+  .hide, .blog-pager{
+  display:none;}
+  
+  .hentry{
+    border-bottom: 0px solid rgba(0, 0, 0, 0.1);
+    padding: 50px 0 0px;
+  }
+</style>
+  
+
+
+<script>
+const circles = document.querySelectorAll(".circulo");
+
+let positions = [
+  { x: 100, y: 100, dx: 2, dy: 2 },
+  { x: 300, y: 200, dx: -2, dy: 1.5 },
+   { x: 700, y: 200, dx: -2, dy: 3 }
+];
+
+function moveCircles() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  circles.forEach((circle, i) => {
+    let p = positions[i];
+
+    p.x += p.dx;
+    p.y += p.dy;
+
+    if (p.x <= 0 || p.x + circle.offsetWidth >= width) p.dx *= -1;
+    if (p.y <= 0 || p.y + circle.offsetHeight >= height) p.dy *= -1;
+
+    circle.style.left = p.x + "px";
+    circle.style.top = p.y + "px";
+  });
+
+  requestAnimationFrame(moveCircles);
+}
+
+moveCircles();
+</script>

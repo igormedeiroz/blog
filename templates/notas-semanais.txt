@@ -1,0 +1,38 @@
+<p>Intro</p>
+
+<h3>Acontecimentos</h3>
+<ul>
+<li></li>
+</ul>
+<br>
+<h3>Atualizações no site</h3>
+<ul>
+<li></li>
+</ul>
+<br>
+<h3>Consumindo</h3>
+
+<p><strong>Livros</strong></p>
+<ul>
+<li></li>
+</ul>
+<br>
+<p><strong>Filmes & Séries</strong></p>
+
+<ul data-type="filmes">
+<li data-type="tvfilme"><i></i></li>
+<li data-type="tvshow"><i></i></li>
+</ul>
+
+<br>
+<p><strong>Músicas</strong></p>
+<ul>
+<li></li>
+</ul>
+
+<div class="divisor"></div>
+<br>
+<p>Páginas amarelas (<a href="/paginas-amarelas">mais</a>):</p>
+<ul>
+<li></li>
+</ul>

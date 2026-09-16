@@ -1,0 +1,14 @@
+<div class="post-colunas-container" style="--colunas: 3;">
+  <div class="post-colunas-item">
+    <img src="URL_DA_IMAGEM" alt="Imagem 1">
+    <p>Texto do post 1</p>
+  </div>
+  <div class="post-colunas-item">
+    <img src="URL_DA_IMAGEM" alt="Imagem 2">
+    <p>Texto do post 2</p>
+  </div>
+  <div class="post-colunas-item">
+    <p>Texto do post 3 sem imagem</p>
+  </div>
+  <!-- Adicione mais .post-colunas-item conforme necessário -->
+</div>

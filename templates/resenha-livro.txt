@@ -1,0 +1,30 @@
+<div class="livro" dir="ltr">
+  <div class="capa-container">
+    <img
+      data-type="livro-capa"  
+      class="capa-livro" 	src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgjByLFfFmUgpl8z43QwBOCXDK_HQDy2npBG_tyt7vOuU67mXsYEtDqir8VDghzqKjTDzQawz3H6KO6M9sKDFheB_zETq33SQjG8QJorwjfHnd1fIq8RYwKDYwzz6ws-GpskmSJWwOXXbXSMhRr3mzr5R02hN4itBXau-xmo7zSkkAXpH-0KczGI7JRHe4/s320/410PTOStCML._SY445_SX342_ML2_.jpg"
+      alt="Capa do livro"
+    />
+  </div>
+
+  <div class="detalhes-livro">
+    <div data-type="livro-nome" class="nome-livro"> </div>
+    <div data-type="livro-serie" class="serie"> </div>
+    <div data-type="livro-autor" class="autor"> </div>
+    <div data-type="livro-traducao" class="traducao"> </div>
+    <div data-type="livro-editora" class="editora"> </div>
+    <div data-type="livro-paginas" class="paginas"> </div>
+
+    <div data-type="livro-nota" class="nota">
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="far fa-star"></i>
+      <i class="far fa-star"></i>
+    </div>
+    <div data-type="livro-resumo" class="resumo">
+    </div>
+    </div>
+  </div>
+
+<br />

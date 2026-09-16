@@ -1,0 +1,25 @@
+<div class="album-review">
+
+  <div class="album-cover">
+    <img alt="album cover" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhueUOXeiaLB3acxUuQvbbAo8jB8MSmqSNGaiH9yHpc0JKil9KJlyAoHkO9e_s6jTelfgt9ERDtatR9Y952hLQ4fR4Cc0SQbbpQ2jze_jRB8ywiq5owPewtuogrEmNOabS_Q9PjNX3t9ZUK4XQUrYAsf1-TedGIQedVBEsGdbuYlZkk0Wp5Z6RY3NkXR6w/s500/truue.png" />
+  </div>
+
+  <ol class="tracklist">
+
+    <li>Dimensão</li>
+    <li>Fundo do Poço</li>
+    <li class="fav">Chorar na Boate</li>
+    <li>Quatro da Manhã</li>
+    <li class="fav">Ar da Sua Graça</li>
+    <li class="fav">Podre</li>
+    <li>Eu Destruo</li>
+    <li>Truque</li>
+    <li>Ideia Merda</li>
+    <li class="fav">Dizer Adeus</li>
+    <li class="fav">Quero Acreditar</li>
+    <li>Segunda Dimensão</li>
+    
+
+  </ol>
+
+</div>

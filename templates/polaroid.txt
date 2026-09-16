@@ -1,0 +1,9 @@
+<div class="polaroid"  style="--tamanho: 100%;">
+  <img src="URL_DA_IMAGEM" alt="Minha Foto">
+  <div class="caption">Legenda da foto</div>
+</div>
+
+<div class="polaroid">
+  <img src="URL_DA_IMAGEM2" alt="Outra Foto">
+  <div class="caption">Outra legenda</div>
+</div>

@@ -419,9 +419,10 @@ sup a{
 .nota-rodape::before {
     content: "";
     display: block;
-    width: 25px;
+    width: 35px;
     height: 1px;
     margin-top: 20px;
+	margin-bottom: 20px;
     background: var(--cor-borda);
     transition: width .3s ease;
 }

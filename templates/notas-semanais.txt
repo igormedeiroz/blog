@@ -5,11 +5,7 @@
 <li></li>
 </ul>
 <br>
-<h3>Atualizações no site</h3>
-<ul>
-<li></li>
-</ul>
-<br>
+
 <h3>Consumindo</h3>
 
 <p><strong>Livros</strong></p>

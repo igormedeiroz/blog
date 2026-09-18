@@ -416,6 +416,24 @@ sup a{
   color:var(--cor-texto-suave);
 }
 
+.nota-rodape::before {
+    content: "";
+    display: block;
+    width: 25px;
+    height: 1px;
+    margin-top: 20px;
+    background: var(--cor-borda);
+    transition: width .3s ease;
+}
+
+.nota-rodape:hover::after {
+  width: 70px;
+  background:
+    var(--cor-texto-suave);
+
+}
+
+
 /* -----------------------------------------------------------------------------
    11. TOGGLE POST
    -------------------------------------------------------------------------- */

@@ -1,0 +1,14 @@
+<p>
+Texto com nota
+<sup><a href="#n1" id="r1">1</a></sup>.
+</p>
+
+
+
+<div class="nota-rodape">
+<p id="n1">
+1. Conteúdo da nota.
+<a href="#r1"></a>
+</p>
+</div>
+<sup><a href="#n1" id="r1">1</a></sup>.

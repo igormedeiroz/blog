@@ -2,5 +2,6 @@
 <div class="tema-entreblogs" data-slug="temas/#013"></div>
 
 #MAPA DE VIAGENS
+<div class="local-marcador" data-type="local" data-pais="PRT" data-nome="Portugal"></div>
 
 #FOTOLOG

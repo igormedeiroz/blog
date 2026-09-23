@@ -1,17 +1,20 @@
 <p>Intro</p>
 
+<br>
 <h3>Acontecimentos</h3>
 <ul>
 <li></li>
 </ul>
-<br>
 
+<br>
 <h3>Consumindo</h3>
 
+<br>
 <p><strong>Livros</strong></p>
 <ul>
 <li></li>
 </ul>
+
 <br>
 <p><strong>Filmes & Séries</strong></p>
 

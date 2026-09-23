@@ -20,8 +20,8 @@
   var IDX_KEY = 'pc_index_v3';
   var IDX_TTL = 6 * 60 * 60 * 1000; // 6 horas
 
-  var PAGE_SIZE = 500;
-  var MAX_REQUESTS = 40;
+  var PAGE_SIZE = 500;      // valor PEDIDO ao Blogger (é só um teto)
+  var MAX_REQUESTS = 60;
 
   var RESERVED = /^(p|search|feeds|b|view|sitemap\.xml|robots\.txt|favicon\.ico)$/i;
 
@@ -200,6 +200,20 @@
    * ----------------------------------------------------
    * CRAWLER
    * ----------------------------------------------------
+   *
+   * IMPORTANTE: o Blogger nem sempre devolve o max-results
+   * pedido — por vezes devolve bem menos (ex.: pedimos 500 e
+   * vêm só ~150), mesmo sem ser o fim do feed de verdade. Por
+   * isso NUNCA assumimos o tamanho da página:
+   *
+   *   1) só paramos quando a página vem mesmo vazia (count 0);
+   *   2) avançamos o start-index pelo número REAL de resultados
+   *      devolvidos, nunca pelo PAGE_SIZE pedido.
+   *
+   * Sem isto, o crawler parava na primeira página (achando que
+   * tinha chegado ao fim) e saltava posts a cada página seguinte
+   * — é por isso que os links antigos não resolviam.
+   * ----------------------------------------------------
    */
 
   function crawl(kind, index, start, requestNumber) {
@@ -214,17 +228,19 @@
         var count = harvest(data, index);
 
         /*
-         * Feed vazio ou menor que PAGE_SIZE:
-         * provavelmente chegamos ao final.
+         * Página realmente vazia: aqui sim, chegámos ao fim
+         * do feed. Um "count" menor que PAGE_SIZE NÃO quer
+         * dizer isto — só quer dizer que esta página teve
+         * menos entradas do que o pedido.
          */
-        if (!count || count < PAGE_SIZE) {
+        if (!count) {
           return;
         }
 
         return crawl(
           kind,
           index,
-          start + PAGE_SIZE,
+          start + count,   // avança pelo que veio de verdade
           requestNumber + 1
         );
       });

@@ -17,6 +17,12 @@
    * /p/slug.html        → /slug
    */
 
+
+  // Executa somente em páginas /p/
+  if (!/^\/p\//i.test(location.pathname)) {
+    return;
+  }
+  
   var IDX_KEY = 'pc_index_v3';
   var IDX_TTL = 6 * 60 * 60 * 1000; // 6 horas
 

@@ -18,12 +18,12 @@
 	{
       "url": "https://www.kaffeina.blog/",
       "nome": "Kaffeina",
-	  "categorias":"blog pessoal, fotografia"
+	  "categorias":"leituras, fotografia"
     },
 	{
       "url": "https://porce-lana.blogspot.com/",
       "nome": "Porcelana",
-	  "categorias":"blog pessoal, fotografia"
+	  "categorias":"blog pessoal"
     },
 	{
       "url": "https://www.arantchans.com/",
@@ -32,18 +32,18 @@
     },
 	{
       "url": "https://manuelmoreale.com/",
-      "nome": "",
-	  "categorias":""
+      "nome": "Manu Moreale",
+	  "categorias":"minimalismo, internet"
     },
 	{
       "url": "https://arquivomorto-log.blogspot.com/",
       "nome": "Cartas não enviadas",
-	  "categorias":""
+	  "categorias":"blog pessoal"
     },
 	{
       "url": "https://departure.blog/",
       "nome": "Departure",
-	  "categorias":""
+	  "categorias":"CSS, internet "
     },
 	{
       "url": "https://www.tristezinhascotidianas.com.br/",
@@ -58,7 +58,7 @@
 	{
       "url": "https://paraquemencontrar.bearblog.dev/",
       "nome": "Garrafas ao mar",
-	  "categorias":""
+	  "categorias":"blog pessoal"
     },
 	{
       "url": "https://vera72dpi.bearblog.dev/",

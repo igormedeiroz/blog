@@ -1,0 +1,61 @@
+<div id="treino-app">
+<style>
+#treino-app{font:16px/1.45 system-ui,sans-serif;max-width:820px;margin:auto;color:#172033}#treino-app *{box-sizing:border-box}
+#treino-app .card{background:#fff;border:1px solid #dbe2ea;border-radius:14px;padding:14px;margin:12px 0}
+#treino-app h2{margin:.2rem 0 1rem}#treino-app .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#treino-app label{display:block;font-size:.88rem;font-weight:650;margin:7px 0 4px}
+#treino-app input,#treino-app select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}
+#treino-app button{padding:10px 13px;border:0;border-radius:8px;background:#155e75;color:white;font:inherit;font-weight:650;margin:8px 5px 0 0}
+#treino-app button.alt{background:#e2e8f0;color:#172033}#treino-app button.del{background:#b91c1c}
+#treino-app .muted{color:#64748b;font-size:.9rem}#treino-app .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#treino-app .stat{background:#f1f5f9;padding:12px;border-radius:9px}#treino-app .stat strong{display:block;font-size:1.3rem}
+#treino-app .entry{border-top:1px solid #e2e8f0;padding:12px 0}#treino-app .exercise{border:1px solid #e2e8f0;border-radius:9px;padding:10px;margin:8px 0}
+#treino-app .exgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}#treino-app .status{min-height:1.4em;color:#075985}
+@media(max-width:520px){#treino-app .grid{grid-template-columns:1fr 1fr}#treino-app .stats{grid-template-columns:1fr 1fr}#treino-app .exgrid{grid-template-columns:1fr 1fr}#treino-app .exgrid .wide{grid-column:1/-1}}
+</style>
+<div class="card"><h2>Registar atividade</h2><p class="muted">A duração é guardada em minutos. Se preencheres início e fim, a duração é calculada automaticamente.</p>
+<div class="grid">
+<div><label>Data</label><input id="t-date" type="date"></div>
+<div><label>Modalidade</label><select id="t-type"><option>ginásio</option><option>dança</option><option>corrida</option><option>caminhada</option><option>ciclismo</option><option>mobilidade</option><option>outro</option></select></div>
+<div><label>Início</label><input id="t-start" type="time"></div><div><label>Fim</label><input id="t-end" type="time"></div>
+<div><label>Duração (minutos)</label><input id="t-mins" type="number" min="1" max="1440" placeholder="75"></div>
+<div><label>Intensidade</label><select id="t-intensity"><option>leve</option><option selected>moderada</option><option>intensa</option></select></div>
+<div><label>Distância (km)</label><input id="t-distance" type="number" min="0" step=".01"></div><div><label>Notas</label><input id="t-notes" maxlength="2000"></div></div>
+<div id="t-exarea"><h3>Exercícios de ginásio (opcional)</h3><div id="t-exercises"></div><button type="button" class="alt" id="t-add">+ Exercício</button><button type="button" class="alt" id="t-plan">Carregar plano</button></div>
+<button type="button" id="t-save">Guardar sessão</button><button type="button" class="alt" id="t-clear">Limpar</button><p class="status" id="t-status" aria-live="polite"></p></div>
+<div class="card"><h2>Resumo</h2><div class="stats"><div class="stat">Horas<strong id="t-hours">0 h</strong></div><div class="stat">Sessões<strong id="t-count">0</strong></div><div class="stat">Dias ativos<strong id="t-days">0</strong></div></div><p class="muted" id="t-breakdown"></p></div>
+<div class="card"><h2>Histórico</h2><div class="grid"><div><label>De</label><input id="t-from" type="date"></div><div><label>Até</label><input id="t-to" type="date"></div></div><button type="button" class="alt" id="t-filter">Filtrar</button><button type="button" class="alt" id="t-all">Últimas 100</button><div id="t-history"></div></div>
+</div>
+<script>
+(()=>{
+const API="https://SUBSTITUIR-PELO-TEU-WORKER.workers.dev";
+const PLAN="https://gym.igormedeiroz.workers.dev/api/treinos";
+const $=id=>document.getElementById(id);let editing=null;
+const now=new Date();$("t-date").value=new Date(now-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
+const msg=(s,err=false)=>{$("t-status").textContent=s;$("t-status").style.color=err?"#b91c1c":"#075985"};
+async function api(path,opt={}){const r=await fetch(API+path,{...opt,headers:{"Content-Type":"application/json",...(opt.headers||{})}});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||"Erro HTTP "+r.status);return d}
+function duration(){let a=$("t-start").value,b=$("t-end").value;if(!a||!b)return;let [h,m]=a.split(":").map(Number),[x,y]=b.split(":").map(Number),n=x*60+y-(h*60+m);if(n<=0)n+=1440;$("t-mins").value=n}
+$("t-start").onchange=duration;$("t-end").onchange=duration;
+function addEx(e={}){let d=document.createElement("div");d.className="exercise";d.innerHTML='<div class="exgrid"><div class="wide"><label>Exercício</label><input data-k="name" placeholder="Supino reto"></div><div><label>Séries</label><input data-k="sets" type="number" min="0"></div><div><label>Repetições</label><input data-k="reps" placeholder="8–12"></div><div><label>Carga (kg)</label><input data-k="weight_kg" type="number" min="0" step=".25"></div><div><label>RIR</label><input data-k="effort_rir" type="number" min="0" max="10"></div></div><button type="button" class="del">Remover</button>';
+for(let k of ["name","sets","reps","weight_kg","effort_rir"])if(e[k]!=null)d.querySelector(`[data-k="${k}"]`).value=e[k];
+d.querySelector("button").onclick=()=>d.remove();$("t-exercises").append(d)}
+$("t-add").onclick=()=>addEx();
+function getExercises(){return [...$("t-exercises").children].map(d=>{let v=k=>d.querySelector(`[data-k="${k}"]`).value.trim();return{name:v("name"),sets:v("sets"),reps:v("reps"),weight_kg:v("weight_kg"),effort_rir:v("effort_rir")}}).filter(e=>e.name)}
+function payload(){return{activity_type:$("t-type").value,session_date:$("t-date").value,start_time:$("t-start").value||null,end_time:$("t-end").value||null,duration_minutes:Number($("t-mins").value),intensity:$("t-intensity").value,distance_km:$("t-distance").value||null,notes:$("t-notes").value,exercises:$("t-type").value==="ginásio"?getExercises():[]}}
+function reset() {editing=null;$("t-date").value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);["t-start","t-end","t-mins","t-distance","t-notes"].forEach(id=>$(id).value="");$("t-type").value="ginásio";$("t-intensity").value="moderada";$("t-exercises").replaceChildren();$("t-save").textContent="Guardar sessão";$("t-exarea").hidden=false}
+$("t-clear").onclick=()=>{reset();msg("")};$("t-type").onchange=()=>$("t-exarea").hidden=$("t-type").value!=="ginásio";
+$("t-save").onclick=async()=>{try{let p=payload();if(!p.session_date)throw Error("Escolhe uma data.");if(!Number.isInteger(p.duration_minutes)||p.duration_minutes<1)throw Error("Indica a duração em minutos.");if($("t-exercises").children.length&&p.activity_type==="ginásio"&&!p.exercises.length)throw Error("Preenche ou remove as linhas de exercícios vazias.");await api(editing?"/api/sessoes/"+editing:"/api/sessoes",{method:editing?"PUT":"POST",body:JSON.stringify(p)});msg(editing?"Sessão atualizada.":"Sessão guardada.");reset();await load()}catch(e){msg(e.message,true)}};
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function fmt(n){return Math.floor(n/60)?`${Math.floor(n/60)}h ${n%60}min`:`${n} min`}
+async function load(){try{let q=new URLSearchParams({limit:"100"});if($("t-from").value)q.set("from",$("t-from").value);if($("t-to").value)q.set("to",$("t-to").value);
+let [h,s]=await Promise.all([api("/api/sessoes?"+q),api("/api/estatisticas?"+new URLSearchParams({from:$("t-from").value||"0001-01-01",to:$("t-to").value||"9999-12-31"}))]);
+$("t-hours").textContent=(s.totals.minutes/60).toLocaleString("pt-PT",{maximumFractionDigits:1})+" h";$("t-count").textContent=s.totals.sessions;$("t-days").textContent=s.totals.active_days;$("t-breakdown").textContent=s.byType.map(x=>x.activity_type+": "+fmt(x.minutes||0)).join(" · ");
+$("t-history").innerHTML=h.sessions.length?h.sessions.map(x=>`<article class="entry"><b>${esc(x.activity_type)} · ${esc(x.session_date)} · ${fmt(x.duration_minutes)}</b><div class="muted">${esc(x.start_time||"")}${x.end_time?"–"+esc(x.end_time):""} · ${esc(x.intensity)}${x.distance_km!=null?" · "+esc(x.distance_km)+" km":""}</div>${x.notes?"<p>"+esc(x.notes)+"</p>":""}${(x.exercises||[]).length?"<ul>"+x.exercises.map(e=>`<li>${esc(e.name)} — ${e.sets??"—"} séries, ${esc(e.reps||"—")} reps${e.weight_kg!=null?", "+esc(e.weight_kg)+" kg":""}</li>`).join("")+"</ul>":""}<button type="button" class="alt" data-edit="${x.id}">Editar</button><button type="button" class="del" data-del="${x.id}">Apagar</button></article>`).join(""):'<p class="muted">Sem sessões neste período.</p>';
+$("t-history").querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{if(confirm("Apagar permanentemente?"))try{await api("/api/sessoes/"+b.dataset.del,{method:"DELETE"});msg("Sessão apagada.");load()}catch(e){msg(e.message,true)}});
+$("t-history").querySelectorAll("[data-edit]").forEach(b=>b.onclick=async()=>{try{let x=await api("/api/sessoes/"+b.dataset.edit);editing=x.id;$("t-date").value=x.session_date;$("t-type").value=x.activity_type;$("t-start").value=x.start_time||"";$("t-end").value=x.end_time||"";$("t-mins").value=x.duration_minutes;$("t-intensity").value=x.intensity;$("t-distance").value=x.distance_km??"";$("t-notes").value=x.notes||"";$("t-exercises").replaceChildren();(x.exercises||[]).forEach(addEx);$("t-exarea").hidden=x.activity_type!=="ginásio";$("t-save").textContent="Guardar alterações";$("treino-app").scrollIntoView({behavior:"smooth"})}catch(e){msg(e.message,true)}});
+}catch(e){msg("Erro ao carregar: "+e.message,true)}}
+$("t-filter").onclick=load;$("t-all").onclick=()=>{$("t-from").value="";$("t-to").value="";load()};
+$("t-plan").onclick=async()=>{try{let r=await fetch(PLAN),d=await r.json(),rows=Array.isArray(d)?d:(d.rows||d.exercicios||d.treinos||[]);let names=rows.map(x=>x["Exercício"]||x.exercicio||x.exercise||x.name).filter(Boolean);if(!names.length)throw Error("Formato do plano não reconhecido; podes adicionar exercícios manualmente.");$("t-exercises").replaceChildren();[...new Set(names)].forEach(name=>addEx({name}));msg("Exercícios carregados. Remove os que não fizeste hoje.")}catch(e){msg(e.message,true)}};
+load();
+})();
+</script>

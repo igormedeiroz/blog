@@ -1,0 +1,25 @@
+{
+  "blogs": [
+    {
+      "url": "https://ajonjoli.bearblog.dev/",
+      "nome": "Ajonjoli",
+	  "categorias":"poesia"
+    },
+	{
+      "url": "https://paratexto.net/",
+      "nome": "Paratexto",
+	  "categorias":"blog pessoal"
+    },
+	{
+      "url": "https://www.bamoretti.com/",
+      "nome": "Ba Moretti",
+	  "categorias":"blog pessoal, diário"
+    },
+	{
+      "url": "https://www.kaffeina.blog/",
+      "nome": "Kaffeina",
+	  "categorias":"blog pessoal, fotografia"
+    }
+	
+  ]
+}

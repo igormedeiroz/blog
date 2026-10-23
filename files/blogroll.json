@@ -19,6 +19,66 @@
       "url": "https://www.kaffeina.blog/",
       "nome": "Kaffeina",
 	  "categorias":"blog pessoal, fotografia"
+    },
+	{
+      "url": "https://porce-lana.blogspot.com/",
+      "nome": "Porcelana",
+	  "categorias":"blog pessoal, fotografia"
+    },
+	{
+      "url": "https://www.arantchans.com/",
+      "nome": "",
+	  "categorias":""
+    },
+	{
+      "url": "https://manuelmoreale.com/",
+      "nome": "",
+	  "categorias":""
+    },
+	{
+      "url": "https://arquivomorto-log.blogspot.com/",
+      "nome": "Cartas não enviadas",
+	  "categorias":""
+    },
+	{
+      "url": "https://departure.blog/",
+      "nome": "Departure",
+	  "categorias":""
+    },
+	{
+      "url": "https://www.tristezinhascotidianas.com.br/",
+      "nome": "Tristezinhas Cotidianas",
+	  "categorias":""
+    },
+	{
+      "url": "https://albertogalca.com/",
+      "nome": "Alberto Galca",
+	  "categorias":""
+    },
+	{
+      "url": "https://paraquemencontrar.bearblog.dev/",
+      "nome": "Garrafas ao mar",
+	  "categorias":""
+    },
+	{
+      "url": "https://vera72dpi.bearblog.dev/",
+      "nome": "Vera 72dpi",
+	  "categorias":""
+    },
+	{
+      "url": "",
+      "nome": "",
+	  "categorias":""
+    },
+	{
+      "url": "",
+      "nome": "",
+	  "categorias":""
+    },
+	{
+      "url": "",
+      "nome": "",
+	  "categorias":""
     }
 	
   ]

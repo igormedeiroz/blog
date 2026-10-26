@@ -97,23 +97,23 @@
     },
 	{
       "url": "https://quinquilharias.bearblog.dev/",
-      "nome": "quinquilharias",
+      "nome": "Quinquilharias",
 	  "categorias":"poesia"
     },
 	{
-      "url": "",
-      "nome": "",
-	  "categorias":""
+      "url": "https://calluna.bearblog.dev/",
+      "nome": "Calluna",
+	  "categorias":"diário"
     },
 	{
-      "url": "",
-      "nome": "",
-	  "categorias":""
+      "url": "https://occultish.bearblog.dev/",
+      "nome": "Notes",
+	  "categorias":"diário, leituras"
     },
 	{
-      "url": "",
-      "nome": "",
-	  "categorias":""
+      "url": "https://mormaco.blog/",
+      "nome": "Mormaço",
+	  "categorias":"diário, reflexões"
     },
 	{
       "url": "",

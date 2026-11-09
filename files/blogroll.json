@@ -131,44 +131,44 @@
 	  "categorias":"poesia"
     },
 	{
-      "url": "",
-      "nome": "",
+      "url": "Minimalismo Real",
+      "nome": "https://minimalismoreal.bearblog.dev/",
+	  "categorias":"minimalismo"
+    },
+	{
+      "url": "https://jamesg.blog/",
+      "nome": "James",
+	  "categorias":"blog pessoal"
+    },
+	{
+      "url": "https://cauenapier.com/",
+      "nome": "Cauê Napier",
+	  "categorias":"tecnologia, internet"
+    },
+	{
+      "url": "https://viniciuscodes.com.br/",
+      "nome": "vinicius codes",
 	  "categorias":""
     },
 	{
-      "url": "",
-      "nome": "",
+      "url": "https://odisseia666.blogspot.com/",
+      "nome": "Fugi de casa",
 	  "categorias":""
     },
 	{
-      "url": "",
-      "nome": "",
-	  "categorias":""
+      "url": "https://gramaturaalta.com.br/",
+      "nome": "Gramatura Alta",
+	  "categorias":"leituras"
     },
 	{
-      "url": "",
-      "nome": "",
-	  "categorias":""
+      "url": "https://falodemais.neocities.org/",
+      "nome": "Falo Demais",
+	  "categorias":"blog pessoal"
     },
 	{
-      "url": "",
-      "nome": "",
-	  "categorias":""
-    },
-	{
-      "url": "",
-      "nome": "",
-	  "categorias":""
-    },
-	{
-      "url": "",
-      "nome": "",
-	  "categorias":""
-    },
-	{
-      "url": "",
-      "nome": "",
-	  "categorias":""
+      "url": "https://adelinedaniele.com/",
+      "nome": "Adeline Daniele",
+	  "categorias":"blog pessoal"
     },
 	{
       "url": "",
